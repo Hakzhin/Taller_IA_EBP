@@ -1,0 +1,2655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taller IA · Colegio El Buen Pastor</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-start: #fdf6f0;
+    --bg-end: #f0e6f6;
+    --card-image: linear-gradient(135deg, #ff9a56 0%, #ff6b95 100%);
+    --card-music: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --card-story: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    --glass-bg: rgba(255,255,255,0.55);
+    --glass-border: rgba(255,255,255,0.7);
+    --glass-shadow: rgba(0,0,0,0.08);
+    --text-dark: #2d2b3d;
+    --text-medium: #5a5775;
+    --text-light: #8b87a0;
+    --accent-warm: #ff7b54;
+    --accent-purple: #7c5cbf;
+    --accent-green: #2ec4a0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(160deg, var(--bg-start) 0%, var(--bg-end) 100%);
+    min-height: 100vh;
+    color: var(--text-dark);
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ── Bokeh Background ── */
+  .bokeh-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .bokeh-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.25;
+    animation: float-bokeh 20s ease-in-out infinite;
+  }
+
+  .bokeh-orb:nth-child(1) { width: 300px; height: 300px; background: #ff9a56; top: 10%; left: 5%; animation-delay: 0s; }
+  .bokeh-orb:nth-child(2) { width: 250px; height: 250px; background: #764ba2; top: 60%; right: 10%; animation-delay: -5s; }
+  .bokeh-orb:nth-child(3) { width: 350px; height: 350px; background: #43e97b; bottom: 10%; left: 30%; animation-delay: -10s; }
+  .bokeh-orb:nth-child(4) { width: 200px; height: 200px; background: #ff6b95; top: 30%; right: 30%; animation-delay: -15s; }
+  .bokeh-orb:nth-child(5) { width: 280px; height: 280px; background: #38f9d7; top: 70%; left: 60%; animation-delay: -8s; }
+  .bokeh-orb:nth-child(6) { width: 180px; height: 180px; background: #667eea; top: 5%; right: 5%; animation-delay: -12s; }
+
+  @keyframes float-bokeh {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(30px, -20px) scale(1.05); }
+    50% { transform: translate(-20px, 30px) scale(0.95); }
+    75% { transform: translate(15px, 15px) scale(1.02); }
+  }
+
+  /* ── Logo ── */
+  .header-logo {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    height: 72px;
+    width: auto;
+    opacity: 0.85;
+    transition: opacity 0.3s;
+    z-index: 10;
+  }
+  .header-logo:hover { opacity: 1; }
+  @media (max-width: 700px) {
+    .header-logo { height: 54px; top: 16px; right: 16px; }
+  }
+
+  /* ── Layout ── */
+  .app-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 24px 60px;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+    animation: fadeInDown 0.8s ease-out;
+  }
+
+  .header-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    padding: 8px 24px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-medium);
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+
+  .header h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+  }
+
+  .header h1 .gradient-text {
+    background: linear-gradient(135deg, #ff7b54, #7c5cbf, #2ec4a0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header p {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    color: var(--text-medium);
+    font-weight: 400;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  /* ── Navigation Pills ── */
+  .nav-pills {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+  }
+
+  .nav-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 50px;
+    border: 2px solid transparent;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px var(--glass-shadow);
+  }
+
+  .nav-pill:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+  .nav-pill.active-image { border-color: #ff7b54; background: rgba(255,123,84,0.12); }
+  .nav-pill.active-music { border-color: #7c5cbf; background: rgba(124,92,191,0.12); }
+  .nav-pill.active-story { border-color: #2ec4a0; background: rgba(46,196,160,0.12); }
+  .nav-pill.active-tips { border-color: #f0b429; background: rgba(240,180,41,0.12); }
+
+  .nav-pill .pill-icon { font-size: 1.3rem; }
+
+  /* ── Section Panels ── */
+  .section-panel {
+    display: none;
+    animation: fadeInUp 0.5s ease-out;
+  }
+  .section-panel.active { display: block; }
+
+  /* ── Glass Card ── */
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+    box-shadow: 0 8px 32px var(--glass-shadow);
+    padding: 36px 32px;
+    margin-bottom: 24px;
+  }
+
+  /* ── Section Header inside card ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .section-icon-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .icon-image { background: var(--card-image); }
+  .icon-music { background: var(--card-music); }
+  .icon-story { background: var(--card-story); }
+
+  .section-title {
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+    font-weight: 700;
+  }
+
+  .section-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-medium);
+    font-weight: 400;
+    margin-top: 2px;
+  }
+
+  /* ── Tool badge ── */
+  .tool-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .badge-image { background: rgba(255,123,84,0.12); color: #d4592e; }
+  .badge-music { background: rgba(124,92,191,0.12); color: #6b47a8; }
+  .badge-story { background: rgba(46,196,160,0.12); color: #1e9a7a; }
+
+  /* ── Info Box ── */
+  .info-box {
+    border-radius: 18px;
+    padding: 22px 24px;
+    margin-bottom: 24px;
+    font-size: 1.02rem;
+    line-height: 1.65;
+    color: var(--text-dark);
+  }
+
+  .info-box-warm { background: rgba(255,154,86,0.1); border-left: 4px solid #ff9a56; }
+  .info-box-purple { background: rgba(118,75,162,0.1); border-left: 4px solid #764ba2; }
+  .info-box-green { background: rgba(67,233,123,0.1); border-left: 4px solid #43e97b; }
+
+  .info-box strong { font-weight: 600; }
+
+  /* ── Steps ── */
+  .steps-container { margin-top: 8px; }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    cursor: pointer;
+    transition: background 0.2s;
+    border-radius: 14px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .step:last-child { border-bottom: none; }
+  .step:hover { background: rgba(255,255,255,0.5); }
+
+  .step-number {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    transition: transform 0.3s;
+  }
+
+  .step:hover .step-number { transform: scale(1.08); }
+
+  .step-number-image { background: var(--card-image); }
+  .step-number-music { background: var(--card-music); }
+  .step-number-story { background: var(--card-story); }
+
+  .step-content { flex: 1; }
+
+  .step-title {
+    font-size: 1.08rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text-dark);
+  }
+
+  .step-description {
+    font-size: 0.95rem;
+    color: var(--text-medium);
+    line-height: 1.55;
+  }
+
+  .step-detail {
+    display: none;
+    margin-top: 12px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(0,0,0,0.05);
+    font-size: 0.93rem;
+    line-height: 1.6;
+    color: var(--text-dark);
+  }
+
+  .step-detail.open { display: block; animation: fadeInDown 0.3s ease; }
+
+  .step-detail code {
+    background: rgba(0,0,0,0.06);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+  }
+
+  .step-toggle-hint {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* ── Task Card ── */
+  .task-card {
+    border-radius: 22px;
+    padding: 28px;
+    margin-top: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .task-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.08;
+    background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.5) 10px, rgba(255,255,255,0.5) 20px);
+  }
+
+  .task-image { background: var(--card-image); color: #fff; }
+  .task-music { background: var(--card-music); color: #fff; }
+  .task-story { background: var(--card-story); color: #1e4a3a; }
+
+  .task-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .task-card p {
+    font-size: 1.02rem;
+    line-height: 1.6;
+    position: relative;
+    opacity: 0.95;
+  }
+
+  .task-card .task-example {
+    margin-top: 14px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.22);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    position: relative;
+  }
+
+  .task-card .task-example strong {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  /* ── Link Button ── */
+  .link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: #fff;
+    transition: all 0.3s ease;
+    margin-top: 18px;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+
+  .link-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+  .link-btn-image { background: linear-gradient(135deg, #d4592e, #c93d6e); }
+  .link-btn-music { background: linear-gradient(135deg, #5a4abf, #6b3fa0); }
+  .link-btn-story { background: linear-gradient(135deg, #1e9a7a, #28b89c); }
+
+  /* ── Tips ── */
+  .tips-section {
+    margin-top: 24px;
+    padding: 22px 24px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.45);
+    border: 1px dashed rgba(0,0,0,0.12);
+  }
+
+  .tips-section h4 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tips-section ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .tips-section li {
+    padding: 6px 0;
+    font-size: 0.95rem;
+    color: var(--text-medium);
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .tips-section li::before {
+    content: '✓';
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    margin-top: 48px;
+    padding: 20px;
+    font-size: 0.85rem;
+    color: var(--text-light);
+  }
+
+  .footer a { color: var(--accent-purple); text-decoration: none; }
+
+  /* ── Animations ── */
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 700px) {
+    .glass-card { padding: 24px 18px; }
+    .step { flex-direction: column; gap: 10px; }
+    .nav-pills { gap: 8px; }
+    .nav-pill { padding: 10px 16px; font-size: 0.9rem; }
+    .section-header { flex-direction: column; text-align: center; }
+    .task-card { padding: 22px 18px; }
+  }
+
+  /* ── Checklist ── */
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    font-size: 1rem;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.3s;
+  }
+
+  .checklist-item .check-box {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 2px solid rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background: rgba(255,255,255,0.6);
+  }
+
+  .checklist-item.done .check-box {
+    background: #2ec4a0;
+    border-color: #2ec4a0;
+    color: #fff;
+  }
+
+  .checklist-item.done .check-label {
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+
+  /* ── Progress Bar ── */
+  .progress-wrapper {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  .progress-bar-bg {
+    height: 10px;
+    background: rgba(0,0,0,0.08);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  .fill-image { background: var(--card-image); }
+  .fill-music { background: var(--card-music); }
+  .fill-story { background: var(--card-story); }
+
+  .progress-label {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 6px;
+    text-align: right;
+    font-weight: 500;
+  }
+
+  /* ── Scroll smooth ── */
+  html { scroll-behavior: smooth; }
+
+  /* ── Formula Grid ── */
+  .formula-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  .formula-card {
+    background: rgba(255,255,255,0.55);
+    border: 2px solid color-mix(in srgb, var(--fc-color) 25%, transparent);
+    border-radius: 20px;
+    padding: 22px 20px;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .formula-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+
+  .formula-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--fc-color);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+
+  .formula-label {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+  }
+
+  .formula-desc {
+    font-size: 0.9rem;
+    color: var(--text-medium);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .formula-example {
+    font-size: 0.85rem;
+    color: var(--fc-color);
+    font-weight: 500;
+    line-height: 1.6;
+    padding: 10px 14px;
+    background: color-mix(in srgb, var(--fc-color) 8%, transparent);
+    border-radius: 12px;
+    font-style: italic;
+  }
+
+  /* ── Before / After ── */
+  .before-after-block {
+    margin-bottom: 20px;
+  }
+
+  .ba-label {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-dark);
+  }
+
+  .ba-row {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .ba-card {
+    flex: 1;
+    border-radius: 16px;
+    padding: 16px 18px;
+    font-size: 0.93rem;
+    line-height: 1.55;
+  }
+
+  .ba-before {
+    background: rgba(220,53,69,0.07);
+    border: 1px solid rgba(220,53,69,0.2);
+    color: #7a2030;
+  }
+
+  .ba-after {
+    background: rgba(46,196,160,0.08);
+    border: 1px solid rgba(46,196,160,0.25);
+    color: #1a5c4a;
+  }
+
+  .ba-tag {
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .ba-arrow {
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-light);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 700px) {
+    .ba-row { flex-direction: column; }
+    .ba-arrow { justify-content: center; transform: rotate(90deg); padding: 4px 0; }
+    .formula-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── Golden Tips ── */
+  .golden-tips {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .golden-tip {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 18px 20px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.45);
+    border: 1px solid rgba(240,180,41,0.2);
+    transition: background 0.2s;
+  }
+
+  .golden-tip:hover { background: rgba(255,255,255,0.7); }
+
+  .golden-tip-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .golden-tip-content strong {
+    display: block;
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 4px;
+  }
+
+  .golden-tip-content p {
+    font-size: 0.93rem;
+    color: var(--text-medium);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .golden-tip-content em {
+    background: rgba(240,180,41,0.15);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-style: normal;
+    font-weight: 500;
+  }
+  /* ── ESO Section Colors ── */
+  :root {
+    --eso-image: linear-gradient(135deg, #ff9a56 0%, #ff6b95 100%);
+    --eso-video: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    --eso-notebook: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+    --eso-materials: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  }
+  .nav-pill.active-eso-image { border-color: #ff7b54; background: rgba(255,123,84,0.12); }
+  .nav-pill.active-eso-video { border-color: #3b82f6; background: rgba(59,130,246,0.12); }
+  .nav-pill.active-eso-notebook { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+  .nav-pill.active-eso-materials { border-color: #f59e0b; background: rgba(245,158,11,0.12); }
+  .nav-pill.active-eso-tips { border-color: #8b5cf6; background: rgba(139,92,246,0.12); }
+
+  .step-number-eso-image { background: var(--eso-image); }
+  .step-number-eso-video { background: var(--eso-video); }
+  .step-number-eso-notebook { background: var(--eso-notebook); }
+  .step-number-eso-materials { background: var(--eso-materials); }
+
+  .badge-eso-image { background: rgba(255,154,86,0.15); color: #d4592e; }
+  .badge-eso-video { background: rgba(59,130,246,0.15); color: #1e40af; }
+  .badge-eso-notebook { background: rgba(239,68,68,0.15); color: #b91c1c; }
+  .badge-eso-materials { background: rgba(245,158,11,0.15); color: #b45309; }
+
+  .icon-eso-image { background: var(--eso-image); }
+  .icon-eso-video { background: var(--eso-video); }
+  .icon-eso-notebook { background: var(--eso-notebook); }
+  .icon-eso-materials { background: var(--eso-materials); }
+
+  .info-box-blue { background: rgba(59,130,246,0.1); border-left: 4px solid #3b82f6; }
+  .info-box-red { background: rgba(239,68,68,0.1); border-left: 4px solid #ef4444; }
+  .info-box-amber { background: rgba(245,158,11,0.1); border-left: 4px solid #f59e0b; }
+
+  .task-eso-image::before { background: var(--eso-image); }
+  .task-eso-video::before { background: var(--eso-video); }
+  .task-eso-notebook::before { background: var(--eso-notebook); }
+  .task-eso-materials::before { background: var(--eso-materials); }
+
+  .link-btn-eso-image { background: linear-gradient(135deg, #d4592e, #c93d6e); }
+  .link-btn-eso-video { background: var(--eso-video); }
+  .link-btn-eso-notebook { background: var(--eso-notebook); }
+  .link-btn-eso-materials { background: linear-gradient(135deg, #d97706, #b45309); }
+
+  .fill-eso-image { background: var(--eso-image); }
+  .fill-eso-video { background: var(--eso-video); }
+  .fill-eso-notebook { background: var(--eso-notebook); }
+  .fill-eso-materials { background: var(--eso-materials); }
+
+  /* ── Landing Screen ── */
+  .landing-header {
+    text-align: center;
+    padding: 60px 20px 30px;
+  }
+  .landing-header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .landing-header p {
+    font-size: 1.1rem;
+    color: var(--text-medium);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  .landing-subtitle {
+    font-size: 0.95rem !important;
+    color: var(--text-light) !important;
+    margin-top: 12px !important;
+  }
+
+  .pathway-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1000px;
+    margin: 40px auto 60px;
+    padding: 0 20px;
+  }
+  @media (max-width: 800px) {
+    .pathway-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      max-width: 420px;
+    }
+  }
+
+  .pathway-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1.5px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 40px 28px 36px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 32px var(--glass-shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .pathway-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    opacity: 0;
+    transition: opacity 0.35s;
+    z-index: 0;
+  }
+  .pathway-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+  }
+  .pathway-card:hover::before {
+    opacity: 0.08;
+  }
+  .pathway-card:active {
+    transform: translateY(-2px) scale(0.98);
+  }
+
+  /* Card theme colors */
+  .pathway-card-infantil::before { background: linear-gradient(135deg, #ff9a56, #ff6b95); }
+  .pathway-card-infantil:hover { border-color: #ff9a56; }
+  .pathway-card-primaria::before { background: linear-gradient(135deg, #667eea, #764ba2); }
+  .pathway-card-primaria:hover { border-color: #667eea; }
+  .pathway-card-eso::before { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+  .pathway-card-eso:hover { border-color: #43e97b; }
+
+  .pathway-icon {
+    font-size: 4rem;
+    margin-bottom: 16px;
+    display: block;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+  }
+  .pathway-card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+  }
+  .pathway-card-desc {
+    font-size: 0.95rem;
+    color: var(--text-medium);
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+  }
+  .pathway-card-ages {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 5px 16px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+  }
+  .pathway-card-infantil .pathway-card-ages { background: rgba(255,154,86,0.15); color: #e0742a; }
+  .pathway-card-primaria .pathway-card-ages { background: rgba(102,126,234,0.15); color: #5a6fd6; }
+  .pathway-card-eso .pathway-card-ages { background: rgba(67,233,123,0.15); color: #1e9a5a; }
+
+  .pathway-badge {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 8px 22px;
+    border-radius: 30px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 0.3px;
+  }
+  .pathway-card-infantil .pathway-badge { background: linear-gradient(135deg, #ff9a56, #ff6b95); }
+  .pathway-card-primaria .pathway-badge { background: linear-gradient(135deg, #9ba3b0, #b0b8c4); cursor: default; }
+  .pathway-card-eso .pathway-badge { background: linear-gradient(135deg, #9ba3b0, #b0b8c4); cursor: default; }
+
+  /* ── Mothership Card (transversal) ── */
+  .mothership-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+  }
+  .mothership-connector {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    position: relative;
+    height: 36px;
+  }
+  .mothership-connector::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(148,163,184,0.1), rgba(148,163,184,0.35));
+  }
+  .mothership-connector-dots {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+  .mothership-connector-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(148,163,184,0.4);
+    display: block;
+  }
+  .mothership-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1.5px solid rgba(148,163,184,0.25);
+    border-radius: 20px;
+    padding: 28px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .mothership-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(148,163,184,0.06), rgba(100,116,139,0.06));
+    z-index: 0;
+  }
+  .mothership-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #ff9a56, #667eea, #43e97b);
+    border-radius: 20px 20px 0 0;
+    z-index: 1;
+  }
+  .mothership-icon {
+    font-size: 2.4rem;
+    margin-bottom: 10px;
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+  .mothership-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    position: relative;
+    z-index: 1;
+  }
+  .mothership-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-medium);
+    margin-top: 2px;
+    position: relative;
+    z-index: 1;
+  }
+  .mothership-desc {
+    font-size: 0.88rem;
+    color: var(--text-light);
+    margin-top: 10px;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+  }
+  .mothership-tags {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+  .mothership-tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    background: rgba(148,163,184,0.12);
+    color: var(--text-medium);
+  }
+  .mothership-badge {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 7px 20px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #9ba3b0, #b0b8c4);
+    color: #fff;
+    cursor: default;
+    position: relative;
+    z-index: 1;
+  }
+  @media (max-width: 800px) {
+    .mothership-card { padding: 22px 18px; }
+    .mothership-connector-dots { gap: 30px; }
+  }
+
+  /* Pathway content containers */
+  .pathway-content { display: none; }
+  .pathway-content.active { display: block; }
+
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    margin: 24px 0 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1.5px solid var(--glass-border);
+    border-radius: 14px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 4px 16px var(--glass-shadow);
+  }
+  .btn-back:hover {
+    background: rgba(255,255,255,0.75);
+    transform: translateX(-4px);
+  }
+
+  /* Placeholder for coming soon */
+  .coming-soon-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1.5px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 60px 40px;
+    text-align: center;
+    max-width: 600px;
+    margin: 30px auto;
+    box-shadow: 0 8px 32px var(--glass-shadow);
+  }
+  .coming-soon-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+  }
+  .coming-soon-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 12px;
+  }
+  .coming-soon-text {
+    font-size: 1rem;
+    color: var(--text-medium);
+    line-height: 1.6;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- Bokeh Background -->
+<div class="bokeh-container">
+  <div class="bokeh-orb"></div>
+  <div class="bokeh-orb"></div>
+  <div class="bokeh-orb"></div>
+  <div class="bokeh-orb"></div>
+  <div class="bokeh-orb"></div>
+  <div class="bokeh-orb"></div>
+</div>
+
+<div class="app-wrapper">
+
+  <!-- Logo -->
+  <img src="data:image/png;base64,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AAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAgiBAAAAACAIEIAAAAAAAjyP5KEM54pwWu9AAAAAElFTkSuQmCC" alt="Logo Colegio El Buen Pastor" class="header-logo">
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- LANDING SCREEN                        -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="landing-screen">
+    <div class="landing-header">
+      <h1>Taller de <span class="gradient-text">Inteligencia Artificial</span></h1>
+      <p>Descubre cómo la IA puede ayudarte en el aula. Elige tu etapa y aprende a crear recursos increíbles, paso a paso 💛</p>
+      <p class="landing-subtitle">Selecciona tu itinerario para comenzar 👇</p>
+    </div>
+
+    <div class="pathway-grid">
+      <!-- Infantil -->
+      <div class="pathway-card pathway-card-infantil" onclick="showPathway('infantil')">
+        <span class="pathway-icon">🧒</span>
+        <div class="pathway-card-title">Infantil</div>
+        <div class="pathway-card-desc">Imágenes, música y cuentos con IA para los más pequeños</div>
+        <div class="pathway-card-ages">3 – 6 años</div>
+        <br>
+        <div class="pathway-badge">Entrar al taller →</div>
+      </div>
+
+      <!-- Primaria -->
+      <div class="pathway-card pathway-card-primaria" onclick="showPathway('primaria')">
+        <span class="pathway-icon">📚</span>
+        <div class="pathway-card-title">Primaria</div>
+        <div class="pathway-card-desc">Herramientas de IA adaptadas a Primaria</div>
+        <div class="pathway-card-ages">6 – 12 años</div>
+        <br>
+        <div class="pathway-badge">Próximamente</div>
+      </div>
+
+      <!-- ESO -->
+      <div class="pathway-card pathway-card-eso" onclick="showPathway('eso')">
+        <span class="pathway-icon">🎓</span>
+        <div class="pathway-card-title">ESO</div>
+        <div class="pathway-card-desc">IA para las asignaturas de Secundaria</div>
+        <div class="pathway-card-ages">12 – 16 años</div>
+        <br>
+        <div class="pathway-badge" style="background: linear-gradient(135deg, #43e97b, #38f9d7); color: #1a3a2a;">Entrar al taller →</div>
+      </div>
+    </div>
+
+    <!-- Mothership: Burocracia (transversal) -->
+    <div class="mothership-wrapper">
+      <div class="mothership-connector">
+        <div class="mothership-connector-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      <div class="mothership-card">
+        <span class="mothership-icon">🗂️</span>
+        <div class="mothership-title">Burocracia</div>
+        <div class="mothership-subtitle">Programaciones y Rúbricas</div>
+        <div class="mothership-desc">
+          Genera programaciones didácticas, rúbricas de evaluación y documentos administrativos con ayuda de la IA. Común a todas las etapas.
+        </div>
+        <div class="mothership-tags">
+          <span class="mothership-tag">🧒 Infantil</span>
+          <span class="mothership-tag">📚 Primaria</span>
+          <span class="mothership-tag">🎓 ESO</span>
+        </div>
+        <br>
+        <div class="mothership-badge">Próximamente</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- PATHWAY: INFANTIL                      -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="pathway-infantil" class="pathway-content">
+    <button class="btn-back" onclick="goHome()">← Volver al inicio</button>
+
+    <!-- Header Infantil -->
+    <header class="header">
+      <div class="header-badge">🧒 Itinerario Infantil</div>
+      <h1>Taller de <span class="gradient-text">IA para Infantil</span></h1>
+      <p>Aprende a crear imágenes, música y cuentos con IA. Paso a paso, sin prisa y con cariño 💛</p>
+    </header>
+
+  <!-- Navigation -->
+  <nav class="nav-pills">
+    <button class="nav-pill active-image" onclick="showSection('image')" id="pill-image">
+      <span class="pill-icon">🎨</span> Imágenes
+    </button>
+    <button class="nav-pill" onclick="showSection('music')" id="pill-music">
+      <span class="pill-icon">🎵</span> Música
+    </button>
+    <button class="nav-pill" onclick="showSection('story')" id="pill-story">
+      <span class="pill-icon">📖</span> Cuentos
+    </button>
+    <button class="nav-pill" onclick="showSection('tips')" id="pill-tips">
+      <span class="pill-icon">✨</span> Trucos
+    </button>
+  </nav>
+
+  <!-- ════════════════════════════════════ -->
+  <!-- SECTION 1: IMAGES                   -->
+  <!-- ════════════════════════════════════ -->
+  <div class="section-panel active" id="section-image">
+    <div class="glass-card">
+      <div class="section-header">
+        <div class="section-icon-circle icon-image">🎨</div>
+        <div>
+          <div class="section-title">Crear Imágenes con IA</div>
+          <div class="section-subtitle">Genera ilustraciones mágicas para tus clases</div>
+        </div>
+      </div>
+
+      <div class="tool-badge badge-image">🔧 Herramienta: Nano Banana Pro (Google Gemini)</div>
+
+      <div class="info-box info-box-warm">
+        <strong>¿Qué es?</strong> Nano Banana Pro es una herramienta de Google que convierte tus ideas en imágenes. Le describes lo que quieres y ella lo dibuja por ti. ¡Es como tener un ilustrador personal! No necesitas saber dibujar ni diseñar.
+      </div>
+
+      <!-- Steps -->
+      <div class="steps-container">
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-image">1</div>
+          <div class="step-content">
+            <div class="step-title">Abre Google Gemini</div>
+            <div class="step-description">Entra en la herramienta desde tu navegador Chrome</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Abre Chrome en tu Chromebook y ve a <code>gemini.google.com</code>. Si te pide iniciar sesión, usa tu cuenta de Google (la misma del correo). Una vez dentro, verás una pantalla con un cuadro de texto donde puedes escribir.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-image">2</div>
+          <div class="step-content">
+            <div class="step-title">Escribe lo que quieres ver</div>
+            <div class="step-description">Describe la imagen que imaginas con palabras sencillas</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              En el cuadro de texto, escribe algo como: <code>Genera una imagen de un conejo simpático leyendo un libro en un jardín lleno de flores</code>. Cuanto más detalles des (colores, ambiente, estilo), mejor quedará la imagen. Puedes escribir en español sin problema.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-image">3</div>
+          <div class="step-content">
+            <div class="step-title">Pulsa "Enviar" y espera</div>
+            <div class="step-description">La IA tardará unos segundos en generar tu imagen</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Haz clic en el botón de enviar (la flecha ➤) o pulsa la tecla <code>Enter</code>. Espera unos 10-15 segundos. Gemini te mostrará una o varias imágenes generadas. Si no te gusta, puedes pedirle cambios: <code>Hazlo más colorido</code> o <code>Ponle un fondo azul</code>.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-image">4</div>
+          <div class="step-content">
+            <div class="step-title">Descarga tu imagen</div>
+            <div class="step-description">Guárdala en tu Chromebook para usarla después</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Cuando tengas la imagen que te gusta, haz clic sobre ella con el botón derecho y selecciona <code>Guardar imagen como...</code>. Elige la carpeta "Descargas" y ponle un nombre que recuerdes. ¡Ya la tienes lista para usar en tus fichas, murales o presentaciones!
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task -->
+      <div class="task-card task-image">
+        <h3>🎯 Tu misión</h3>
+        <p>Crea una imagen que puedas usar en tu aula de Infantil. Puede ser un personaje, una escena de un cuento o una ilustración para una ficha de trabajo.</p>
+        <div class="task-example">
+          <strong>💡 Ejemplo de instrucción:</strong>
+          «Genera una imagen en estilo acuarela infantil de una mariposa con alas de colores del arcoíris posada sobre una flor de girasol, con fondo de cielo azul suave y nubes blancas esponjosas»
+        </div>
+      </div>
+
+      <a href="https://gemini.google.com" target="_blank" class="link-btn link-btn-image">
+        Abrir Gemini ↗
+      </a>
+
+      <!-- Progress -->
+      <div class="progress-wrapper" id="progress-image">
+        <div class="progress-bar-bg"><div class="progress-bar-fill fill-image" id="fill-image"></div></div>
+        <div class="progress-label" id="label-image">0 de 4 pasos completados</div>
+      </div>
+
+      <!-- Checklist -->
+      <div class="tips-section">
+        <h4>📋 Tu progreso</h4>
+        <div class="checklist-item" onclick="toggleCheck(this, 'image')">
+          <div class="check-box"></div>
+          <span class="check-label">He abierto Gemini en Chrome</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'image')">
+          <div class="check-box"></div>
+          <span class="check-label">He escrito mi descripción</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'image')">
+          <div class="check-box"></div>
+          <span class="check-label">He generado una imagen</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'image')">
+          <div class="check-box"></div>
+          <span class="check-label">He descargado la imagen</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════ -->
+  <!-- SECTION 2: MUSIC                    -->
+  <!-- ════════════════════════════════════ -->
+  <div class="section-panel" id="section-music">
+    <div class="glass-card">
+      <div class="section-header">
+        <div class="section-icon-circle icon-music">🎵</div>
+        <div>
+          <div class="section-title">Crear Música y Canciones</div>
+          <div class="section-subtitle">Compón canciones originales para tu aula</div>
+        </div>
+      </div>
+
+      <div class="tool-badge badge-music">🔧 Herramienta: Suno AI</div>
+
+      <div class="info-box info-box-purple">
+        <strong>¿Qué es?</strong> Suno es una herramienta que crea canciones completas (con letra, música y voz) a partir de una descripción tuya. Puedes crear canciones para enseñar los colores, las estaciones, normas de clase... ¡Lo que imagines! No necesitas saber música.
+      </div>
+
+      <!-- Steps -->
+      <div class="steps-container">
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-music">1</div>
+          <div class="step-content">
+            <div class="step-title">Entra en Suno AI</div>
+            <div class="step-description">Abre la web y crea tu cuenta gratuita</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Abre Chrome y ve a <code>suno.com</code>. Haz clic en <code>Sign Up</code> o <code>Registrarse</code>. Puedes usar tu cuenta de Google para entrar más rápido (botón "Continue with Google"). La versión gratuita te deja crear varias canciones al día.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-music">2</div>
+          <div class="step-content">
+            <div class="step-title">Pulsa "Create" (Crear)</div>
+            <div class="step-description">Busca el botón de creación en la pantalla principal</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Una vez dentro, busca el botón <code>Create</code> (suele estar arriba o a la izquierda). Se abrirá un cuadro donde puedes describir la canción que quieres. Aquí es donde ocurre la magia.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-music">3</div>
+          <div class="step-content">
+            <div class="step-title">Describe tu canción</div>
+            <div class="step-description">Escribe qué tipo de canción quieres y sobre qué tema</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              En el cuadro de texto, escribe en español lo que quieres. Por ejemplo: <code>Una canción infantil alegre y pegadiza sobre los días de la semana, con ritmo pop suave, cantada por una voz femenina dulce, en español</code>. Puedes especificar el estilo musical, el idioma, el tema y el tono.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-music">4</div>
+          <div class="step-content">
+            <div class="step-title">Genera y escucha</div>
+            <div class="step-description">Pulsa crear y escucha el resultado</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Pulsa el botón de crear y espera entre 30 segundos y un minuto. Suno generará dos versiones de tu canción. Escúchalas y elige la que más te guste. Si quieres otra versión, simplemente vuelve a pulsar "Create". ¡Puedes descargarla con el botón de descarga (tres puntitos → Download)!
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task -->
+      <div class="task-card task-music">
+        <h3>🎯 Tu misión</h3>
+        <p>Crea una canción personalizada para tu clase. Puede ser sobre un tema que estés trabajando, una canción de bienvenida, de despedida, o para enseñar un contenido concreto.</p>
+        <div class="task-example">
+          <strong>💡 Ejemplo de instrucción:</strong>
+          «Canción infantil corta y alegre en español, estilo pop acústico, con voz femenina suave, sobre las rutinas de la mañana en el cole: colgar la mochila, decir buenos días, sentarse en la asamblea. Tono cariñoso y divertido»
+        </div>
+      </div>
+
+      <a href="https://suno.com" target="_blank" class="link-btn link-btn-music">
+        Abrir Suno AI ↗
+      </a>
+
+      <!-- Progress -->
+      <div class="progress-wrapper" id="progress-music">
+        <div class="progress-bar-bg"><div class="progress-bar-fill fill-music" id="fill-music"></div></div>
+        <div class="progress-label" id="label-music">0 de 4 pasos completados</div>
+      </div>
+
+      <!-- Checklist -->
+      <div class="tips-section">
+        <h4>📋 Tu progreso</h4>
+        <div class="checklist-item" onclick="toggleCheck(this, 'music')">
+          <div class="check-box"></div>
+          <span class="check-label">He abierto Suno y creado mi cuenta</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'music')">
+          <div class="check-box"></div>
+          <span class="check-label">He encontrado el botón "Create"</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'music')">
+          <div class="check-box"></div>
+          <span class="check-label">He descrito mi canción</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'music')">
+          <div class="check-box"></div>
+          <span class="check-label">He escuchado y descargado mi canción</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════ -->
+  <!-- SECTION 3: STORIES                  -->
+  <!-- ════════════════════════════════════ -->
+  <div class="section-panel" id="section-story">
+    <div class="glass-card">
+      <div class="section-header">
+        <div class="section-icon-circle icon-story">📖</div>
+        <div>
+          <div class="section-title">Crear Cuentos Ilustrados</div>
+          <div class="section-subtitle">Genera cuentos personalizados con ilustraciones</div>
+        </div>
+      </div>
+
+      <div class="tool-badge badge-story">🔧 Herramienta: Storybook (Google Gemini)</div>
+
+      <div class="info-box info-box-green">
+        <strong>¿Qué es?</strong> Storybook es una función experimental de Google que crea cuentos ilustrados automáticamente. Tú le dices de qué quieres el cuento, y la IA escribe la historia y genera las ilustraciones. Perfecto para crear cuentos únicos adaptados a tu aula.
+      </div>
+
+      <!-- Steps -->
+      <div class="steps-container">
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-story">1</div>
+          <div class="step-content">
+            <div class="step-title">Abre Storybook en Gemini</div>
+            <div class="step-description">Accede a la herramienta experimental de cuentos</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Ve a <code>gemini.google.com</code> en Chrome. Una vez dentro, busca en el menú lateral o en las opciones de herramientas la sección <code>Gems</code> o <code>Extensiones</code>. Storybook puede aparecer como una Gem especializada. Si no la encuentras, puedes pedirle directamente a Gemini: <code>Crea un cuento ilustrado sobre...</code> y generará texto e imágenes.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-story">2</div>
+          <div class="step-content">
+            <div class="step-title">Elige el tema de tu cuento</div>
+            <div class="step-description">Piensa en una historia adaptada a tu aula</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Antes de escribir, piensa: ¿qué valores quieres transmitir? ¿Hay algún tema que estés trabajando? ¿Un alumno/a que necesite verse reflejado? Los mejores cuentos son los que conectan con la realidad de los niños y niñas de tu aula.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-story">3</div>
+          <div class="step-content">
+            <div class="step-title">Escribe tu petición</div>
+            <div class="step-description">Describe el cuento que quieres con todo el detalle posible</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Escribe algo como: <code>Crea un cuento ilustrado de 5 páginas para niños de 4 años sobre una estrella que baja del cielo para jugar con los niños del cole. Estilo de ilustración suave y colorido. El cuento debe enseñar la importancia de compartir.</code> Cuantos más detalles, mejor resultado.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-story">4</div>
+          <div class="step-content">
+            <div class="step-title">Revisa, mejora y guarda</div>
+            <div class="step-description">Lee el cuento, pide cambios si quieres y descárgalo</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Lee el cuento generado. Si algo no te convence, dile a Gemini: <code>Cambia el final para que sea más divertido</code> o <code>Hazlo más cortito</code>. Cuando estés contento/a, puedes copiar el texto y guardar las imágenes. ¡Ya tienes un cuento único para tu clase!
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task -->
+      <div class="task-card task-story">
+        <h3>🎯 Tu misión</h3>
+        <p>Crea un cuento ilustrado personalizado para tu grupo de alumnos. Piensa en un valor, un tema o una situación que quieras trabajar con ellos y deja que la IA te ayude a contarlo.</p>
+        <div class="task-example">
+          <strong>💡 Ejemplo de instrucción:</strong>
+          «Crea un cuento ilustrado de 6 páginas para niños de 5 años sobre un caracol llamado Paco que tiene miedo de ir lento, pero descubre que ir despacio le permite ver cosas hermosas que los demás se pierden. Estilo ilustración acuarela tierna. Moraleja: cada uno tiene su ritmo y eso está bien»
+        </div>
+      </div>
+
+      <a href="https://gemini.google.com" target="_blank" class="link-btn link-btn-story">
+        Abrir Gemini ↗
+      </a>
+
+      <!-- Progress -->
+      <div class="progress-wrapper" id="progress-story">
+        <div class="progress-bar-bg"><div class="progress-bar-fill fill-story" id="fill-story"></div></div>
+        <div class="progress-label" id="label-story">0 de 4 pasos completados</div>
+      </div>
+
+      <!-- Checklist -->
+      <div class="tips-section">
+        <h4>📋 Tu progreso</h4>
+        <div class="checklist-item" onclick="toggleCheck(this, 'story')">
+          <div class="check-box"></div>
+          <span class="check-label">He abierto Gemini / Storybook</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'story')">
+          <div class="check-box"></div>
+          <span class="check-label">He pensado el tema de mi cuento</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'story')">
+          <div class="check-box"></div>
+          <span class="check-label">He escrito mi petición</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'story')">
+          <div class="check-box"></div>
+          <span class="check-label">He revisado y guardado mi cuento</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════ -->
+  <!-- SECTION 4: TRUCOS DE PROMPTING     -->
+  <!-- ════════════════════════════════════ -->
+  <div class="section-panel" id="section-tips">
+    <div class="glass-card">
+      <div class="section-header">
+        <div class="section-icon-circle" style="background: linear-gradient(135deg, #f0b429 0%, #f7d070 100%);">✨</div>
+        <div>
+          <div class="section-title">Trucos para hablar con la IA</div>
+          <div class="section-subtitle">Pequeños secretos para que los resultados sean mucho mejores</div>
+        </div>
+      </div>
+
+      <div class="info-box" style="background: rgba(240,180,41,0.1); border-left: 4px solid #f0b429;">
+        <strong>La idea clave:</strong> Hablar con una IA es como pedir comida en un restaurante. Si dices «ponme algo de comer», te traerán cualquier cosa. Pero si dices «quiero una ensalada templada con queso de cabra, nueces y vinagreta de miel», el resultado será exactamente lo que buscas. Con la IA pasa lo mismo: <strong>cuanto más le expliques lo que imaginas, mejor será el resultado</strong>.
+      </div>
+
+      <!-- The Formula -->
+      <div style="margin: 28px 0 8px; padding: 0 4px;">
+        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px;">
+          🧪 La fórmula mágica
+        </h3>
+        <p style="font-size: 0.95rem; color: var(--text-medium); margin-bottom: 18px; line-height: 1.5;">
+          No hace falta escribir mucho. Solo hay que incluir <strong>4 ingredientes</strong>. Piensa en ellos como si rellenases una ficha:
+        </p>
+      </div>
+
+      <div class="formula-grid">
+        <div class="formula-card" style="--fc-color: #ff7b54;">
+          <div class="formula-number">1</div>
+          <div class="formula-label">QUÉ quiero</div>
+          <div class="formula-desc">¿Una imagen? ¿Una canción? ¿Un cuento? Díselo claro al principio.</div>
+          <div class="formula-example">«Genera una imagen de…»<br>«Crea una canción sobre…»<br>«Escribe un cuento de…»</div>
+        </div>
+        <div class="formula-card" style="--fc-color: #7c5cbf;">
+          <div class="formula-number">2</div>
+          <div class="formula-label">CÓMO lo quiero</div>
+          <div class="formula-desc">El estilo, el tono, la estética. Como elegir el "traje" del resultado.</div>
+          <div class="formula-example">«…estilo acuarela infantil»<br>«…ritmo alegre y pegadizo»<br>«…con ilustraciones tiernas»</div>
+        </div>
+        <div class="formula-card" style="--fc-color: #2ec4a0;">
+          <div class="formula-number">3</div>
+          <div class="formula-label">PARA QUIÉN</div>
+          <div class="formula-desc">La edad, el nivel, el contexto. Esto cambia mucho el resultado.</div>
+          <div class="formula-example">«…para niños de 3 años»<br>«…para la asamblea de clase»<br>«…para trabajar las emociones»</div>
+        </div>
+        <div class="formula-card" style="--fc-color: #f0b429;">
+          <div class="formula-number">4</div>
+          <div class="formula-label">DETALLES extra</div>
+          <div class="formula-desc">Colores, personajes, duración, idioma… Los extras que lo hacen perfecto.</div>
+          <div class="formula-example">«…colores pastel y fondo blanco»<br>«…voz femenina dulce, en español»<br>«…con un final sorpresa»</div>
+        </div>
+      </div>
+
+      <!-- Before / After -->
+      <div style="margin: 36px 0 8px; padding: 0 4px;">
+        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px;">
+          🔄 Antes y después: la diferencia de un buen prompt
+        </h3>
+        <p style="font-size: 0.95rem; color: var(--text-medium); margin-bottom: 18px; line-height: 1.5;">
+          Mira cómo cambia el resultado con solo añadir unos detalles:
+        </p>
+      </div>
+
+      <!-- Before/After: Images -->
+      <div class="before-after-block">
+        <div class="ba-label">🎨 Para imágenes</div>
+        <div class="ba-row">
+          <div class="ba-card ba-before">
+            <div class="ba-tag">❌ Así no</div>
+            <p>«Dibuja un oso»</p>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-card ba-after">
+            <div class="ba-tag">✅ Así sí</div>
+            <p>«Genera una imagen de un oso de peluche marrón sentado en una nube, estilo ilustración infantil con colores pastel, fondo de cielo rosa suave con estrellas pequeñas»</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Before/After: Music -->
+      <div class="before-after-block">
+        <div class="ba-label">🎵 Para música</div>
+        <div class="ba-row">
+          <div class="ba-card ba-before">
+            <div class="ba-tag">❌ Así no</div>
+            <p>«Haz una canción de los números»</p>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-card ba-after">
+            <div class="ba-tag">✅ Así sí</div>
+            <p>«Canción infantil en español, alegre y pegadiza, estilo pop acústico con guitarra, voz femenina suave, que enseñe los números del 1 al 10 con ejemplos divertidos (1 nariz, 2 ojitos…), duración 1 minuto»</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Before/After: Stories -->
+      <div class="before-after-block">
+        <div class="ba-label">📖 Para cuentos</div>
+        <div class="ba-row">
+          <div class="ba-card ba-before">
+            <div class="ba-tag">❌ Así no</div>
+            <p>«Cuento de un perro»</p>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-card ba-after">
+            <div class="ba-tag">✅ Así sí</div>
+            <p>«Crea un cuento ilustrado de 5 páginas para niños de 4 años sobre un perrito llamado Canela que tiene miedo del primer día de cole, pero descubre que hacer amigos es maravilloso. Estilo acuarela tierna, colores cálidos. Moraleja: lo desconocido puede ser bonito»</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Golden Tips -->
+      <div style="margin: 36px 0 8px; padding: 0 4px;">
+        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px;">
+          💡 5 trucos de oro
+        </h3>
+      </div>
+
+      <div class="golden-tips">
+        <div class="golden-tip">
+          <div class="golden-tip-icon">🔁</div>
+          <div class="golden-tip-content">
+            <strong>Si no te gusta, ¡pide cambios!</strong>
+            <p>No hace falta empezar de cero. Dile a la IA qué cambiar: «hazlo más colorido», «cambia la voz a masculina», «que el final sea más divertido». La IA recuerda la conversación.</p>
+          </div>
+        </div>
+        <div class="golden-tip">
+          <div class="golden-tip-icon">📋</div>
+          <div class="golden-tip-content">
+            <strong>Copia y modifica</strong>
+            <p>Si un compañero/a ha escrito un buen prompt, cópialo y cámbialo a tu gusto. No hay que reinventar la rueda. Los ejemplos de este taller son tuyos para modificar.</p>
+          </div>
+        </div>
+        <div class="golden-tip">
+          <div class="golden-tip-icon">🎯</div>
+          <div class="golden-tip-content">
+            <strong>Sé específica, no larga</strong>
+            <p>No hace falta escribir un párrafo enorme. Con 2-3 frases bien pensadas basta: qué quiero + cómo lo quiero + para quién. Calidad, no cantidad.</p>
+          </div>
+        </div>
+        <div class="golden-tip">
+          <div class="golden-tip-icon">🌟</div>
+          <div class="golden-tip-content">
+            <strong>Usa palabras clave de estilo</strong>
+            <p>Estas palabras hacen magia: <em>infantil, tierno, acuarela, pastel, alegre, suave, cálido, minimalista, colorido, divertido</em>. Añade una o dos y verás la diferencia.</p>
+          </div>
+        </div>
+        <div class="golden-tip">
+          <div class="golden-tip-icon">😊</div>
+          <div class="golden-tip-content">
+            <strong>No tengas miedo de equivocarte</strong>
+            <p>No puedes romper nada. Si el resultado es raro, simplemente prueba otra vez con otras palabras. La IA no se enfada, no se cansa y no juzga. ¡Experimenta!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metaprompt Section -->
+      <div class="task-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; margin-top: 28px; border: 2px solid rgba(255,255,255,0.2);">
+        <h3 style="color: #fff; display: flex; align-items: center; gap: 10px; font-size: 1.25rem;">
+          🪄 El truco más fácil del mundo: pídele ayuda a la propia IA
+        </h3>
+        <p style="color: rgba(255,255,255,0.92); font-size: 1.05rem; line-height: 1.7; margin-top: 8px;">
+          ¿Sabes qué quieres pero no encuentras las palabras para explicárselo a la IA? Pues hay un truco muy sencillo: <strong>pídele a la propia IA que te ayude a escribir la instrucción</strong>. Es como cuando le dices a alguien: «Quiero hacer un bizcocho, pero no sé qué ingredientes necesito. ¿Me ayudas a hacer la lista?». Mira lo fácil que es:
+        </p>
+
+        <div style="display: flex; align-items: center; gap: 12px; margin: 20px 0 10px; flex-wrap: wrap;">
+          <span style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">1️⃣</span>
+          <span style="font-weight: 600; font-size: 1rem;">Tienes una idea, aunque sea vaga — ¡y eso basta!</span>
+        </div>
+        <div class="task-example" style="background: rgba(255,255,255,0.15); color: #ffe0e0; border-left: 4px solid #ff8a80;">
+          💭 <em>«Quiero una imagen de un animal para trabajar la primavera, pero no sé cómo pedirla bien…»</em>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px; margin: 18px 0 10px; flex-wrap: wrap;">
+          <span style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">2️⃣</span>
+          <span style="font-weight: 600; font-size: 1rem;">Se lo cuentas a la IA con tus palabras, tal cual</span>
+        </div>
+        <div class="task-example" style="background: rgba(255,255,255,0.15); color: #fff; border-left: 4px solid #82b1ff;">
+          📝 <em>«Soy profesora de Infantil (5 años). Quiero generar una imagen de un animal relacionado con la primavera. <strong>Ayúdame a escribir una instrucción detallada</strong> para un generador de imágenes, con estilo infantil y colores suaves.»</em>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px; margin: 18px 0 10px; flex-wrap: wrap;">
+          <span style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">3️⃣</span>
+          <span style="font-weight: 600; font-size: 1rem;">¡Y la IA te la escribe! Solo tienes que copiar y pegar</span>
+        </div>
+        <div class="task-example" style="background: rgba(255,255,255,0.15); color: #c8e6c9; border-left: 4px solid #69f0ae;">
+          ✅ <em>«Una mariposa monarca posada sobre una flor de lavanda en un jardín soleado de primavera, estilo acuarela infantil, colores pastel suaves (rosa, lila, verde menta), fondo con cielo celeste y nubes redondeadas, aspecto tierno y amigable para niños de 5 años»</em>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.15); border-radius: 14px; padding: 16px 20px; margin-top: 18px;">
+          <p style="color: rgba(255,255,255,0.95); margin: 0; font-size: 0.98rem; line-height: 1.65;">
+            <strong>💡 ¿Por qué funciona tan bien?</strong> Porque tú sabes <em>qué necesitas</em> en tu aula (eso nadie lo sabe mejor que tú), y la IA sabe <em>qué palabras dan mejores resultados</em>. Juntando las dos cosas, consigues resultados mucho mejores sin esfuerzo. ¡Es como tener una asistente creativa que te entiende a la primera!
+          </p>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.12); border-radius: 14px; padding: 16px 20px; margin-top: 12px;">
+          <p style="color: rgba(255,255,255,0.9); margin: 0; font-size: 0.95rem; line-height: 1.6;">
+            <strong>🔑 La frase mágica que siempre funciona:</strong><br>
+            <em>«Soy [tu rol, p. ej. profesora de Infantil de 4 años]. Quiero crear [qué: una imagen / canción / cuento] sobre [tema]. <strong>Ayúdame a escribir una instrucción detallada</strong> para [herramienta: el generador de imágenes / canciones / cuentos].»</em>
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Reference -->
+      <div class="task-card" style="background: linear-gradient(135deg, #f0b429 0%, #f7d070 100%); color: #4a3600; margin-top: 28px;">
+        <h3 style="color: #4a3600;">📌 Tu chuleta rápida</h3>
+        <p style="color: #5a4400;">Cuando no sepas qué escribir, rellena esta plantilla y pégala tal cual:</p>
+        <div class="task-example" style="background: rgba(255,255,255,0.35); color: #4a3600; margin-top: 14px; font-size: 1rem; line-height: 1.7;">
+          <strong style="color: #4a3600;">Para imágenes:</strong><br>
+          «Genera una imagen de <em>[qué]</em>, estilo <em>[acuarela/dibujo/foto/cartoon]</em>, para niños de <em>[edad]</em>, con colores <em>[pastel/vivos/cálidos]</em> y fondo <em>[color/escena]</em>»
+        </div>
+        <div class="task-example" style="background: rgba(255,255,255,0.35); color: #4a3600; margin-top: 10px; font-size: 1rem; line-height: 1.7;">
+          <strong style="color: #4a3600;">Para canciones:</strong><br>
+          «Canción infantil en español sobre <em>[tema]</em>, estilo <em>[pop/acústico/nana]</em>, voz <em>[femenina/masculina]</em>, tono <em>[alegre/dulce/divertido]</em>, duración <em>[corta/1 minuto]</em>»
+        </div>
+        <div class="task-example" style="background: rgba(255,255,255,0.35); color: #4a3600; margin-top: 10px; font-size: 1rem; line-height: 1.7;">
+          <strong style="color: #4a3600;">Para cuentos:</strong><br>
+          «Crea un cuento ilustrado de <em>[nº páginas]</em> para niños de <em>[edad]</em> sobre <em>[personaje]</em> que <em>[qué le pasa]</em>. Estilo <em>[acuarela/cartoon]</em>. Moraleja: <em>[enseñanza]</em>»
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  </div> <!-- /pathway-infantil -->
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- PATHWAY: PRIMARIA                      -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="pathway-primaria" class="pathway-content">
+    <button class="btn-back" onclick="goHome()">← Volver al inicio</button>
+
+    <header class="header">
+      <div class="header-badge">📚 Itinerario Primaria</div>
+      <h1>Taller de <span class="gradient-text">IA para Primaria</span></h1>
+      <p>Herramientas de IA adaptadas al aula de Educación Primaria</p>
+    </header>
+
+    <div class="coming-soon-card">
+      <div class="coming-soon-icon">🚧</div>
+      <div class="coming-soon-title">Próximamente</div>
+      <div class="coming-soon-text">
+        Estamos preparando contenidos específicos para Primaria.<br>
+        ¡Vuelve pronto para descubrir las herramientas que hemos seleccionado para ti!
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- PATHWAY: ESO                           -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="pathway-eso" class="pathway-content">
+    <button class="btn-back" onclick="goHome()">← Volver al inicio</button>
+
+    <header class="header">
+      <div class="header-badge">🎓 Itinerario ESO</div>
+      <h1>Taller de <span class="gradient-text">IA para ESO</span></h1>
+      <p>Herramientas de Inteligencia Artificial para crear recursos, vídeos y materiales adaptados a Secundaria</p>
+    </header>
+
+    <!-- ESO Navigation -->
+    <nav class="nav-pills">
+      <button class="nav-pill active-eso-image" onclick="showEsoSection('eso-image')" id="pill-eso-image">
+        <span class="pill-icon">🎨</span> Imágenes
+      </button>
+      <button class="nav-pill" onclick="showEsoSection('eso-video')" id="pill-eso-video">
+        <span class="pill-icon">🎬</span> Vídeos
+      </button>
+      <button class="nav-pill" onclick="showEsoSection('eso-notebook')" id="pill-eso-notebook">
+        <span class="pill-icon">📓</span> NotebookLM
+      </button>
+      <button class="nav-pill" onclick="showEsoSection('eso-materials')" id="pill-eso-materials">
+        <span class="pill-icon">📝</span> Materiales
+      </button>
+      <button class="nav-pill" onclick="showEsoSection('eso-tips')" id="pill-eso-tips">
+        <span class="pill-icon">✨</span> Trucos
+      </button>
+    </nav>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- ESO SECTION 1: IMAGES               -->
+    <!-- ════════════════════════════════════ -->
+    <div class="section-panel active" id="section-eso-image">
+      <div class="glass-card">
+        <div class="section-header">
+          <div class="section-icon-circle icon-eso-image">🎨</div>
+          <div>
+            <div class="section-title">Crear Imágenes con IA</div>
+            <div class="section-subtitle">Genera ilustraciones y recursos visuales para tus clases de ESO</div>
+          </div>
+        </div>
+
+        <div class="tool-badge badge-eso-image">🔧 Herramienta: Nano Banana Pro (Google Gemini)</div>
+
+        <div class="info-box info-box-warm">
+          <strong>¿Qué es?</strong> Nano Banana Pro es el generador de imágenes de Google, integrado en Gemini. Le describes lo que necesitas y genera la imagen en segundos. Ideal para crear portadas de temas, mapas conceptuales visuales, ilustraciones históricas, infografías o material de apoyo para cualquier asignatura.
+        </div>
+
+        <!-- Steps -->
+        <div class="steps-container">
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-image">1</div>
+            <div class="step-content">
+              <div class="step-title">Abre Google Gemini</div>
+              <div class="step-description">Accede al generador de imágenes desde tu navegador</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Abre Chrome en tu Chromebook y ve a <code>gemini.google.com</code>. Inicia sesión con tu cuenta de Google (la del colegio). Una vez dentro, verás un cuadro de texto donde escribir tu petición. Gemini entiende perfectamente el español.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-image">2</div>
+            <div class="step-content">
+              <div class="step-title">Describe la imagen que necesitas</div>
+              <div class="step-description">Sé concreto: asignatura, tema, estilo y uso que le darás</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Escribe algo como: <code>Genera una imagen de estilo infografía educativa que muestre las partes del aparato digestivo humano, con etiquetas claras, colores vivos y fondo blanco, para alumnos de 3º ESO</code>. Cuanto más contexto des (nivel, estilo, finalidad), mejor será el resultado.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-image">3</div>
+            <div class="step-content">
+              <div class="step-title">Pulsa «Enviar» y revisa</div>
+              <div class="step-description">Gemini generará la imagen en unos segundos</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Haz clic en enviar (➤) o pulsa <code>Enter</code>. Espera 10-15 segundos. Si la imagen no es lo que esperabas, puedes pedir cambios: <code>Pon las etiquetas más grandes</code>, <code>Cambia el estilo a acuarela</code> o <code>Añade un título arriba</code>. Itera hasta que te convenza.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-image">4</div>
+            <div class="step-content">
+              <div class="step-title">Descarga y utiliza la imagen</div>
+              <div class="step-description">Guárdala para usarla en presentaciones, fichas o exámenes</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Clic derecho sobre la imagen → <code>Guardar imagen como...</code>. Guárdala en una carpeta organizada (p. ej., «Recursos IA»). Ya puedes insertarla en tus documentos de Google, presentaciones de Slides o fichas de trabajo para los alumnos.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task -->
+        <div class="task-card task-eso-image">
+          <h3>🎯 Tu misión</h3>
+          <p>Crea una imagen que puedas usar en una de tus asignaturas de ESO: una ilustración histórica, un mapa conceptual visual, una portada de tema o un recurso para una ficha.</p>
+          <div class="task-example">
+            <strong>💡 Ejemplo de instrucción:</strong>
+            «Genera una imagen educativa de estilo realista que represente un ágora griega durante una asamblea democrática en Atenas, siglo V a.C., con ciudadanos debatiendo, columnas dóricas al fondo y cielo mediterráneo. Para una clase de Geografía e Historia de 2º ESO»
+          </div>
+        </div>
+
+        <a href="https://gemini.google.com" target="_blank" class="link-btn link-btn-eso-image">
+          Abrir Gemini ↗
+        </a>
+
+        <!-- Progress -->
+        <div class="progress-wrapper" id="progress-eso-image">
+          <div class="progress-bar-bg"><div class="progress-bar-fill fill-eso-image" id="fill-eso-image"></div></div>
+          <div class="progress-label" id="label-eso-image">0 de 4 pasos completados</div>
+        </div>
+
+        <!-- Checklist -->
+        <div class="tips-section">
+          <h4>📋 Tu progreso</h4>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-image')">
+            <div class="check-box"></div>
+            <span class="check-label">He abierto Gemini en Chrome</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-image')">
+            <div class="check-box"></div>
+            <span class="check-label">He descrito una imagen para mi asignatura</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-image')">
+            <div class="check-box"></div>
+            <span class="check-label">He generado la imagen</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-image')">
+            <div class="check-box"></div>
+            <span class="check-label">He descargado la imagen</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- ESO SECTION 2: VIDEOS               -->
+    <!-- ════════════════════════════════════ -->
+    <div class="section-panel" id="section-eso-video">
+      <div class="glass-card">
+        <div class="section-header">
+          <div class="section-icon-circle icon-eso-video">🎬</div>
+          <div>
+            <div class="section-title">Crear Vídeos con IA</div>
+            <div class="section-subtitle">Genera clips de vídeo a partir de texto o imágenes para tus clases</div>
+          </div>
+        </div>
+
+        <div class="tool-badge badge-eso-video">🔧 Herramienta: Google Flow (motor Veo 3.1)</div>
+
+        <div class="info-box info-box-blue">
+          <strong>¿Qué es?</strong> Google Flow es la herramienta de creación de vídeo con IA de Google, impulsada por Veo 3.1. Le describes una escena con palabras y genera un clip de vídeo realista con audio sincronizado (sonido ambiente, diálogos, efectos). Puedes usarlo para crear vídeos explicativos, recreaciones históricas, visualizaciones de fenómenos naturales o intros para tus temas.
+        </div>
+
+        <div class="info-box info-box-blue" style="border-left-color: #1e40af;">
+          <strong>💰 Acceso:</strong> Si tu colegio usa Google Workspace for Education, tienes 100 créditos mensuales gratis en Flow. También puedes acceder con Google AI Pro (19,99 $/mes, 1.000 créditos). Cada vídeo consume entre 10 y 50 créditos según el modelo y la duración.
+        </div>
+
+        <!-- Steps -->
+        <div class="steps-container">
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-video">1</div>
+            <div class="step-content">
+              <div class="step-title">Abre Google Flow</div>
+              <div class="step-description">Accede a la plataforma de creación de vídeo</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Abre Chrome y ve a <code>labs.google/flow</code>. Inicia sesión con tu cuenta de Google. Verás la interfaz de Flow con un espacio para crear proyectos. Si es tu primera vez, explora los vídeos de ejemplo en «Flow TV» para hacerte una idea de lo que se puede lograr.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-video">2</div>
+            <div class="step-content">
+              <div class="step-title">Describe la escena que quieres</div>
+              <div class="step-description">Escribe con detalle qué debe mostrar el vídeo</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Crea un nuevo proyecto y escribe tu descripción. Sé concreto con el encuadre, la ambientación y la acción. Por ejemplo: <code>Una animación educativa que muestra el ciclo del agua: gotas de lluvia cayendo sobre montañas, agua fluyendo por un río hasta el mar, evaporación con el sol, formación de nubes y nueva lluvia. Estilo realista, colores vivos, movimiento suave.</code> Elige formato horizontal (16:9) para presentaciones o vertical (9:16) para móvil.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-video">3</div>
+            <div class="step-content">
+              <div class="step-title">Genera y revisa el clip</div>
+              <div class="step-description">Flow creará un vídeo de hasta 8 segundos con audio</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Pulsa generar y espera entre 30 segundos y 2 minutos. Flow generará un clip de hasta 8 segundos en 1080p con sonido ambiente sincronizado. Revisa el resultado: si necesitas ajustes, puedes usar las herramientas de edición para insertar o eliminar objetos, o extender la duración del clip. Puedes encadenar varios clips para crear un vídeo más largo.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-video">4</div>
+            <div class="step-content">
+              <div class="step-title">Descarga o comparte</div>
+              <div class="step-description">Guarda el vídeo para usarlo en clase</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Cuando el vídeo te convenza, expórtalo o descárgalo. Podrás insertarlo en tus presentaciones de Google Slides, compartirlo en Google Classroom o proyectarlo directamente en clase. Recuerda que los vídeos generados con IA incluyen una marca de agua digital (SynthID) de Google. Puedes combinarlo con imágenes generadas en Gemini como «ingredientes» para lograr mayor consistencia visual.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task -->
+        <div class="task-card task-eso-video">
+          <h3>🎯 Tu misión</h3>
+          <p>Crea un clip de vídeo corto que puedas proyectar al iniciar un tema en clase. Puede ser una recreación histórica, un fenómeno geográfico, una metáfora visual para Lengua o una escena filosófica.</p>
+          <div class="task-example">
+            <strong>💡 Ejemplo de instrucción:</strong>
+            «Un plano cinematográfico de un mercado medieval bullicioso en la Europa del siglo XIII: puestos de tela y especias, campesinos y mercaderes negociando, una catedral gótica al fondo, luz de atardecer dorada. Audio ambiente con voces y sonidos de mercado. Estilo realista, formato 16:9»
+          </div>
+        </div>
+
+        <a href="https://labs.google/flow" target="_blank" class="link-btn link-btn-eso-video">
+          Abrir Google Flow ↗
+        </a>
+
+        <!-- Progress -->
+        <div class="progress-wrapper" id="progress-eso-video">
+          <div class="progress-bar-bg"><div class="progress-bar-fill fill-eso-video" id="fill-eso-video"></div></div>
+          <div class="progress-label" id="label-eso-video">0 de 4 pasos completados</div>
+        </div>
+
+        <!-- Checklist -->
+        <div class="tips-section">
+          <h4>📋 Tu progreso</h4>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-video')">
+            <div class="check-box"></div>
+            <span class="check-label">He abierto Google Flow</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-video')">
+            <div class="check-box"></div>
+            <span class="check-label">He descrito una escena para mi asignatura</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-video')">
+            <div class="check-box"></div>
+            <span class="check-label">He generado un clip de vídeo</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-video')">
+            <div class="check-box"></div>
+            <span class="check-label">He descargado o compartido el vídeo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- ESO SECTION 3: NOTEBOOKLM           -->
+    <!-- ════════════════════════════════════ -->
+    <div class="section-panel" id="section-eso-notebook">
+      <div class="glass-card">
+        <div class="section-header">
+          <div class="section-icon-circle icon-eso-notebook">📓</div>
+          <div>
+            <div class="section-title">NotebookLM</div>
+            <div class="section-subtitle">Tu asistente de investigación que solo trabaja con tus fuentes</div>
+          </div>
+        </div>
+
+        <div class="tool-badge badge-eso-notebook">🔧 Herramienta: Google NotebookLM (gratuita)</div>
+
+        <div class="info-box info-box-red">
+          <strong>¿Qué es?</strong> NotebookLM es un asistente de investigación de Google basado en IA. Su diferencia clave: solo trabaja con los documentos que tú le proporcionas, no inventa información ni busca en internet. Subes tus PDFs, apuntes, vídeos de YouTube o webs, y NotebookLM se convierte en un experto en ese material. Puede generar resúmenes, guías de estudio, cuestionarios, cronologías e incluso podcasts en audio a partir de tus fuentes.
+        </div>
+
+        <div class="info-box info-box-red" style="border-left-color: #b91c1c;">
+          <strong>💰 Acceso:</strong> NotebookLM es gratuito para todos los centros educativos con Google Workspace for Education. Está cubierto bajo los Términos de Servicio de Workspace (los datos no se usan para entrenar IA). Disponible para usuarios de todas las edades, con protecciones adicionales para menores.
+        </div>
+
+        <!-- Steps -->
+        <div class="steps-container">
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-notebook">1</div>
+            <div class="step-content">
+              <div class="step-title">Abre NotebookLM y crea un cuaderno</div>
+              <div class="step-description">Cada cuaderno es un espacio de trabajo sobre un tema</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Ve a <code>notebooklm.google.com</code> e inicia sesión con tu cuenta de Google. Haz clic en <code>Nuevo cuaderno</code> y ponle un nombre descriptivo, por ejemplo: «Tema 5 · La Edad Media – 2º ESO» o «Análisis Lazarillo de Tormes – 3º ESO». Puedes tener hasta 100 cuadernos.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-notebook">2</div>
+            <div class="step-content">
+              <div class="step-title">Sube tus fuentes</div>
+              <div class="step-description">Añade PDFs, Docs, Slides, vídeos de YouTube o webs</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Haz clic en <code>Añadir fuente</code> (panel izquierdo). Puedes subir: PDFs del libro de texto, documentos de Google Drive, presentaciones de Slides, enlaces a vídeos de YouTube, sitios web o archivos de audio. Cada cuaderno admite hasta 50 fuentes. NotebookLM leerá y analizará todo el contenido automáticamente, generando un resumen inicial.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-notebook">3</div>
+            <div class="step-content">
+              <div class="step-title">Pregunta y explora el contenido</div>
+              <div class="step-description">Haz preguntas concretas y obtén respuestas con citas a tus fuentes</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                En el cuadro de chat (parte inferior), escribe lo que necesites. Ejemplos: <code>¿Cuáles son las causas principales de la caída del Imperio Romano según mis fuentes?</code>, <code>Resume el capítulo 3 en 5 puntos clave</code>, <code>Crea una cronología de los eventos principales</code>. Cada respuesta incluye citas directas a tus documentos para que puedas verificar la información.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-notebook">4</div>
+            <div class="step-content">
+              <div class="step-title">Genera materiales listos para usar</div>
+              <div class="step-description">Crea guías de estudio, cuestionarios, resúmenes de audio y vídeo</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                En el panel derecho encontrarás herramientas para generar automáticamente: <strong>Guías de estudio</strong> con preguntas y respuestas, <strong>Resúmenes</strong> del contenido, <strong>Preguntas frecuentes</strong>, <strong>Cronologías</strong>, <strong>Resúmenes de audio</strong> (dos voces de IA comentan tu material como un podcast) y <strong>Resúmenes de vídeo</strong> (vídeos explicativos cortos). Puedes copiar y compartir estos materiales con tus alumnos.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task -->
+        <div class="task-card task-eso-notebook">
+          <h3>🎯 Tu misión</h3>
+          <p>Crea un cuaderno de NotebookLM sobre un tema de tu asignatura. Sube al menos 2 fuentes (un PDF y un vídeo de YouTube o web) y genera una guía de estudio o un resumen de audio para tus alumnos.</p>
+          <div class="task-example">
+            <strong>💡 Ideas para probarlo:</strong>
+            Sube el PDF de un tema del libro de texto + un vídeo de YouTube sobre el mismo contenido. Pide a NotebookLM: «Crea un cuestionario de 10 preguntas tipo test sobre este tema, con 4 opciones cada una y la respuesta correcta señalada». Luego genera un «Audio Overview» y tendrás un podcast del tema.
+          </div>
+        </div>
+
+        <a href="https://notebooklm.google.com" target="_blank" class="link-btn link-btn-eso-notebook">
+          Abrir NotebookLM ↗
+        </a>
+
+        <!-- Progress -->
+        <div class="progress-wrapper" id="progress-eso-notebook">
+          <div class="progress-bar-bg"><div class="progress-bar-fill fill-eso-notebook" id="fill-eso-notebook"></div></div>
+          <div class="progress-label" id="label-eso-notebook">0 de 4 pasos completados</div>
+        </div>
+
+        <!-- Checklist -->
+        <div class="tips-section">
+          <h4>📋 Tu progreso</h4>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-notebook')">
+            <div class="check-box"></div>
+            <span class="check-label">He abierto NotebookLM y creado un cuaderno</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-notebook')">
+            <div class="check-box"></div>
+            <span class="check-label">He subido al menos 2 fuentes</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-notebook')">
+            <div class="check-box"></div>
+            <span class="check-label">He hecho preguntas sobre mis fuentes</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-notebook')">
+            <div class="check-box"></div>
+            <span class="check-label">He generado una guía de estudio o resumen de audio</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- ESO SECTION 4: MATERIALS & NEE      -->
+    <!-- ════════════════════════════════════ -->
+    <div class="section-panel" id="section-eso-materials">
+      <div class="glass-card">
+        <div class="section-header">
+          <div class="section-icon-circle icon-eso-materials">📝</div>
+          <div>
+            <div class="section-title">Materiales y Adaptaciones NEE</div>
+            <div class="section-subtitle">Genera temarios, actividades, exámenes y adaptaciones con IA</div>
+          </div>
+        </div>
+
+        <div class="tool-badge badge-eso-materials">🔧 Herramienta: Google Gemini</div>
+
+        <div class="info-box info-box-amber">
+          <strong>¿Qué es?</strong> Gemini es el asistente de IA de Google. Puedes pedirle que elabore temarios, actividades, exámenes tipo test o de desarrollo, rúbricas de evaluación y, lo más valioso, adaptaciones personalizadas para alumnos con Necesidades Educativas Especiales (NEE). La clave está en darle el contexto preciso: asignatura, nivel, criterios de evaluación y tipo de adaptación necesaria.
+        </div>
+
+        <div class="info-box info-box-amber" style="border-left-color: #d97706;">
+          <strong>⚠️ Importante:</strong> Gemini genera borradores que siempre debes revisar y adaptar. Nunca incluyas datos personales de alumnos (nombres, diagnósticos concretos…) al escribir tus peticiones — describe el perfil de necesidades sin identificar al alumno, conforme a la normativa de protección de datos.
+        </div>
+
+        <!-- Steps -->
+        <div class="steps-container">
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-materials">1</div>
+            <div class="step-content">
+              <div class="step-title">Abre Gemini y define el contexto</div>
+              <div class="step-description">Dile a Gemini qué asignatura, curso y tema vas a trabajar</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Ve a <code>gemini.google.com</code> e inicia sesión. Lo primero es dar a Gemini un contexto rico. Empieza con algo como: <code>Eres un asistente educativo experto en la legislación LOMLOE para ESO en la Región de Murcia. Voy a pedirte que generes materiales para la asignatura de Geografía e Historia de 2º ESO, Tema 6: El Islam y Al-Ándalus. Los alumnos tienen entre 13 y 14 años.</code>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-materials">2</div>
+            <div class="step-content">
+              <div class="step-title">Solicita el material que necesitas</div>
+              <div class="step-description">Temarios, actividades, exámenes tipo test o de desarrollo</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Ahora pide lo que necesites de forma concreta. Ejemplos:
+                <br>• <code>Elabora un resumen del tema en 10 puntos clave, usando vocabulario accesible para alumnos de 13 años</code>
+                <br>• <code>Crea un examen tipo test de 15 preguntas con 4 opciones (a, b, c, d) sobre este tema. Incluye la hoja de respuestas aparte</code>
+                <br>• <code>Diseña 5 actividades variadas (una línea del tiempo, un mapa, un texto con huecos, un debate y un trabajo en grupo) con sus instrucciones completas</code>
+                <br>• <code>Genera una rúbrica de evaluación para un trabajo de investigación sobre este tema, con 4 niveles de logro y 5 criterios</code>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-materials">3</div>
+            <div class="step-content">
+              <div class="step-title">Pide la adaptación para NEE</div>
+              <div class="step-description">Genera versiones adaptadas según el perfil de necesidades</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Una vez tengas el material base, pide la adaptación sin datos personales del alumno. Ejemplo: <code>Adapta este examen para un alumno con dificultades de comprensión lectora: reduce a 10 preguntas, simplifica el vocabulario, añade un pequeño texto de apoyo antes de cada bloque de preguntas, utiliza frases cortas y directas, y aumenta el tamaño de letra a 14pt.</code>
+                <br><br>Otro ejemplo: <code>Adapta estas actividades para un alumno con altas capacidades: añade una actividad de ampliación que requiera investigación autónoma, conexión con la actualidad y pensamiento crítico.</code>
+                <br><br>O bien: <code>Adapta este resumen para un alumno con TDAH: usa esquemas visuales con viñetas, destaca las palabras clave en negrita, incluye iconos de tipo emoji al inicio de cada punto para facilitar la lectura y reduce los párrafos a máximo 3 líneas.</code>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-materials">4</div>
+            <div class="step-content">
+              <div class="step-title">Revisa, ajusta y exporta</div>
+              <div class="step-description">Siempre revisa el contenido antes de usarlo con tus alumnos</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Lee el material generado con atención crítica: comprueba que los datos son correctos, el nivel lingüístico es adecuado y las adaptaciones responden realmente a las necesidades del alumno. Copia el texto a un Google Doc para maquetarlo con el formato de tu centro. Puedes pedirle a Gemini que lo refine: <code>Reescribe la pregunta 5 con un lenguaje más sencillo</code> o <code>Añade un ejemplo a la actividad 3</code>. La IA te da un borrador sólido; tu criterio profesional hace el resto.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task -->
+        <div class="task-card task-eso-materials">
+          <h3>🎯 Tu misión</h3>
+          <p>Genera un material completo (examen o actividad) para una de tus asignaturas y crea una adaptación para un perfil NEE. Revisa que el contenido sea correcto y adecuado al nivel.</p>
+          <div class="task-example">
+            <strong>💡 Ejemplo paso a paso:</strong>
+            1) Pídele a Gemini un examen de 15 preguntas tipo test sobre «La narrativa del siglo XVI: el Lazarillo» para 3º ESO.
+            2) Luego pide: «Adapta este examen para un alumno con dislexia: usa tipografía clara, aumenta el interlineado, reduce las opciones a 3 por pregunta y añade un fragmento del texto antes de cada bloque de preguntas como apoyo visual».
+            3) Copia ambas versiones a un Google Doc y compáralas.
+          </div>
+        </div>
+
+        <a href="https://gemini.google.com" target="_blank" class="link-btn link-btn-eso-materials">
+          Abrir Gemini ↗
+        </a>
+
+        <!-- Progress -->
+        <div class="progress-wrapper" id="progress-eso-materials">
+          <div class="progress-bar-bg"><div class="progress-bar-fill fill-eso-materials" id="fill-eso-materials"></div></div>
+          <div class="progress-label" id="label-eso-materials">0 de 4 pasos completados</div>
+        </div>
+
+        <!-- Checklist -->
+        <div class="tips-section">
+          <h4>📋 Tu progreso</h4>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-materials')">
+            <div class="check-box"></div>
+            <span class="check-label">He dado contexto a Gemini (asignatura, curso, tema)</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-materials')">
+            <div class="check-box"></div>
+            <span class="check-label">He generado un material (examen, actividad o temario)</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-materials')">
+            <div class="check-box"></div>
+            <span class="check-label">He pedido una adaptación para un perfil NEE</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-materials')">
+            <div class="check-box"></div>
+            <span class="check-label">He revisado y copiado el material a un documento</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- ESO SECTION 5: TRUCOS DE PROMPTING  -->
+    <!-- ════════════════════════════════════ -->
+    <div class="section-panel" id="section-eso-tips">
+      <div class="glass-card">
+        <div class="section-header">
+          <div class="section-icon-circle" style="background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);">✨</div>
+          <div>
+            <div class="section-title">Trucos para hablar con la IA</div>
+            <div class="section-subtitle">Pequeños secretos para que los resultados sean mucho mejores</div>
+          </div>
+        </div>
+
+        <div class="info-box" style="background: rgba(139,92,246,0.1); border-left: 4px solid #8b5cf6;">
+          <strong>La idea clave:</strong> Hablar con una IA es como pedir comida en un restaurante. Si dices «ponme algo de comer», te traerán cualquier cosa. Pero si dices «quiero una ensalada templada con queso de cabra, nueces y vinagreta de miel», el resultado será exactamente lo que buscas. Con la IA pasa lo mismo: <strong>cuanto más contexto le des, mejor será el resultado</strong>.
+        </div>
+
+        <!-- The Formula -->
+        <div style="margin: 28px 0 8px; padding: 0 4px;">
+          <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px;">
+            🧪 La fórmula mágica del prompting
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-medium); margin-bottom: 18px; line-height: 1.5;">
+            No hace falta escribir mucho. Solo hay que incluir <strong>4 ingredientes</strong>. Piensa en ellos como si rellenases una ficha:
+          </p>
+        </div>
+
+        <div class="formula-grid">
+          <div class="formula-card" style="--fc-color: #ff7b54;">
+            <div class="formula-number">1</div>
+            <div class="formula-label">QUÉ quiero</div>
+            <div class="formula-desc">¿Una imagen? ¿Un vídeo? ¿Un examen? ¿Un resumen? Díselo claro al principio.</div>
+            <div class="formula-example">«Genera una imagen de…»<br>«Crea un vídeo de…»<br>«Elabora un examen de…»</div>
+          </div>
+          <div class="formula-card" style="--fc-color: #3b82f6;">
+            <div class="formula-number">2</div>
+            <div class="formula-label">CÓMO lo quiero</div>
+            <div class="formula-desc">El estilo, formato, tono o estructura. Como elegir el «traje» del resultado.</div>
+            <div class="formula-example">«…estilo infografía educativa»<br>«…tipo test con 4 opciones»<br>«…en tono cinematográfico»</div>
+          </div>
+          <div class="formula-card" style="--fc-color: #10b981;">
+            <div class="formula-number">3</div>
+            <div class="formula-label">PARA QUIÉN</div>
+            <div class="formula-desc">El curso, la edad, el nivel, las necesidades. Esto cambia mucho el resultado.</div>
+            <div class="formula-example">«…para 2º ESO (13 años)»<br>«…adaptado a un alumno con TDAH»<br>«…nivel de dificultad medio»</div>
+          </div>
+          <div class="formula-card" style="--fc-color: #8b5cf6;">
+            <div class="formula-number">4</div>
+            <div class="formula-label">DETALLES extra</div>
+            <div class="formula-desc">Asignatura, tema concreto, marco normativo, formato de entrega… Los extras que lo hacen perfecto.</div>
+            <div class="formula-example">«…tema: Al-Ándalus, Geo e Hª»<br>«…incluye rúbrica de evaluación»<br>«…formato horizontal 16:9»</div>
+          </div>
+        </div>
+
+        <!-- Before / After -->
+        <div style="margin: 36px 0 8px; padding: 0 4px;">
+          <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px;">
+            🔄 Antes y después: la diferencia de un buen prompt
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-medium); margin-bottom: 18px; line-height: 1.5;">
+            Mira cómo cambia el resultado con solo añadir contexto:
+          </p>
+        </div>
+
+        <!-- Before/After: Images -->
+        <div class="before-after-block">
+          <div class="ba-label">🎨 Para imágenes</div>
+          <div class="ba-row">
+            <div class="ba-card ba-before">
+              <div class="ba-tag">❌ Así no</div>
+              <p>«Haz un dibujo del Imperio Romano»</p>
+            </div>
+            <div class="ba-arrow">→</div>
+            <div class="ba-card ba-after">
+              <div class="ba-tag">✅ Así sí</div>
+              <p>«Genera una imagen realista de un foro romano al atardecer, con ciudadanos con toga, un templo con columnas corintias, mercaderes y un acueducto al fondo. Estilo pintura académica, colores cálidos, para una clase de Hª de 2º ESO»</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Before/After: Videos -->
+        <div class="before-after-block">
+          <div class="ba-label">🎬 Para vídeos</div>
+          <div class="ba-row">
+            <div class="ba-card ba-before">
+              <div class="ba-tag">❌ Así no</div>
+              <p>«Vídeo del ciclo del agua»</p>
+            </div>
+            <div class="ba-arrow">→</div>
+            <div class="ba-card ba-after">
+              <div class="ba-tag">✅ Así sí</div>
+              <p>«Clip de 8 segundos que muestra el ciclo del agua: lluvia cayendo sobre montañas verdes, agua fluyendo por un río hasta el mar, evaporación con rayos de sol, nubes formándose. Estilo realista, movimiento fluido, formato 16:9, audio ambiente con sonido de agua»</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Before/After: Materials -->
+        <div class="before-after-block">
+          <div class="ba-label">📝 Para materiales y exámenes</div>
+          <div class="ba-row">
+            <div class="ba-card ba-before">
+              <div class="ba-tag">❌ Así no</div>
+              <p>«Hazme un examen del Lazarillo»</p>
+            </div>
+            <div class="ba-arrow">→</div>
+            <div class="ba-card ba-after">
+              <div class="ba-tag">✅ Así sí</div>
+              <p>«Elabora un examen de 15 preguntas tipo test (4 opciones, solo una correcta) sobre "La vida de Lazarillo de Tormes" para 3º ESO (14-15 años), Lengua y Literatura. Incluye: 5 preguntas de comprensión, 5 de vocabulario en contexto y 5 de análisis literario. Añade la hoja de respuestas aparte»</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Before/After: NotebookLM -->
+        <div class="before-after-block">
+          <div class="ba-label">📓 Para NotebookLM</div>
+          <div class="ba-row">
+            <div class="ba-card ba-before">
+              <div class="ba-tag">❌ Así no</div>
+              <p>«Resume esto»</p>
+            </div>
+            <div class="ba-arrow">→</div>
+            <div class="ba-card ba-after">
+              <div class="ba-tag">✅ Así sí</div>
+              <p>«A partir de mis fuentes, genera una guía de estudio con: 10 preguntas clave y sus respuestas, una cronología de los eventos principales y 5 conceptos que los alumnos deben memorizar para el examen, presentados en formato esquemático»</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Golden Tips -->
+        <div style="margin: 36px 0 8px; padding: 0 4px;">
+          <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px;">
+            💡 5 trucos de oro
+          </h3>
+        </div>
+
+        <div class="golden-tips">
+          <div class="golden-tip">
+            <div class="golden-tip-icon">🔁</div>
+            <div class="golden-tip-content">
+              <strong>Si no te gusta, ¡pide cambios!</strong>
+              <p>No hace falta empezar de cero. Dile a la IA qué cambiar: «simplifica el vocabulario», «añade dos preguntas más de desarrollo», «hazlo más visual». La IA recuerda toda la conversación.</p>
+            </div>
+          </div>
+          <div class="golden-tip">
+            <div class="golden-tip-icon">📋</div>
+            <div class="golden-tip-content">
+              <strong>Copia y modifica</strong>
+              <p>Si un compañero ha escrito un buen prompt, cópialo y cámbialo para tu asignatura. Los ejemplos de este taller son tuyos para reutilizar y adaptar.</p>
+            </div>
+          </div>
+          <div class="golden-tip">
+            <div class="golden-tip-icon">🎯</div>
+            <div class="golden-tip-content">
+              <strong>Sé específico, no largo</strong>
+              <p>No hace falta escribir un párrafo enorme. Con 2-3 frases bien pensadas basta: qué quiero + cómo lo quiero + para quién + tema concreto. Calidad, no cantidad.</p>
+            </div>
+          </div>
+          <div class="golden-tip">
+            <div class="golden-tip-icon">🌟</div>
+            <div class="golden-tip-content">
+              <strong>Usa palabras clave según la herramienta</strong>
+              <p>Para imágenes: <em>realista, infografía, esquema, estilo pictórico, colores vivos</em>. Para vídeos: <em>cinematográfico, movimiento suave, plano aéreo, 16:9</em>. Para materiales: <em>tipo test, rúbrica, adaptación, saberes básicos, criterios de evaluación</em>.</p>
+            </div>
+          </div>
+          <div class="golden-tip">
+            <div class="golden-tip-icon">⚠️</div>
+            <div class="golden-tip-content">
+              <strong>Revisa siempre el resultado</strong>
+              <p>La IA genera borradores, no productos finales. Comprueba datos históricos, citas literarias, y que el nivel lingüístico sea adecuado. Tu criterio profesional es insustituible.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metaprompt Section -->
+        <div class="task-card" style="background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%); color: #fff; margin-top: 28px; border: 2px solid rgba(255,255,255,0.2);">
+          <h3 style="color: #fff; display: flex; align-items: center; gap: 10px; font-size: 1.25rem;">
+            🪄 El truco más fácil del mundo: pídele ayuda a la propia IA
+          </h3>
+          <p style="color: rgba(255,255,255,0.92); font-size: 1.05rem; line-height: 1.7; margin-top: 8px;">
+            ¿Sabes lo que necesitas pero no encuentras las palabras para pedírselo a la IA? Hay un truco muy sencillo: <strong>cuéntale tu idea con tus palabras y pídele que ella escriba la instrucción por ti</strong>. Es como decirle a un compañero: «Oye, quiero montar algo sobre la Edad Media, ¿me ayudas a pensarlo?». Mira qué fácil:
+          </p>
+
+          <div style="display: flex; align-items: center; gap: 12px; margin: 20px 0 10px; flex-wrap: wrap;">
+            <span style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">1️⃣</span>
+            <span style="font-weight: 600; font-size: 1rem;">Tienes una idea, aunque sea vaga — ¡y eso basta!</span>
+          </div>
+          <div class="task-example" style="background: rgba(255,255,255,0.15); color: #ffe0e0; border-left: 4px solid #ff8a80;">
+            💭 <em>«Quiero hacer un examen sobre la Edad Media pero no sé cómo estructurarlo bien para que sea completo…»</em>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px; margin: 18px 0 10px; flex-wrap: wrap;">
+            <span style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">2️⃣</span>
+            <span style="font-weight: 600; font-size: 1rem;">Se lo cuentas a la IA con tus palabras, tal cual</span>
+          </div>
+          <div class="task-example" style="background: rgba(255,255,255,0.15); color: #fff; border-left: 4px solid #82b1ff;">
+            📝 <em>«Soy profesor de Geografía e Historia de 2º ESO (alumnos de 13-14 años) en la Región de Murcia. Quiero crear un examen sobre la Edad Media (feudalismo, sociedad estamental, arte románico y gótico). <strong>Ayúdame a escribir una instrucción detallada</strong> para que Gemini me genere un examen equilibrado con diferentes tipos de preguntas.»</em>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px; margin: 18px 0 10px; flex-wrap: wrap;">
+            <span style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">3️⃣</span>
+            <span style="font-weight: 600; font-size: 1rem;">¡Y la IA te la escribe! Solo tienes que copiar y pegar</span>
+          </div>
+          <div class="task-example" style="background: rgba(255,255,255,0.15); color: #c8e6c9; border-left: 4px solid #69f0ae;">
+            ✅ <em>«Genera un examen de Geografía e Historia para 2º ESO sobre "La Europa feudal (siglos X-XIII)" con esta estructura: Bloque A – 8 preguntas tipo test (4 opciones), Bloque B – 3 preguntas de verdadero/falso que el alumno debe justificar, Bloque C – 1 pregunta de desarrollo breve (máx. 10 líneas) sobre la vida en un feudo, Bloque D – 1 actividad de análisis de una imagen (describe una miniatura medieval y pide al alumno que identifique elementos). Incluye la clave de corrección con criterios de puntuación.»</em>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.15); border-radius: 14px; padding: 16px 20px; margin-top: 18px;">
+            <p style="color: rgba(255,255,255,0.95); margin: 0; font-size: 0.98rem; line-height: 1.65;">
+              <strong>💡 ¿Por qué funciona tan bien?</strong> Porque tú sabes <em>qué necesitas</em> en tu aula y conoces a tus alumnos (eso nadie lo sabe mejor que tú), y la IA sabe <em>qué estructura y detalle dan mejores resultados</em>. Juntando las dos cosas, consigues materiales mucho más completos sin complicarte la vida.
+            </p>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.12); border-radius: 14px; padding: 16px 20px; margin-top: 12px;">
+            <p style="color: rgba(255,255,255,0.9); margin: 0; font-size: 0.95rem; line-height: 1.6;">
+              <strong>🔑 La frase mágica que siempre funciona:</strong><br>
+              <em>«Soy [tu rol, p. ej. profesor de Lengua de 3º ESO]. Quiero crear [qué: un examen / actividades / un vídeo] sobre [tema]. <strong>Ayúdame a escribir una instrucción detallada</strong> para [herramienta: Gemini / Flow / NotebookLM].»</em>
+            </p>
+          </div>
+        </div>
+
+        <!-- Quick Reference -->
+        <div class="task-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #c4b5fd 100%); color: #2e1065; margin-top: 28px;">
+          <h3 style="color: #2e1065;">📌 Tu chuleta rápida</h3>
+          <p style="color: #3b0764;">Cuando no sepas qué escribir, rellena estas plantillas y pégalas tal cual:</p>
+          <div class="task-example" style="background: rgba(255,255,255,0.35); color: #2e1065; margin-top: 14px; font-size: 1rem; line-height: 1.7;">
+            <strong style="color: #2e1065;">Para imágenes:</strong><br>
+            «Genera una imagen de <em>[qué escena/concepto]</em>, estilo <em>[realista/infografía/esquema/pictórico]</em>, para alumnos de <em>[curso y edad]</em>, con <em>[detalles de ambientación, colores, época]</em>. Para la asignatura de <em>[asignatura]</em>»
+          </div>
+          <div class="task-example" style="background: rgba(255,255,255,0.35); color: #2e1065; margin-top: 10px; font-size: 1rem; line-height: 1.7;">
+            <strong style="color: #2e1065;">Para vídeos:</strong><br>
+            «Crea un clip de <em>[duración]</em> que muestre <em>[qué escena o proceso]</em>, estilo <em>[realista/animación/cinematográfico]</em>, formato <em>[16:9 o 9:16]</em>, con audio <em>[ambiente/diálogo/música]</em>. Para <em>[asignatura, curso]</em>»
+          </div>
+          <div class="task-example" style="background: rgba(255,255,255,0.35); color: #2e1065; margin-top: 10px; font-size: 1rem; line-height: 1.7;">
+            <strong style="color: #2e1065;">Para materiales/exámenes:</strong><br>
+            «Elabora <em>[examen/actividades/rúbrica]</em> de <em>[asignatura]</em> para <em>[curso]</em>, tema: <em>[tema]</em>. Incluye <em>[nº preguntas, tipo, estructura]</em>. Nivel: <em>[básico/medio/avanzado]</em>. Añade <em>[clave de corrección/criterios de puntuación]</em>»
+          </div>
+          <div class="task-example" style="background: rgba(255,255,255,0.35); color: #2e1065; margin-top: 10px; font-size: 1rem; line-height: 1.7;">
+            <strong style="color: #2e1065;">Para adaptaciones NEE:</strong><br>
+            «Adapta este material para un alumno con <em>[perfil: dificultad lectora/TDAH/altas capacidades/TEA…]</em>: <em>[simplifica vocabulario / reduce preguntas / añade apoyos visuales / incluye ampliación…]</em>. Mantén los mismos contenidos pero ajusta <em>[formato/extensión/complejidad]</em>»
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    Taller de IA · Colegio El Buen Pastor · Febrero 2026<br>
+    Preparado con 💛 por Manu
+  </footer>
+
+</div>
+
+<script>
+  // ── Pathway Navigation (Landing → Itinerary) ──
+  function showPathway(pathway) {
+    // Only navigate to active pathways
+    if (pathway !== 'infantil' && pathway !== 'eso') {
+      return; // Primaria aún no disponible
+    }
+
+    document.getElementById('landing-screen').style.display = 'none';
+    document.querySelectorAll('.pathway-content').forEach(p => p.classList.remove('active'));
+    document.getElementById('pathway-' + pathway).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function goHome() {
+    document.querySelectorAll('.pathway-content').forEach(p => p.classList.remove('active'));
+    document.getElementById('landing-screen').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Section Navigation (within Infantil) ──
+  function showSection(section) {
+    document.querySelectorAll('#pathway-infantil .section-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('#pathway-infantil .nav-pill').forEach(p => {
+      p.classList.remove('active-image', 'active-music', 'active-story', 'active-tips');
+    });
+
+    document.getElementById('section-' + section).classList.add('active');
+    document.getElementById('pill-' + section).classList.add('active-' + section);
+    window.scrollTo({ top: 300, behavior: 'smooth' });
+  }
+
+  // ── Section Navigation (within ESO) ──
+  function showEsoSection(section) {
+    document.querySelectorAll('#pathway-eso .section-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('#pathway-eso .nav-pill').forEach(p => {
+      p.classList.remove('active-eso-image', 'active-eso-video', 'active-eso-notebook', 'active-eso-materials', 'active-eso-tips');
+    });
+
+    document.getElementById('section-' + section).classList.add('active');
+    document.getElementById('pill-' + section).classList.add('active-' + section);
+    window.scrollTo({ top: 300, behavior: 'smooth' });
+  }
+
+  // ── Step Detail Toggle ──
+  function toggleDetail(stepEl) {
+    const detail = stepEl.querySelector('.step-detail');
+    const hint = stepEl.querySelector('.step-toggle-hint');
+    if (detail) {
+      detail.classList.toggle('open');
+      if (detail.classList.contains('open')) {
+        hint.textContent = 'Toca aquí para ocultar ▲';
+      } else {
+        hint.textContent = 'Toca aquí para ver más detalles ▼';
+      }
+    }
+  }
+
+  // ── Checklist & Progress ──
+  function toggleCheck(item, section) {
+    item.classList.toggle('done');
+    const box = item.querySelector('.check-box');
+    box.textContent = item.classList.contains('done') ? '✓' : '';
+    updateProgress(section);
+  }
+
+  function updateProgress(section) {
+    const panel = document.getElementById('section-' + section);
+    const total = panel.querySelectorAll('.checklist-item').length;
+    const done = panel.querySelectorAll('.checklist-item.done').length;
+    const pct = Math.round((done / total) * 100);
+
+    document.getElementById('fill-' + section).style.width = pct + '%';
+    document.getElementById('label-' + section).textContent = done + ' de ' + total + ' pasos completados';
+
+    if (done === total) {
+      document.getElementById('label-' + section).textContent = '🎉 ¡Todos los pasos completados!';
+    }
+  }
+</script>
+
+</body>
+</html>
