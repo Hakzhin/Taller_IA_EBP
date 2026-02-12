@@ -1045,6 +1045,59 @@
     position: relative;
     z-index: 1;
   }
+  .mothership-apps {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+  .mothership-app-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1.5px solid transparent;
+  }
+  .mothership-app-btn.active-app {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border-color: rgba(255,255,255,0.2);
+    box-shadow: 0 4px 15px rgba(102,126,234,0.35);
+    cursor: pointer;
+  }
+  .mothership-app-btn.active-app:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102,126,234,0.5);
+  }
+  .mothership-app-btn.coming-soon-app {
+    background: rgba(148,163,184,0.15);
+    color: var(--text-light);
+    border-color: rgba(148,163,184,0.25);
+    cursor: default;
+  }
+  .mothership-app-btn .app-status {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  .mothership-app-btn.active-app .app-status {
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+  }
+  .mothership-app-btn.coming-soon-app .app-status {
+    background: rgba(148,163,184,0.2);
+    color: var(--text-light);
+  }
   @media (max-width: 800px) {
     .mothership-card { padding: 22px 18px; }
     .mothership-connector-dots { gap: 30px; }
@@ -1189,8 +1242,16 @@
           <span class="mothership-tag">📚 Primaria</span>
           <span class="mothership-tag">🎓 ESO</span>
         </div>
-        <br>
-        <div class="mothership-badge">Próximamente</div>
+        <div class="mothership-apps">
+          <a href="https://rubric-s-830258786759.us-west1.run.app/" target="_blank" class="mothership-app-btn active-app">
+            📋 Rubric@sEBP
+            <span class="app-status">Abrir →</span>
+          </a>
+          <div class="mothership-app-btn coming-soon-app">
+            📝 ANotaEBP
+            <span class="app-status">Próximamente</span>
+          </div>
+        </div>
       </div>
     </div>
 
