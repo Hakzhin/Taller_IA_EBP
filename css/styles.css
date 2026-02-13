@@ -890,12 +890,12 @@
   }
 
   /* Card theme colors */
-  .pathway-card-infantil::before { background: linear-gradient(135deg, #22c55e, #10b981); }
-  .pathway-card-infantil:hover { border-color: #22c55e; }
-  .pathway-card-primaria::before { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-  .pathway-card-primaria:hover { border-color: #3b82f6; }
-  .pathway-card-eso::before { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-  .pathway-card-eso:hover { border-color: #8b5cf6; }
+  .pathway-card-infantil::before { background: linear-gradient(135deg, #059669, #14b8a6); }
+  .pathway-card-infantil:hover { border-color: #059669; }
+  .pathway-card-primaria::before { background: linear-gradient(135deg, #2563eb, #38bdf8); }
+  .pathway-card-primaria:hover { border-color: #2563eb; }
+  .pathway-card-eso::before { background: linear-gradient(135deg, #7c3aed, #4f46e5); }
+  .pathway-card-eso:hover { border-color: #7c3aed; }
 
   .pathway-icon {
     font-size: 4rem;
@@ -930,9 +930,9 @@
     position: relative;
     z-index: 1;
   }
-  .pathway-card-infantil .pathway-card-ages { background: rgba(34,197,94,0.15); color: #16a34a; }
-  .pathway-card-primaria .pathway-card-ages { background: rgba(59,130,246,0.15); color: #2563eb; }
-  .pathway-card-eso .pathway-card-ages { background: rgba(139,92,246,0.15); color: #7c3aed; }
+  .pathway-card-infantil .pathway-card-ages { background: rgba(5,150,105,0.12); color: #059669; }
+  .pathway-card-primaria .pathway-card-ages { background: rgba(37,99,235,0.12); color: #2563eb; }
+  .pathway-card-eso .pathway-card-ages { background: rgba(124,58,237,0.12); color: #7c3aed; }
 
   .pathway-badge {
     display: inline-block;
@@ -946,9 +946,9 @@
     z-index: 1;
     letter-spacing: 0.3px;
   }
-  .pathway-card-infantil .pathway-badge { background: linear-gradient(135deg, #22c55e, #10b981); }
-  .pathway-card-primaria .pathway-badge { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-  .pathway-card-eso .pathway-badge { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+  .pathway-card-infantil .pathway-badge { background: linear-gradient(135deg, #059669, #14b8a6); }
+  .pathway-card-primaria .pathway-badge { background: linear-gradient(135deg, #2563eb, #38bdf8); }
+  .pathway-card-eso .pathway-badge { background: linear-gradient(135deg, #7c3aed, #4f46e5); }
 
   /* ── Mothership Card (transversal) ── */
   .mothership-wrapper {
