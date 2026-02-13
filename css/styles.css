@@ -874,7 +874,7 @@
     position: absolute;
     inset: 0;
     border-radius: 24px;
-    opacity: 0;
+    opacity: 0.04;
     transition: opacity 0.35s;
     z-index: 0;
   }
@@ -883,7 +883,7 @@
     box-shadow: 0 16px 48px rgba(0,0,0,0.15);
   }
   .pathway-card:hover::before {
-    opacity: 0.08;
+    opacity: 0.12;
   }
   .pathway-card:active {
     transform: translateY(-2px) scale(0.98);
@@ -891,10 +891,15 @@
 
   /* Card theme colors */
   .pathway-card-infantil::before { background: linear-gradient(135deg, #059669, #14b8a6); }
+  .pathway-card-infantil { border-color: rgba(5,150,105,0.25); background: linear-gradient(165deg, rgba(5,150,105,0.06) 0%, rgba(20,184,166,0.03) 100%); }
   .pathway-card-infantil:hover { border-color: #059669; }
+
   .pathway-card-primaria::before { background: linear-gradient(135deg, #2563eb, #38bdf8); }
+  .pathway-card-primaria { border-color: rgba(37,99,235,0.25); background: linear-gradient(165deg, rgba(37,99,235,0.06) 0%, rgba(56,189,248,0.03) 100%); }
   .pathway-card-primaria:hover { border-color: #2563eb; }
+
   .pathway-card-eso::before { background: linear-gradient(135deg, #7c3aed, #4f46e5); }
+  .pathway-card-eso { border-color: rgba(124,58,237,0.25); background: linear-gradient(165deg, rgba(124,58,237,0.06) 0%, rgba(79,70,229,0.03) 100%); }
   .pathway-card-eso:hover { border-color: #7c3aed; }
 
   .pathway-icon {
