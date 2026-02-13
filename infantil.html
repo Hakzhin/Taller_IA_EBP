@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taller IA · Colegio El Buen Pastor</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- ═══════════════════════════════════════ -->
+  <!-- PATHWAY: INFANTIL                      -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="pathway-infantil" class="pathway-content active">
+    <button class="btn-back" onclick="window.location.href='index.html'">← Volver al inicio</button>
+
+    <!-- Header Infantil -->
+    <header class="header">
+      <div class="header-badge">🧒 Itinerario Infantil</div>
+      <h1>Taller de <span class="gradient-text">IA para Infantil</span></h1>
+      <p>Aprende a crear imágenes, música y cuentos con IA. Paso a paso, sin prisa y con cariño 💛</p>
+    </header>
+
+  <!-- Navigation -->
+  <nav class="nav-pills">
+    <button class="nav-pill active-image" onclick="showSection('image')" id="pill-image">
+      <span class="pill-icon">🎨</span> Imágenes
+    </button>
+    <button class="nav-pill" onclick="showSection('music')" id="pill-music">
+      <span class="pill-icon">🎵</span> Música
+    </button>
+    <button class="nav-pill" onclick="showSection('story')" id="pill-story">
+      <span class="pill-icon">📖</span> Cuentos
+    </button>
+    <button class="nav-pill" onclick="showSection('tips')" id="pill-tips">
+      <span class="pill-icon">✨</span> Trucos
+    </button>
+  </nav>
+
+  <!-- ════════════════════════════════════ -->
+  <!-- SECTION 1: IMAGES                   -->
+  <!-- ════════════════════════════════════ -->
+  <div class="section-panel active" id="section-image">
+    <div class="glass-card">
+      <div class="section-header">
+        <div class="section-icon-circle icon-image">🎨</div>
+        <div>
+          <div class="section-title">Crear Imágenes con IA</div>
+          <div class="section-subtitle">Genera ilustraciones mágicas para tus clases</div>
+        </div>
+      </div>
+
+      <div class="tool-badge badge-image">🔧 Herramienta: Nano Banana Pro (Google Gemini)</div>
+
+      <div class="info-box info-box-warm">
+        <strong>¿Qué es?</strong> Nano Banana Pro es una herramienta de Google que convierte tus ideas en imágenes. Le describes lo que quieres y ella lo dibuja por ti. ¡Es como tener un ilustrador personal! No necesitas saber dibujar ni diseñar.
+      </div>
+
+      <!-- Steps -->
+      <div class="steps-container">
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-image">1</div>
+          <div class="step-content">
+            <div class="step-title">Abre Google Gemini</div>
+            <div class="step-description">Entra en la herramienta desde tu navegador Chrome</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Abre Chrome en tu Chromebook y ve a <code>gemini.google.com</code>. Si te pide iniciar sesión, usa tu cuenta de Google (la misma del correo). Una vez dentro, verás una pantalla con un cuadro de texto donde puedes escribir.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-image">2</div>
+          <div class="step-content">
+            <div class="step-title">Escribe lo que quieres ver</div>
+            <div class="step-description">Describe la imagen que imaginas con palabras sencillas</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              En el cuadro de texto, escribe algo como: <code>Genera una imagen de un conejo simpático leyendo un libro en un jardín lleno de flores</code>. Cuanto más detalles des (colores, ambiente, estilo), mejor quedará la imagen. Puedes escribir en español sin problema.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-image">3</div>
+          <div class="step-content">
+            <div class="step-title">Pulsa "Enviar" y espera</div>
+            <div class="step-description">La IA tardará unos segundos en generar tu imagen</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Haz clic en el botón de enviar (la flecha ➤) o pulsa la tecla <code>Enter</code>. Espera unos 10-15 segundos. Gemini te mostrará una o varias imágenes generadas. Si no te gusta, puedes pedirle cambios: <code>Hazlo más colorido</code> o <code>Ponle un fondo azul</code>.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-image">4</div>
+          <div class="step-content">
+            <div class="step-title">Descarga tu imagen</div>
+            <div class="step-description">Guárdala en tu Chromebook para usarla después</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Cuando tengas la imagen que te gusta, haz clic sobre ella con el botón derecho y selecciona <code>Guardar imagen como...</code>. Elige la carpeta "Descargas" y ponle un nombre que recuerdes. ¡Ya la tienes lista para usar en tus fichas, murales o presentaciones!
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task -->
+      <div class="task-card task-image">
+        <h3>🎯 Tu misión</h3>
+        <p>Crea una imagen que puedas usar en tu aula de Infantil. Puede ser un personaje, una escena de un cuento o una ilustración para una ficha de trabajo.</p>
+        <div class="task-example">
+          <strong>💡 Ejemplo de instrucción:</strong>
+          «Genera una imagen en estilo acuarela infantil de una mariposa con alas de colores del arcoíris posada sobre una flor de girasol, con fondo de cielo azul suave y nubes blancas esponjosas»
+        </div>
+      </div>
+
+      <a href="https://gemini.google.com" target="_blank" class="link-btn link-btn-image">
+        Abrir Gemini ↗
+      </a>
+
+      <!-- Progress -->
+      <div class="progress-wrapper" id="progress-image">
+        <div class="progress-bar-bg"><div class="progress-bar-fill fill-image" id="fill-image"></div></div>
+        <div class="progress-label" id="label-image">0 de 4 pasos completados</div>
+      </div>
+
+      <!-- Checklist -->
+      <div class="tips-section">
+        <h4>📋 Tu progreso</h4>
+        <div class="checklist-item" onclick="toggleCheck(this, 'image')">
+          <div class="check-box"></div>
+          <span class="check-label">He abierto Gemini en Chrome</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'image')">
+          <div class="check-box"></div>
+          <span class="check-label">He escrito mi descripción</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'image')">
+          <div class="check-box"></div>
+          <span class="check-label">He generado una imagen</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'image')">
+          <div class="check-box"></div>
+          <span class="check-label">He descargado la imagen</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════ -->
+  <!-- SECTION 2: MUSIC                    -->
+  <!-- ════════════════════════════════════ -->
+  <div class="section-panel" id="section-music">
+    <div class="glass-card">
+      <div class="section-header">
+        <div class="section-icon-circle icon-music">🎵</div>
+        <div>
+          <div class="section-title">Crear Música y Canciones</div>
+          <div class="section-subtitle">Compón canciones originales para tu aula</div>
+        </div>
+      </div>
+
+      <div class="tool-badge badge-music">🔧 Herramienta: Suno AI</div>
+
+      <div class="info-box info-box-purple">
+        <strong>¿Qué es?</strong> Suno es una herramienta que crea canciones completas (con letra, música y voz) a partir de una descripción tuya. Puedes crear canciones para enseñar los colores, las estaciones, normas de clase... ¡Lo que imagines! No necesitas saber música.
+      </div>
+
+      <!-- Steps -->
+      <div class="steps-container">
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-music">1</div>
+          <div class="step-content">
+            <div class="step-title">Entra en Suno AI</div>
+            <div class="step-description">Abre la web y crea tu cuenta gratuita</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Abre Chrome y ve a <code>suno.com</code>. Haz clic en <code>Sign Up</code> o <code>Registrarse</code>. Puedes usar tu cuenta de Google para entrar más rápido (botón "Continue with Google"). La versión gratuita te deja crear varias canciones al día.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-music">2</div>
+          <div class="step-content">
+            <div class="step-title">Pulsa "Create" (Crear)</div>
+            <div class="step-description">Busca el botón de creación en la pantalla principal</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Una vez dentro, busca el botón <code>Create</code> (suele estar arriba o a la izquierda). Se abrirá un cuadro donde puedes describir la canción que quieres. Aquí es donde ocurre la magia.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-music">3</div>
+          <div class="step-content">
+            <div class="step-title">Describe tu canción</div>
+            <div class="step-description">Escribe qué tipo de canción quieres y sobre qué tema</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              En el cuadro de texto, escribe en español lo que quieres. Por ejemplo: <code>Una canción infantil alegre y pegadiza sobre los días de la semana, con ritmo pop suave, cantada por una voz femenina dulce, en español</code>. Puedes especificar el estilo musical, el idioma, el tema y el tono.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-music">4</div>
+          <div class="step-content">
+            <div class="step-title">Genera y escucha</div>
+            <div class="step-description">Pulsa crear y escucha el resultado</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Pulsa el botón de crear y espera entre 30 segundos y un minuto. Suno generará dos versiones de tu canción. Escúchalas y elige la que más te guste. Si quieres otra versión, simplemente vuelve a pulsar "Create". ¡Puedes descargarla con el botón de descarga (tres puntitos → Download)!
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task -->
+      <div class="task-card task-music">
+        <h3>🎯 Tu misión</h3>
+        <p>Crea una canción personalizada para tu clase. Puede ser sobre un tema que estés trabajando, una canción de bienvenida, de despedida, o para enseñar un contenido concreto.</p>
+        <div class="task-example">
+          <strong>💡 Ejemplo de instrucción:</strong>
+          «Canción infantil corta y alegre en español, estilo pop acústico, con voz femenina suave, sobre las rutinas de la mañana en el cole: colgar la mochila, decir buenos días, sentarse en la asamblea. Tono cariñoso y divertido»
+        </div>
+      </div>
+
+      <a href="https://suno.com" target="_blank" class="link-btn link-btn-music">
+        Abrir Suno AI ↗
+      </a>
+
+      <!-- Progress -->
+      <div class="progress-wrapper" id="progress-music">
+        <div class="progress-bar-bg"><div class="progress-bar-fill fill-music" id="fill-music"></div></div>
+        <div class="progress-label" id="label-music">0 de 4 pasos completados</div>
+      </div>
+
+      <!-- Checklist -->
+      <div class="tips-section">
+        <h4>📋 Tu progreso</h4>
+        <div class="checklist-item" onclick="toggleCheck(this, 'music')">
+          <div class="check-box"></div>
+          <span class="check-label">He abierto Suno y creado mi cuenta</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'music')">
+          <div class="check-box"></div>
+          <span class="check-label">He encontrado el botón "Create"</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'music')">
+          <div class="check-box"></div>
+          <span class="check-label">He descrito mi canción</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'music')">
+          <div class="check-box"></div>
+          <span class="check-label">He escuchado y descargado mi canción</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════ -->
+  <!-- SECTION 3: STORIES                  -->
+  <!-- ════════════════════════════════════ -->
+  <div class="section-panel" id="section-story">
+    <div class="glass-card">
+      <div class="section-header">
+        <div class="section-icon-circle icon-story">📖</div>
+        <div>
+          <div class="section-title">Crear Cuentos Ilustrados</div>
+          <div class="section-subtitle">Genera cuentos personalizados con ilustraciones</div>
+        </div>
+      </div>
+
+      <div class="tool-badge badge-story">🔧 Herramienta: Storybook (Google Gemini)</div>
+
+      <div class="info-box info-box-green">
+        <strong>¿Qué es?</strong> Storybook es una función experimental de Google que crea cuentos ilustrados automáticamente. Tú le dices de qué quieres el cuento, y la IA escribe la historia y genera las ilustraciones. Perfecto para crear cuentos únicos adaptados a tu aula.
+      </div>
+
+      <!-- Steps -->
+      <div class="steps-container">
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-story">1</div>
+          <div class="step-content">
+            <div class="step-title">Abre Storybook en Gemini</div>
+            <div class="step-description">Accede a la herramienta experimental de cuentos</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Ve a <code>gemini.google.com</code> en Chrome. Una vez dentro, busca en el menú lateral o en las opciones de herramientas la sección <code>Gems</code> o <code>Extensiones</code>. Storybook puede aparecer como una Gem especializada. Si no la encuentras, puedes pedirle directamente a Gemini: <code>Crea un cuento ilustrado sobre...</code> y generará texto e imágenes.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-story">2</div>
+          <div class="step-content">
+            <div class="step-title">Elige el tema de tu cuento</div>
+            <div class="step-description">Piensa en una historia adaptada a tu aula</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Antes de escribir, piensa: ¿qué valores quieres transmitir? ¿Hay algún tema que estés trabajando? ¿Un alumno/a que necesite verse reflejado? Los mejores cuentos son los que conectan con la realidad de los niños y niñas de tu aula.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-story">3</div>
+          <div class="step-content">
+            <div class="step-title">Escribe tu petición</div>
+            <div class="step-description">Describe el cuento que quieres con todo el detalle posible</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Escribe algo como: <code>Crea un cuento ilustrado de 5 páginas para niños de 4 años sobre una estrella que baja del cielo para jugar con los niños del cole. Estilo de ilustración suave y colorido. El cuento debe enseñar la importancia de compartir.</code> Cuantos más detalles, mejor resultado.
+            </div>
+          </div>
+        </div>
+
+        <div class="step" onclick="toggleDetail(this)">
+          <div class="step-number step-number-story">4</div>
+          <div class="step-content">
+            <div class="step-title">Revisa, mejora y guarda</div>
+            <div class="step-description">Lee el cuento, pide cambios si quieres y descárgalo</div>
+            <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+            <div class="step-detail">
+              Lee el cuento generado. Si algo no te convence, dile a Gemini: <code>Cambia el final para que sea más divertido</code> o <code>Hazlo más cortito</code>. Cuando estés contento/a, puedes copiar el texto y guardar las imágenes. ¡Ya tienes un cuento único para tu clase!
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task -->
+      <div class="task-card task-story">
+        <h3>🎯 Tu misión</h3>
+        <p>Crea un cuento ilustrado personalizado para tu grupo de alumnos. Piensa en un valor, un tema o una situación que quieras trabajar con ellos y deja que la IA te ayude a contarlo.</p>
+        <div class="task-example">
+          <strong>💡 Ejemplo de instrucción:</strong>
+          «Crea un cuento ilustrado de 6 páginas para niños de 5 años sobre un caracol llamado Paco que tiene miedo de ir lento, pero descubre que ir despacio le permite ver cosas hermosas que los demás se pierden. Estilo ilustración acuarela tierna. Moraleja: cada uno tiene su ritmo y eso está bien»
+        </div>
+      </div>
+
+      <a href="https://gemini.google.com" target="_blank" class="link-btn link-btn-story">
+        Abrir Gemini ↗
+      </a>
+
+      <!-- Progress -->
+      <div class="progress-wrapper" id="progress-story">
+        <div class="progress-bar-bg"><div class="progress-bar-fill fill-story" id="fill-story"></div></div>
+        <div class="progress-label" id="label-story">0 de 4 pasos completados</div>
+      </div>
+
+      <!-- Checklist -->
+      <div class="tips-section">
+        <h4>📋 Tu progreso</h4>
+        <div class="checklist-item" onclick="toggleCheck(this, 'story')">
+          <div class="check-box"></div>
+          <span class="check-label">He abierto Gemini / Storybook</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'story')">
+          <div class="check-box"></div>
+          <span class="check-label">He pensado el tema de mi cuento</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'story')">
+          <div class="check-box"></div>
+          <span class="check-label">He escrito mi petición</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 'story')">
+          <div class="check-box"></div>
+          <span class="check-label">He revisado y guardado mi cuento</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════ -->
+  <!-- SECTION 4: TRUCOS DE PROMPTING     -->
+  <!-- ════════════════════════════════════ -->
+  <div class="section-panel" id="section-tips">
+    <div class="glass-card">
+      <div class="section-header">
+        <div class="section-icon-circle" style="background: linear-gradient(135deg, #f0b429 0%, #f7d070 100%);">✨</div>
+        <div>
+          <div class="section-title">Trucos para hablar con la IA</div>
+          <div class="section-subtitle">Pequeños secretos para que los resultados sean mucho mejores</div>
+        </div>
+      </div>
+
+      <div class="info-box" style="background: rgba(240,180,41,0.1); border-left: 4px solid #f0b429;">
+        <strong>La idea clave:</strong> Hablar con una IA es como pedir comida en un restaurante. Si dices «ponme algo de comer», te traerán cualquier cosa. Pero si dices «quiero una ensalada templada con queso de cabra, nueces y vinagreta de miel», el resultado será exactamente lo que buscas. Con la IA pasa lo mismo: <strong>cuanto más le expliques lo que imaginas, mejor será el resultado</strong>.
+      </div>
+
+      <!-- The Formula -->
+      <div style="margin: 28px 0 8px; padding: 0 4px;">
+        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px;">
+          🧪 La fórmula mágica
+        </h3>
+        <p style="font-size: 0.95rem; color: var(--text-medium); margin-bottom: 18px; line-height: 1.5;">
+          No hace falta escribir mucho. Solo hay que incluir <strong>4 ingredientes</strong>. Piensa en ellos como si rellenases una ficha:
+        </p>
+      </div>
+
+      <div class="formula-grid">
+        <div class="formula-card" style="--fc-color: #ff7b54;">
+          <div class="formula-number">1</div>
+          <div class="formula-label">QUÉ quiero</div>
+          <div class="formula-desc">¿Una imagen? ¿Una canción? ¿Un cuento? Díselo claro al principio.</div>
+          <div class="formula-example">«Genera una imagen de…»<br>«Crea una canción sobre…»<br>«Escribe un cuento de…»</div>
+        </div>
+        <div class="formula-card" style="--fc-color: #7c5cbf;">
+          <div class="formula-number">2</div>
+          <div class="formula-label">CÓMO lo quiero</div>
+          <div class="formula-desc">El estilo, el tono, la estética. Como elegir el "traje" del resultado.</div>
+          <div class="formula-example">«…estilo acuarela infantil»<br>«…ritmo alegre y pegadizo»<br>«…con ilustraciones tiernas»</div>
+        </div>
+        <div class="formula-card" style="--fc-color: #2ec4a0;">
+          <div class="formula-number">3</div>
+          <div class="formula-label">PARA QUIÉN</div>
+          <div class="formula-desc">La edad, el nivel, el contexto. Esto cambia mucho el resultado.</div>
+          <div class="formula-example">«…para niños de 3 años»<br>«…para la asamblea de clase»<br>«…para trabajar las emociones»</div>
+        </div>
+        <div class="formula-card" style="--fc-color: #f0b429;">
+          <div class="formula-number">4</div>
+          <div class="formula-label">DETALLES extra</div>
+          <div class="formula-desc">Colores, personajes, duración, idioma… Los extras que lo hacen perfecto.</div>
+          <div class="formula-example">«…colores pastel y fondo blanco»<br>«…voz femenina dulce, en español»<br>«…con un final sorpresa»</div>
+        </div>
+      </div>
+
+      <!-- Before / After -->
+      <div style="margin: 36px 0 8px; padding: 0 4px;">
+        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px;">
+          🔄 Antes y después: la diferencia de un buen prompt
+        </h3>
+        <p style="font-size: 0.95rem; color: var(--text-medium); margin-bottom: 18px; line-height: 1.5;">
+          Mira cómo cambia el resultado con solo añadir unos detalles:
+        </p>
+      </div>
+
+      <!-- Before/After: Images -->
+      <div class="before-after-block">
+        <div class="ba-label">🎨 Para imágenes</div>
+        <div class="ba-row">
+          <div class="ba-card ba-before">
+            <div class="ba-tag">❌ Así no</div>
+            <p>«Dibuja un oso»</p>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-card ba-after">
+            <div class="ba-tag">✅ Así sí</div>
+            <p>«Genera una imagen de un oso de peluche marrón sentado en una nube, estilo ilustración infantil con colores pastel, fondo de cielo rosa suave con estrellas pequeñas»</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Before/After: Music -->
+      <div class="before-after-block">
+        <div class="ba-label">🎵 Para música</div>
+        <div class="ba-row">
+          <div class="ba-card ba-before">
+            <div class="ba-tag">❌ Así no</div>
+            <p>«Haz una canción de los números»</p>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-card ba-after">
+            <div class="ba-tag">✅ Así sí</div>
+            <p>«Canción infantil en español, alegre y pegadiza, estilo pop acústico con guitarra, voz femenina suave, que enseñe los números del 1 al 10 con ejemplos divertidos (1 nariz, 2 ojitos…), duración 1 minuto»</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Before/After: Stories -->
+      <div class="before-after-block">
+        <div class="ba-label">📖 Para cuentos</div>
+        <div class="ba-row">
+          <div class="ba-card ba-before">
+            <div class="ba-tag">❌ Así no</div>
+            <p>«Cuento de un perro»</p>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-card ba-after">
+            <div class="ba-tag">✅ Así sí</div>
+            <p>«Crea un cuento ilustrado de 5 páginas para niños de 4 años sobre un perrito llamado Canela que tiene miedo del primer día de cole, pero descubre que hacer amigos es maravilloso. Estilo acuarela tierna, colores cálidos. Moraleja: lo desconocido puede ser bonito»</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Golden Tips -->
+      <div style="margin: 36px 0 8px; padding: 0 4px;">
+        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px;">
+          💡 5 trucos de oro
+        </h3>
+      </div>
+
+      <div class="golden-tips">
+        <div class="golden-tip">
+          <div class="golden-tip-icon">🔁</div>
+          <div class="golden-tip-content">
+            <strong>Si no te gusta, ¡pide cambios!</strong>
+            <p>No hace falta empezar de cero. Dile a la IA qué cambiar: «hazlo más colorido», «cambia la voz a masculina», «que el final sea más divertido». La IA recuerda la conversación.</p>
+          </div>
+        </div>
+        <div class="golden-tip">
+          <div class="golden-tip-icon">📋</div>
+          <div class="golden-tip-content">
+            <strong>Copia y modifica</strong>
+            <p>Si un compañero/a ha escrito un buen prompt, cópialo y cámbialo a tu gusto. No hay que reinventar la rueda. Los ejemplos de este taller son tuyos para modificar.</p>
+          </div>
+        </div>
+        <div class="golden-tip">
+          <div class="golden-tip-icon">🎯</div>
+          <div class="golden-tip-content">
+            <strong>Sé específica, no larga</strong>
+            <p>No hace falta escribir un párrafo enorme. Con 2-3 frases bien pensadas basta: qué quiero + cómo lo quiero + para quién. Calidad, no cantidad.</p>
+          </div>
+        </div>
+        <div class="golden-tip">
+          <div class="golden-tip-icon">🌟</div>
+          <div class="golden-tip-content">
+            <strong>Usa palabras clave de estilo</strong>
+            <p>Estas palabras hacen magia: <em>infantil, tierno, acuarela, pastel, alegre, suave, cálido, minimalista, colorido, divertido</em>. Añade una o dos y verás la diferencia.</p>
+          </div>
+        </div>
+        <div class="golden-tip">
+          <div class="golden-tip-icon">😊</div>
+          <div class="golden-tip-content">
+            <strong>No tengas miedo de equivocarte</strong>
+            <p>No puedes romper nada. Si el resultado es raro, simplemente prueba otra vez con otras palabras. La IA no se enfada, no se cansa y no juzga. ¡Experimenta!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metaprompt Section -->
+      <div class="task-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; margin-top: 28px; border: 2px solid rgba(255,255,255,0.2);">
+        <h3 style="color: #fff; display: flex; align-items: center; gap: 10px; font-size: 1.25rem;">
+          🪄 El truco más fácil del mundo: pídele ayuda a la propia IA
+        </h3>
+        <p style="color: rgba(255,255,255,0.92); font-size: 1.05rem; line-height: 1.7; margin-top: 8px;">
+          ¿Sabes qué quieres pero no encuentras las palabras para explicárselo a la IA? Pues hay un truco muy sencillo: <strong>pídele a la propia IA que te ayude a escribir la instrucción</strong>. Es como cuando le dices a alguien: «Quiero hacer un bizcocho, pero no sé qué ingredientes necesito. ¿Me ayudas a hacer la lista?». Mira lo fácil que es:
+        </p>
+
+        <div style="display: flex; align-items: center; gap: 12px; margin: 20px 0 10px; flex-wrap: wrap;">
+          <span style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">1️⃣</span>
+          <span style="font-weight: 600; font-size: 1rem;">Tienes una idea, aunque sea vaga — ¡y eso basta!</span>
+        </div>
+        <div class="task-example" style="background: rgba(255,255,255,0.15); color: #ffe0e0; border-left: 4px solid #ff8a80;">
+          💭 <em>«Quiero una imagen de un animal para trabajar la primavera, pero no sé cómo pedirla bien…»</em>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px; margin: 18px 0 10px; flex-wrap: wrap;">
+          <span style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">2️⃣</span>
+          <span style="font-weight: 600; font-size: 1rem;">Se lo cuentas a la IA con tus palabras, tal cual</span>
+        </div>
+        <div class="task-example" style="background: rgba(255,255,255,0.15); color: #fff; border-left: 4px solid #82b1ff;">
+          📝 <em>«Soy profesora de Infantil (5 años). Quiero generar una imagen de un animal relacionado con la primavera. <strong>Ayúdame a escribir una instrucción detallada</strong> para un generador de imágenes, con estilo infantil y colores suaves.»</em>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px; margin: 18px 0 10px; flex-wrap: wrap;">
+          <span style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">3️⃣</span>
+          <span style="font-weight: 600; font-size: 1rem;">¡Y la IA te la escribe! Solo tienes que copiar y pegar</span>
+        </div>
+        <div class="task-example" style="background: rgba(255,255,255,0.15); color: #c8e6c9; border-left: 4px solid #69f0ae;">
+          ✅ <em>«Una mariposa monarca posada sobre una flor de lavanda en un jardín soleado de primavera, estilo acuarela infantil, colores pastel suaves (rosa, lila, verde menta), fondo con cielo celeste y nubes redondeadas, aspecto tierno y amigable para niños de 5 años»</em>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.15); border-radius: 14px; padding: 16px 20px; margin-top: 18px;">
+          <p style="color: rgba(255,255,255,0.95); margin: 0; font-size: 0.98rem; line-height: 1.65;">
+            <strong>💡 ¿Por qué funciona tan bien?</strong> Porque tú sabes <em>qué necesitas</em> en tu aula (eso nadie lo sabe mejor que tú), y la IA sabe <em>qué palabras dan mejores resultados</em>. Juntando las dos cosas, consigues resultados mucho mejores sin esfuerzo. ¡Es como tener una asistente creativa que te entiende a la primera!
+          </p>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.12); border-radius: 14px; padding: 16px 20px; margin-top: 12px;">
+          <p style="color: rgba(255,255,255,0.9); margin: 0; font-size: 0.95rem; line-height: 1.6;">
+            <strong>🔑 La frase mágica que siempre funciona:</strong><br>
+            <em>«Soy [tu rol, p. ej. profesora de Infantil de 4 años]. Quiero crear [qué: una imagen / canción / cuento] sobre [tema]. <strong>Ayúdame a escribir una instrucción detallada</strong> para [herramienta: el generador de imágenes / canciones / cuentos].»</em>
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Reference -->
+      <div class="task-card" style="background: linear-gradient(135deg, #f0b429 0%, #f7d070 100%); color: #4a3600; margin-top: 28px;">
+        <h3 style="color: #4a3600;">📌 Tu chuleta rápida</h3>
+        <p style="color: #5a4400;">Cuando no sepas qué escribir, rellena esta plantilla y pégala tal cual:</p>
+        <div class="task-example" style="background: rgba(255,255,255,0.35); color: #4a3600; margin-top: 14px; font-size: 1rem; line-height: 1.7;">
+          <strong style="color: #4a3600;">Para imágenes:</strong><br>
+          «Genera una imagen de <em>[qué]</em>, estilo <em>[acuarela/dibujo/foto/cartoon]</em>, para niños de <em>[edad]</em>, con colores <em>[pastel/vivos/cálidos]</em> y fondo <em>[color/escena]</em>»
+        </div>
+        <div class="task-example" style="background: rgba(255,255,255,0.35); color: #4a3600; margin-top: 10px; font-size: 1rem; line-height: 1.7;">
+          <strong style="color: #4a3600;">Para canciones:</strong><br>
+          «Canción infantil en español sobre <em>[tema]</em>, estilo <em>[pop/acústico/nana]</em>, voz <em>[femenina/masculina]</em>, tono <em>[alegre/dulce/divertido]</em>, duración <em>[corta/1 minuto]</em>»
+        </div>
+        <div class="task-example" style="background: rgba(255,255,255,0.35); color: #4a3600; margin-top: 10px; font-size: 1rem; line-height: 1.7;">
+          <strong style="color: #4a3600;">Para cuentos:</strong><br>
+          «Crea un cuento ilustrado de <em>[nº páginas]</em> para niños de <em>[edad]</em> sobre <em>[personaje]</em> que <em>[qué le pasa]</em>. Estilo <em>[acuarela/cartoon]</em>. Moraleja: <em>[enseñanza]</em>»
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  </div> <!-- /pathway-infantil -->
+
+
+<script src="js/app.js"></script>
+</body>
+</html>

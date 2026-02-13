@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taller IA · Colegio El Buen Pastor</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- ═══════════════════════════════════════ -->
+  <!-- PATHWAY: ESO                           -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="pathway-eso" class="pathway-content active">
+    <button class="btn-back" onclick="window.location.href='index.html'">← Volver al inicio</button>
+
+    <header class="header">
+      <div class="header-badge">🎓 Itinerario ESO</div>
+      <h1>Taller de <span class="gradient-text">IA para ESO</span></h1>
+      <p>Herramientas de Inteligencia Artificial para crear recursos, vídeos y materiales adaptados a Secundaria</p>
+    </header>
+
+    <!-- ESO Navigation -->
+    <nav class="nav-pills">
+      <button class="nav-pill active-eso-image" onclick="showEsoSection('eso-image')" id="pill-eso-image">
+        <span class="pill-icon">🎨</span> Imágenes
+      </button>
+      <button class="nav-pill" onclick="showEsoSection('eso-video')" id="pill-eso-video">
+        <span class="pill-icon">🎬</span> Vídeos
+      </button>
+      <button class="nav-pill" onclick="showEsoSection('eso-notebook')" id="pill-eso-notebook">
+        <span class="pill-icon">📓</span> NotebookLM
+      </button>
+      <button class="nav-pill" onclick="showEsoSection('eso-materials')" id="pill-eso-materials">
+        <span class="pill-icon">📝</span> Materiales
+      </button>
+      <button class="nav-pill" onclick="showEsoSection('eso-tips')" id="pill-eso-tips">
+        <span class="pill-icon">✨</span> Trucos
+      </button>
+    </nav>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- ESO SECTION 1: IMAGES               -->
+    <!-- ════════════════════════════════════ -->
+    <div class="section-panel active" id="section-eso-image">
+      <div class="glass-card">
+        <div class="section-header">
+          <div class="section-icon-circle icon-eso-image">🎨</div>
+          <div>
+            <div class="section-title">Crear Imágenes con IA</div>
+            <div class="section-subtitle">Genera ilustraciones y recursos visuales para tus clases de ESO</div>
+          </div>
+        </div>
+
+        <div class="tool-badge badge-eso-image">🔧 Herramienta: Nano Banana Pro (Google Gemini)</div>
+
+        <div class="info-box info-box-warm">
+          <strong>¿Qué es?</strong> Nano Banana Pro es el generador de imágenes de Google, integrado en Gemini. Le describes lo que necesitas y genera la imagen en segundos. Ideal para crear portadas de temas, mapas conceptuales visuales, ilustraciones históricas, infografías o material de apoyo para cualquier asignatura.
+        </div>
+
+        <!-- Steps -->
+        <div class="steps-container">
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-image">1</div>
+            <div class="step-content">
+              <div class="step-title">Abre Google Gemini</div>
+              <div class="step-description">Accede al generador de imágenes desde tu navegador</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Abre Chrome en tu Chromebook y ve a <code>gemini.google.com</code>. Inicia sesión con tu cuenta de Google (la del colegio). Una vez dentro, verás un cuadro de texto donde escribir tu petición. Gemini entiende perfectamente el español.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-image">2</div>
+            <div class="step-content">
+              <div class="step-title">Describe la imagen que necesitas</div>
+              <div class="step-description">Sé concreto: asignatura, tema, estilo y uso que le darás</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Escribe algo como: <code>Genera una imagen de estilo infografía educativa que muestre las partes del aparato digestivo humano, con etiquetas claras, colores vivos y fondo blanco, para alumnos de 3º ESO</code>. Cuanto más contexto des (nivel, estilo, finalidad), mejor será el resultado.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-image">3</div>
+            <div class="step-content">
+              <div class="step-title">Pulsa «Enviar» y revisa</div>
+              <div class="step-description">Gemini generará la imagen en unos segundos</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Haz clic en enviar (➤) o pulsa <code>Enter</code>. Espera 10-15 segundos. Si la imagen no es lo que esperabas, puedes pedir cambios: <code>Pon las etiquetas más grandes</code>, <code>Cambia el estilo a acuarela</code> o <code>Añade un título arriba</code>. Itera hasta que te convenza.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-image">4</div>
+            <div class="step-content">
+              <div class="step-title">Descarga y utiliza la imagen</div>
+              <div class="step-description">Guárdala para usarla en presentaciones, fichas o exámenes</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Clic derecho sobre la imagen → <code>Guardar imagen como...</code>. Guárdala en una carpeta organizada (p. ej., «Recursos IA»). Ya puedes insertarla en tus documentos de Google, presentaciones de Slides o fichas de trabajo para los alumnos.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task -->
+        <div class="task-card task-eso-image">
+          <h3>🎯 Tu misión</h3>
+          <p>Crea una imagen que puedas usar en una de tus asignaturas de ESO: una ilustración histórica, un mapa conceptual visual, una portada de tema o un recurso para una ficha.</p>
+          <div class="task-example">
+            <strong>💡 Ejemplo de instrucción:</strong>
+            «Genera una imagen educativa de estilo realista que represente un ágora griega durante una asamblea democrática en Atenas, siglo V a.C., con ciudadanos debatiendo, columnas dóricas al fondo y cielo mediterráneo. Para una clase de Geografía e Historia de 2º ESO»
+          </div>
+        </div>
+
+        <a href="https://gemini.google.com" target="_blank" class="link-btn link-btn-eso-image">
+          Abrir Gemini ↗
+        </a>
+
+        <!-- Progress -->
+        <div class="progress-wrapper" id="progress-eso-image">
+          <div class="progress-bar-bg"><div class="progress-bar-fill fill-eso-image" id="fill-eso-image"></div></div>
+          <div class="progress-label" id="label-eso-image">0 de 4 pasos completados</div>
+        </div>
+
+        <!-- Checklist -->
+        <div class="tips-section">
+          <h4>📋 Tu progreso</h4>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-image')">
+            <div class="check-box"></div>
+            <span class="check-label">He abierto Gemini en Chrome</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-image')">
+            <div class="check-box"></div>
+            <span class="check-label">He descrito una imagen para mi asignatura</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-image')">
+            <div class="check-box"></div>
+            <span class="check-label">He generado la imagen</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-image')">
+            <div class="check-box"></div>
+            <span class="check-label">He descargado la imagen</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- ESO SECTION 2: VIDEOS               -->
+    <!-- ════════════════════════════════════ -->
+    <div class="section-panel" id="section-eso-video">
+      <div class="glass-card">
+        <div class="section-header">
+          <div class="section-icon-circle icon-eso-video">🎬</div>
+          <div>
+            <div class="section-title">Crear Vídeos con IA</div>
+            <div class="section-subtitle">Genera clips de vídeo a partir de texto o imágenes para tus clases</div>
+          </div>
+        </div>
+
+        <div class="tool-badge badge-eso-video">🔧 Herramienta: Google Flow (motor Veo 3.1)</div>
+
+        <div class="info-box info-box-blue">
+          <strong>¿Qué es?</strong> Google Flow es la herramienta de creación de vídeo con IA de Google, impulsada por Veo 3.1. Le describes una escena con palabras y genera un clip de vídeo realista con audio sincronizado (sonido ambiente, diálogos, efectos). Puedes usarlo para crear vídeos explicativos, recreaciones históricas, visualizaciones de fenómenos naturales o intros para tus temas.
+        </div>
+
+        <div class="info-box info-box-blue" style="border-left-color: #1e40af;">
+          <strong>💰 Acceso:</strong> Si tu colegio usa Google Workspace for Education, tienes 100 créditos mensuales gratis en Flow. También puedes acceder con Google AI Pro (19,99 $/mes, 1.000 créditos). Cada vídeo consume entre 10 y 50 créditos según el modelo y la duración.
+        </div>
+
+        <!-- Steps -->
+        <div class="steps-container">
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-video">1</div>
+            <div class="step-content">
+              <div class="step-title">Abre Google Flow</div>
+              <div class="step-description">Accede a la plataforma de creación de vídeo</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Abre Chrome y ve a <code>labs.google/flow</code>. Inicia sesión con tu cuenta de Google. Verás la interfaz de Flow con un espacio para crear proyectos. Si es tu primera vez, explora los vídeos de ejemplo en «Flow TV» para hacerte una idea de lo que se puede lograr.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-video">2</div>
+            <div class="step-content">
+              <div class="step-title">Describe la escena que quieres</div>
+              <div class="step-description">Escribe con detalle qué debe mostrar el vídeo</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Crea un nuevo proyecto y escribe tu descripción. Sé concreto con el encuadre, la ambientación y la acción. Por ejemplo: <code>Una animación educativa que muestra el ciclo del agua: gotas de lluvia cayendo sobre montañas, agua fluyendo por un río hasta el mar, evaporación con el sol, formación de nubes y nueva lluvia. Estilo realista, colores vivos, movimiento suave.</code> Elige formato horizontal (16:9) para presentaciones o vertical (9:16) para móvil.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-video">3</div>
+            <div class="step-content">
+              <div class="step-title">Genera y revisa el clip</div>
+              <div class="step-description">Flow creará un vídeo de hasta 8 segundos con audio</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Pulsa generar y espera entre 30 segundos y 2 minutos. Flow generará un clip de hasta 8 segundos en 1080p con sonido ambiente sincronizado. Revisa el resultado: si necesitas ajustes, puedes usar las herramientas de edición para insertar o eliminar objetos, o extender la duración del clip. Puedes encadenar varios clips para crear un vídeo más largo.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-video">4</div>
+            <div class="step-content">
+              <div class="step-title">Descarga o comparte</div>
+              <div class="step-description">Guarda el vídeo para usarlo en clase</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Cuando el vídeo te convenza, expórtalo o descárgalo. Podrás insertarlo en tus presentaciones de Google Slides, compartirlo en Google Classroom o proyectarlo directamente en clase. Recuerda que los vídeos generados con IA incluyen una marca de agua digital (SynthID) de Google. Puedes combinarlo con imágenes generadas en Gemini como «ingredientes» para lograr mayor consistencia visual.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task -->
+        <div class="task-card task-eso-video">
+          <h3>🎯 Tu misión</h3>
+          <p>Crea un clip de vídeo corto que puedas proyectar al iniciar un tema en clase. Puede ser una recreación histórica, un fenómeno geográfico, una metáfora visual para Lengua o una escena filosófica.</p>
+          <div class="task-example">
+            <strong>💡 Ejemplo de instrucción:</strong>
+            «Un plano cinematográfico de un mercado medieval bullicioso en la Europa del siglo XIII: puestos de tela y especias, campesinos y mercaderes negociando, una catedral gótica al fondo, luz de atardecer dorada. Audio ambiente con voces y sonidos de mercado. Estilo realista, formato 16:9»
+          </div>
+        </div>
+
+        <a href="https://labs.google/flow" target="_blank" class="link-btn link-btn-eso-video">
+          Abrir Google Flow ↗
+        </a>
+
+        <!-- Progress -->
+        <div class="progress-wrapper" id="progress-eso-video">
+          <div class="progress-bar-bg"><div class="progress-bar-fill fill-eso-video" id="fill-eso-video"></div></div>
+          <div class="progress-label" id="label-eso-video">0 de 4 pasos completados</div>
+        </div>
+
+        <!-- Checklist -->
+        <div class="tips-section">
+          <h4>📋 Tu progreso</h4>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-video')">
+            <div class="check-box"></div>
+            <span class="check-label">He abierto Google Flow</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-video')">
+            <div class="check-box"></div>
+            <span class="check-label">He descrito una escena para mi asignatura</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-video')">
+            <div class="check-box"></div>
+            <span class="check-label">He generado un clip de vídeo</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-video')">
+            <div class="check-box"></div>
+            <span class="check-label">He descargado o compartido el vídeo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- ESO SECTION 3: NOTEBOOKLM           -->
+    <!-- ════════════════════════════════════ -->
+    <div class="section-panel" id="section-eso-notebook">
+      <div class="glass-card">
+        <div class="section-header">
+          <div class="section-icon-circle icon-eso-notebook">📓</div>
+          <div>
+            <div class="section-title">NotebookLM</div>
+            <div class="section-subtitle">Tu asistente de investigación que solo trabaja con tus fuentes</div>
+          </div>
+        </div>
+
+        <div class="tool-badge badge-eso-notebook">🔧 Herramienta: Google NotebookLM (gratuita)</div>
+
+        <div class="info-box info-box-red">
+          <strong>¿Qué es?</strong> NotebookLM es un asistente de investigación de Google basado en IA. Su diferencia clave: solo trabaja con los documentos que tú le proporcionas, no inventa información ni busca en internet. Subes tus PDFs, apuntes, vídeos de YouTube o webs, y NotebookLM se convierte en un experto en ese material. Puede generar resúmenes, guías de estudio, cuestionarios, cronologías e incluso podcasts en audio a partir de tus fuentes.
+        </div>
+
+        <div class="info-box info-box-red" style="border-left-color: #b91c1c;">
+          <strong>💰 Acceso:</strong> NotebookLM es gratuito para todos los centros educativos con Google Workspace for Education. Está cubierto bajo los Términos de Servicio de Workspace (los datos no se usan para entrenar IA). Disponible para usuarios de todas las edades, con protecciones adicionales para menores.
+        </div>
+
+        <!-- Steps -->
+        <div class="steps-container">
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-notebook">1</div>
+            <div class="step-content">
+              <div class="step-title">Abre NotebookLM y crea un cuaderno</div>
+              <div class="step-description">Cada cuaderno es un espacio de trabajo sobre un tema</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Ve a <code>notebooklm.google.com</code> e inicia sesión con tu cuenta de Google. Haz clic en <code>Nuevo cuaderno</code> y ponle un nombre descriptivo, por ejemplo: «Tema 5 · La Edad Media – 2º ESO» o «Análisis Lazarillo de Tormes – 3º ESO». Puedes tener hasta 100 cuadernos.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-notebook">2</div>
+            <div class="step-content">
+              <div class="step-title">Sube tus fuentes</div>
+              <div class="step-description">Añade PDFs, Docs, Slides, vídeos de YouTube o webs</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Haz clic en <code>Añadir fuente</code> (panel izquierdo). Puedes subir: PDFs del libro de texto, documentos de Google Drive, presentaciones de Slides, enlaces a vídeos de YouTube, sitios web o archivos de audio. Cada cuaderno admite hasta 50 fuentes. NotebookLM leerá y analizará todo el contenido automáticamente, generando un resumen inicial.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-notebook">3</div>
+            <div class="step-content">
+              <div class="step-title">Pregunta y explora el contenido</div>
+              <div class="step-description">Haz preguntas concretas y obtén respuestas con citas a tus fuentes</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                En el cuadro de chat (parte inferior), escribe lo que necesites. Ejemplos: <code>¿Cuáles son las causas principales de la caída del Imperio Romano según mis fuentes?</code>, <code>Resume el capítulo 3 en 5 puntos clave</code>, <code>Crea una cronología de los eventos principales</code>. Cada respuesta incluye citas directas a tus documentos para que puedas verificar la información.
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-notebook">4</div>
+            <div class="step-content">
+              <div class="step-title">Genera materiales listos para usar</div>
+              <div class="step-description">Crea guías de estudio, cuestionarios, resúmenes de audio y vídeo</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                En el panel derecho encontrarás herramientas para generar automáticamente: <strong>Guías de estudio</strong> con preguntas y respuestas, <strong>Resúmenes</strong> del contenido, <strong>Preguntas frecuentes</strong>, <strong>Cronologías</strong>, <strong>Resúmenes de audio</strong> (dos voces de IA comentan tu material como un podcast) y <strong>Resúmenes de vídeo</strong> (vídeos explicativos cortos). Puedes copiar y compartir estos materiales con tus alumnos.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task -->
+        <div class="task-card task-eso-notebook">
+          <h3>🎯 Tu misión</h3>
+          <p>Crea un cuaderno de NotebookLM sobre un tema de tu asignatura. Sube al menos 2 fuentes (un PDF y un vídeo de YouTube o web) y genera una guía de estudio o un resumen de audio para tus alumnos.</p>
+          <div class="task-example">
+            <strong>💡 Ideas para probarlo:</strong>
+            Sube el PDF de un tema del libro de texto + un vídeo de YouTube sobre el mismo contenido. Pide a NotebookLM: «Crea un cuestionario de 10 preguntas tipo test sobre este tema, con 4 opciones cada una y la respuesta correcta señalada». Luego genera un «Audio Overview» y tendrás un podcast del tema.
+          </div>
+        </div>
+
+        <a href="https://notebooklm.google.com" target="_blank" class="link-btn link-btn-eso-notebook">
+          Abrir NotebookLM ↗
+        </a>
+
+        <!-- Progress -->
+        <div class="progress-wrapper" id="progress-eso-notebook">
+          <div class="progress-bar-bg"><div class="progress-bar-fill fill-eso-notebook" id="fill-eso-notebook"></div></div>
+          <div class="progress-label" id="label-eso-notebook">0 de 4 pasos completados</div>
+        </div>
+
+        <!-- Checklist -->
+        <div class="tips-section">
+          <h4>📋 Tu progreso</h4>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-notebook')">
+            <div class="check-box"></div>
+            <span class="check-label">He abierto NotebookLM y creado un cuaderno</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-notebook')">
+            <div class="check-box"></div>
+            <span class="check-label">He subido al menos 2 fuentes</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-notebook')">
+            <div class="check-box"></div>
+            <span class="check-label">He hecho preguntas sobre mis fuentes</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-notebook')">
+            <div class="check-box"></div>
+            <span class="check-label">He generado una guía de estudio o resumen de audio</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- ESO SECTION 4: MATERIALS & NEE      -->
+    <!-- ════════════════════════════════════ -->
+    <div class="section-panel" id="section-eso-materials">
+      <div class="glass-card">
+        <div class="section-header">
+          <div class="section-icon-circle icon-eso-materials">📝</div>
+          <div>
+            <div class="section-title">Materiales y Adaptaciones NEE</div>
+            <div class="section-subtitle">Genera temarios, actividades, exámenes y adaptaciones con IA</div>
+          </div>
+        </div>
+
+        <div class="tool-badge badge-eso-materials">🔧 Herramienta: Google Gemini</div>
+
+        <div class="info-box info-box-amber">
+          <strong>¿Qué es?</strong> Gemini es el asistente de IA de Google. Puedes pedirle que elabore temarios, actividades, exámenes tipo test o de desarrollo, rúbricas de evaluación y, lo más valioso, adaptaciones personalizadas para alumnos con Necesidades Educativas Especiales (NEE). La clave está en darle el contexto preciso: asignatura, nivel, criterios de evaluación y tipo de adaptación necesaria.
+        </div>
+
+        <div class="info-box info-box-amber" style="border-left-color: #d97706;">
+          <strong>⚠️ Importante:</strong> Gemini genera borradores que siempre debes revisar y adaptar. Nunca incluyas datos personales de alumnos (nombres, diagnósticos concretos…) al escribir tus peticiones — describe el perfil de necesidades sin identificar al alumno, conforme a la normativa de protección de datos.
+        </div>
+
+        <!-- Steps -->
+        <div class="steps-container">
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-materials">1</div>
+            <div class="step-content">
+              <div class="step-title">Abre Gemini y define el contexto</div>
+              <div class="step-description">Dile a Gemini qué asignatura, curso y tema vas a trabajar</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Ve a <code>gemini.google.com</code> e inicia sesión. Lo primero es dar a Gemini un contexto rico. Empieza con algo como: <code>Eres un asistente educativo experto en la legislación LOMLOE para ESO en la Región de Murcia. Voy a pedirte que generes materiales para la asignatura de Geografía e Historia de 2º ESO, Tema 6: El Islam y Al-Ándalus. Los alumnos tienen entre 13 y 14 años.</code>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-materials">2</div>
+            <div class="step-content">
+              <div class="step-title">Solicita el material que necesitas</div>
+              <div class="step-description">Temarios, actividades, exámenes tipo test o de desarrollo</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Ahora pide lo que necesites de forma concreta. Ejemplos:
+                <br>• <code>Elabora un resumen del tema en 10 puntos clave, usando vocabulario accesible para alumnos de 13 años</code>
+                <br>• <code>Crea un examen tipo test de 15 preguntas con 4 opciones (a, b, c, d) sobre este tema. Incluye la hoja de respuestas aparte</code>
+                <br>• <code>Diseña 5 actividades variadas (una línea del tiempo, un mapa, un texto con huecos, un debate y un trabajo en grupo) con sus instrucciones completas</code>
+                <br>• <code>Genera una rúbrica de evaluación para un trabajo de investigación sobre este tema, con 4 niveles de logro y 5 criterios</code>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-materials">3</div>
+            <div class="step-content">
+              <div class="step-title">Pide la adaptación para NEE</div>
+              <div class="step-description">Genera versiones adaptadas según el perfil de necesidades</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Una vez tengas el material base, pide la adaptación sin datos personales del alumno. Ejemplo: <code>Adapta este examen para un alumno con dificultades de comprensión lectora: reduce a 10 preguntas, simplifica el vocabulario, añade un pequeño texto de apoyo antes de cada bloque de preguntas, utiliza frases cortas y directas, y aumenta el tamaño de letra a 14pt.</code>
+                <br><br>Otro ejemplo: <code>Adapta estas actividades para un alumno con altas capacidades: añade una actividad de ampliación que requiera investigación autónoma, conexión con la actualidad y pensamiento crítico.</code>
+                <br><br>O bien: <code>Adapta este resumen para un alumno con TDAH: usa esquemas visuales con viñetas, destaca las palabras clave en negrita, incluye iconos de tipo emoji al inicio de cada punto para facilitar la lectura y reduce los párrafos a máximo 3 líneas.</code>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" onclick="toggleDetail(this)">
+            <div class="step-number step-number-eso-materials">4</div>
+            <div class="step-content">
+              <div class="step-title">Revisa, ajusta y exporta</div>
+              <div class="step-description">Siempre revisa el contenido antes de usarlo con tus alumnos</div>
+              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
+              <div class="step-detail">
+                Lee el material generado con atención crítica: comprueba que los datos son correctos, el nivel lingüístico es adecuado y las adaptaciones responden realmente a las necesidades del alumno. Copia el texto a un Google Doc para maquetarlo con el formato de tu centro. Puedes pedirle a Gemini que lo refine: <code>Reescribe la pregunta 5 con un lenguaje más sencillo</code> o <code>Añade un ejemplo a la actividad 3</code>. La IA te da un borrador sólido; tu criterio profesional hace el resto.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task -->
+        <div class="task-card task-eso-materials">
+          <h3>🎯 Tu misión</h3>
+          <p>Genera un material completo (examen o actividad) para una de tus asignaturas y crea una adaptación para un perfil NEE. Revisa que el contenido sea correcto y adecuado al nivel.</p>
+          <div class="task-example">
+            <strong>💡 Ejemplo paso a paso:</strong>
+            1) Pídele a Gemini un examen de 15 preguntas tipo test sobre «La narrativa del siglo XVI: el Lazarillo» para 3º ESO.
+            2) Luego pide: «Adapta este examen para un alumno con dislexia: usa tipografía clara, aumenta el interlineado, reduce las opciones a 3 por pregunta y añade un fragmento del texto antes de cada bloque de preguntas como apoyo visual».
+            3) Copia ambas versiones a un Google Doc y compáralas.
+          </div>
+        </div>
+
+        <a href="https://gemini.google.com" target="_blank" class="link-btn link-btn-eso-materials">
+          Abrir Gemini ↗
+        </a>
+
+        <!-- Progress -->
+        <div class="progress-wrapper" id="progress-eso-materials">
+          <div class="progress-bar-bg"><div class="progress-bar-fill fill-eso-materials" id="fill-eso-materials"></div></div>
+          <div class="progress-label" id="label-eso-materials">0 de 4 pasos completados</div>
+        </div>
+
+        <!-- Checklist -->
+        <div class="tips-section">
+          <h4>📋 Tu progreso</h4>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-materials')">
+            <div class="check-box"></div>
+            <span class="check-label">He dado contexto a Gemini (asignatura, curso, tema)</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-materials')">
+            <div class="check-box"></div>
+            <span class="check-label">He generado un material (examen, actividad o temario)</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-materials')">
+            <div class="check-box"></div>
+            <span class="check-label">He pedido una adaptación para un perfil NEE</span>
+          </div>
+          <div class="checklist-item" onclick="toggleCheck(this, 'eso-materials')">
+            <div class="check-box"></div>
+            <span class="check-label">He revisado y copiado el material a un documento</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- ESO SECTION 5: TRUCOS DE PROMPTING  -->
+    <!-- ════════════════════════════════════ -->
+    <div class="section-panel" id="section-eso-tips">
+      <div class="glass-card">
+        <div class="section-header">
+          <div class="section-icon-circle" style="background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);">✨</div>
+          <div>
+            <div class="section-title">Trucos para hablar con la IA</div>
+            <div class="section-subtitle">Pequeños secretos para que los resultados sean mucho mejores</div>
+          </div>
+        </div>
+
+        <div class="info-box" style="background: rgba(139,92,246,0.1); border-left: 4px solid #8b5cf6;">
+          <strong>La idea clave:</strong> Hablar con una IA es como pedir comida en un restaurante. Si dices «ponme algo de comer», te traerán cualquier cosa. Pero si dices «quiero una ensalada templada con queso de cabra, nueces y vinagreta de miel», el resultado será exactamente lo que buscas. Con la IA pasa lo mismo: <strong>cuanto más contexto le des, mejor será el resultado</strong>.
+        </div>
+
+        <!-- The Formula -->
+        <div style="margin: 28px 0 8px; padding: 0 4px;">
+          <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px;">
+            🧪 La fórmula mágica del prompting
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-medium); margin-bottom: 18px; line-height: 1.5;">
+            No hace falta escribir mucho. Solo hay que incluir <strong>4 ingredientes</strong>. Piensa en ellos como si rellenases una ficha:
+          </p>
+        </div>
+
+        <div class="formula-grid">
+          <div class="formula-card" style="--fc-color: #ff7b54;">
+            <div class="formula-number">1</div>
+            <div class="formula-label">QUÉ quiero</div>
+            <div class="formula-desc">¿Una imagen? ¿Un vídeo? ¿Un examen? ¿Un resumen? Díselo claro al principio.</div>
+            <div class="formula-example">«Genera una imagen de…»<br>«Crea un vídeo de…»<br>«Elabora un examen de…»</div>
+          </div>
+          <div class="formula-card" style="--fc-color: #3b82f6;">
+            <div class="formula-number">2</div>
+            <div class="formula-label">CÓMO lo quiero</div>
+            <div class="formula-desc">El estilo, formato, tono o estructura. Como elegir el «traje» del resultado.</div>
+            <div class="formula-example">«…estilo infografía educativa»<br>«…tipo test con 4 opciones»<br>«…en tono cinematográfico»</div>
+          </div>
+          <div class="formula-card" style="--fc-color: #10b981;">
+            <div class="formula-number">3</div>
+            <div class="formula-label">PARA QUIÉN</div>
+            <div class="formula-desc">El curso, la edad, el nivel, las necesidades. Esto cambia mucho el resultado.</div>
+            <div class="formula-example">«…para 2º ESO (13 años)»<br>«…adaptado a un alumno con TDAH»<br>«…nivel de dificultad medio»</div>
+          </div>
+          <div class="formula-card" style="--fc-color: #8b5cf6;">
+            <div class="formula-number">4</div>
+            <div class="formula-label">DETALLES extra</div>
+            <div class="formula-desc">Asignatura, tema concreto, marco normativo, formato de entrega… Los extras que lo hacen perfecto.</div>
+            <div class="formula-example">«…tema: Al-Ándalus, Geo e Hª»<br>«…incluye rúbrica de evaluación»<br>«…formato horizontal 16:9»</div>
+          </div>
+        </div>
+
+        <!-- Before / After -->
+        <div style="margin: 36px 0 8px; padding: 0 4px;">
+          <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px;">
+            🔄 Antes y después: la diferencia de un buen prompt
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-medium); margin-bottom: 18px; line-height: 1.5;">
+            Mira cómo cambia el resultado con solo añadir contexto:
+          </p>
+        </div>
+
+        <!-- Before/After: Images -->
+        <div class="before-after-block">
+          <div class="ba-label">🎨 Para imágenes</div>
+          <div class="ba-row">
+            <div class="ba-card ba-before">
+              <div class="ba-tag">❌ Así no</div>
+              <p>«Haz un dibujo del Imperio Romano»</p>
+            </div>
+            <div class="ba-arrow">→</div>
+            <div class="ba-card ba-after">
+              <div class="ba-tag">✅ Así sí</div>
+              <p>«Genera una imagen realista de un foro romano al atardecer, con ciudadanos con toga, un templo con columnas corintias, mercaderes y un acueducto al fondo. Estilo pintura académica, colores cálidos, para una clase de Hª de 2º ESO»</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Before/After: Videos -->
+        <div class="before-after-block">
+          <div class="ba-label">🎬 Para vídeos</div>
+          <div class="ba-row">
+            <div class="ba-card ba-before">
+              <div class="ba-tag">❌ Así no</div>
+              <p>«Vídeo del ciclo del agua»</p>
+            </div>
+            <div class="ba-arrow">→</div>
+            <div class="ba-card ba-after">
+              <div class="ba-tag">✅ Así sí</div>
+              <p>«Clip de 8 segundos que muestra el ciclo del agua: lluvia cayendo sobre montañas verdes, agua fluyendo por un río hasta el mar, evaporación con rayos de sol, nubes formándose. Estilo realista, movimiento fluido, formato 16:9, audio ambiente con sonido de agua»</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Before/After: Materials -->
+        <div class="before-after-block">
+          <div class="ba-label">📝 Para materiales y exámenes</div>
+          <div class="ba-row">
+            <div class="ba-card ba-before">
+              <div class="ba-tag">❌ Así no</div>
+              <p>«Hazme un examen del Lazarillo»</p>
+            </div>
+            <div class="ba-arrow">→</div>
+            <div class="ba-card ba-after">
+              <div class="ba-tag">✅ Así sí</div>
+              <p>«Elabora un examen de 15 preguntas tipo test (4 opciones, solo una correcta) sobre "La vida de Lazarillo de Tormes" para 3º ESO (14-15 años), Lengua y Literatura. Incluye: 5 preguntas de comprensión, 5 de vocabulario en contexto y 5 de análisis literario. Añade la hoja de respuestas aparte»</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Before/After: NotebookLM -->
+        <div class="before-after-block">
+          <div class="ba-label">📓 Para NotebookLM</div>
+          <div class="ba-row">
+            <div class="ba-card ba-before">
+              <div class="ba-tag">❌ Así no</div>
+              <p>«Resume esto»</p>
+            </div>
+            <div class="ba-arrow">→</div>
+            <div class="ba-card ba-after">
+              <div class="ba-tag">✅ Así sí</div>
+              <p>«A partir de mis fuentes, genera una guía de estudio con: 10 preguntas clave y sus respuestas, una cronología de los eventos principales y 5 conceptos que los alumnos deben memorizar para el examen, presentados en formato esquemático»</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Golden Tips -->
+        <div style="margin: 36px 0 8px; padding: 0 4px;">
+          <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px;">
+            💡 5 trucos de oro
+          </h3>
+        </div>
+
+        <div class="golden-tips">
+          <div class="golden-tip">
+            <div class="golden-tip-icon">🔁</div>
+            <div class="golden-tip-content">
+              <strong>Si no te gusta, ¡pide cambios!</strong>
+              <p>No hace falta empezar de cero. Dile a la IA qué cambiar: «simplifica el vocabulario», «añade dos preguntas más de desarrollo», «hazlo más visual». La IA recuerda toda la conversación.</p>
+            </div>
+          </div>
+          <div class="golden-tip">
+            <div class="golden-tip-icon">📋</div>
+            <div class="golden-tip-content">
+              <strong>Copia y modifica</strong>
+              <p>Si un compañero ha escrito un buen prompt, cópialo y cámbialo para tu asignatura. Los ejemplos de este taller son tuyos para reutilizar y adaptar.</p>
+            </div>
+          </div>
+          <div class="golden-tip">
+            <div class="golden-tip-icon">🎯</div>
+            <div class="golden-tip-content">
+              <strong>Sé específico, no largo</strong>
+              <p>No hace falta escribir un párrafo enorme. Con 2-3 frases bien pensadas basta: qué quiero + cómo lo quiero + para quién + tema concreto. Calidad, no cantidad.</p>
+            </div>
+          </div>
+          <div class="golden-tip">
+            <div class="golden-tip-icon">🌟</div>
+            <div class="golden-tip-content">
+              <strong>Usa palabras clave según la herramienta</strong>
+              <p>Para imágenes: <em>realista, infografía, esquema, estilo pictórico, colores vivos</em>. Para vídeos: <em>cinematográfico, movimiento suave, plano aéreo, 16:9</em>. Para materiales: <em>tipo test, rúbrica, adaptación, saberes básicos, criterios de evaluación</em>.</p>
+            </div>
+          </div>
+          <div class="golden-tip">
+            <div class="golden-tip-icon">⚠️</div>
+            <div class="golden-tip-content">
+              <strong>Revisa siempre el resultado</strong>
+              <p>La IA genera borradores, no productos finales. Comprueba datos históricos, citas literarias, y que el nivel lingüístico sea adecuado. Tu criterio profesional es insustituible.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metaprompt Section -->
+        <div class="task-card" style="background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%); color: #fff; margin-top: 28px; border: 2px solid rgba(255,255,255,0.2);">
+          <h3 style="color: #fff; display: flex; align-items: center; gap: 10px; font-size: 1.25rem;">
+            🪄 El truco más fácil del mundo: pídele ayuda a la propia IA
+          </h3>
+          <p style="color: rgba(255,255,255,0.92); font-size: 1.05rem; line-height: 1.7; margin-top: 8px;">
+            ¿Sabes lo que necesitas pero no encuentras las palabras para pedírselo a la IA? Hay un truco muy sencillo: <strong>cuéntale tu idea con tus palabras y pídele que ella escriba la instrucción por ti</strong>. Es como decirle a un compañero: «Oye, quiero montar algo sobre la Edad Media, ¿me ayudas a pensarlo?». Mira qué fácil:
+          </p>
+
+          <div style="display: flex; align-items: center; gap: 12px; margin: 20px 0 10px; flex-wrap: wrap;">
+            <span style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">1️⃣</span>
+            <span style="font-weight: 600; font-size: 1rem;">Tienes una idea, aunque sea vaga — ¡y eso basta!</span>
+          </div>
+          <div class="task-example" style="background: rgba(255,255,255,0.15); color: #ffe0e0; border-left: 4px solid #ff8a80;">
+            💭 <em>«Quiero hacer un examen sobre la Edad Media pero no sé cómo estructurarlo bien para que sea completo…»</em>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px; margin: 18px 0 10px; flex-wrap: wrap;">
+            <span style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">2️⃣</span>
+            <span style="font-weight: 600; font-size: 1rem;">Se lo cuentas a la IA con tus palabras, tal cual</span>
+          </div>
+          <div class="task-example" style="background: rgba(255,255,255,0.15); color: #fff; border-left: 4px solid #82b1ff;">
+            📝 <em>«Soy profesor de Geografía e Historia de 2º ESO (alumnos de 13-14 años) en la Región de Murcia. Quiero crear un examen sobre la Edad Media (feudalismo, sociedad estamental, arte románico y gótico). <strong>Ayúdame a escribir una instrucción detallada</strong> para que Gemini me genere un examen equilibrado con diferentes tipos de preguntas.»</em>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px; margin: 18px 0 10px; flex-wrap: wrap;">
+            <span style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">3️⃣</span>
+            <span style="font-weight: 600; font-size: 1rem;">¡Y la IA te la escribe! Solo tienes que copiar y pegar</span>
+          </div>
+          <div class="task-example" style="background: rgba(255,255,255,0.15); color: #c8e6c9; border-left: 4px solid #69f0ae;">
+            ✅ <em>«Genera un examen de Geografía e Historia para 2º ESO sobre "La Europa feudal (siglos X-XIII)" con esta estructura: Bloque A – 8 preguntas tipo test (4 opciones), Bloque B – 3 preguntas de verdadero/falso que el alumno debe justificar, Bloque C – 1 pregunta de desarrollo breve (máx. 10 líneas) sobre la vida en un feudo, Bloque D – 1 actividad de análisis de una imagen (describe una miniatura medieval y pide al alumno que identifique elementos). Incluye la clave de corrección con criterios de puntuación.»</em>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.15); border-radius: 14px; padding: 16px 20px; margin-top: 18px;">
+            <p style="color: rgba(255,255,255,0.95); margin: 0; font-size: 0.98rem; line-height: 1.65;">
+              <strong>💡 ¿Por qué funciona tan bien?</strong> Porque tú sabes <em>qué necesitas</em> en tu aula y conoces a tus alumnos (eso nadie lo sabe mejor que tú), y la IA sabe <em>qué estructura y detalle dan mejores resultados</em>. Juntando las dos cosas, consigues materiales mucho más completos sin complicarte la vida.
+            </p>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.12); border-radius: 14px; padding: 16px 20px; margin-top: 12px;">
+            <p style="color: rgba(255,255,255,0.9); margin: 0; font-size: 0.95rem; line-height: 1.6;">
+              <strong>🔑 La frase mágica que siempre funciona:</strong><br>
+              <em>«Soy [tu rol, p. ej. profesor de Lengua de 3º ESO]. Quiero crear [qué: un examen / actividades / un vídeo] sobre [tema]. <strong>Ayúdame a escribir una instrucción detallada</strong> para [herramienta: Gemini / Flow / NotebookLM].»</em>
+            </p>
+          </div>
+        </div>
+
+        <!-- Quick Reference -->
+        <div class="task-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #c4b5fd 100%); color: #2e1065; margin-top: 28px;">
+          <h3 style="color: #2e1065;">📌 Tu chuleta rápida</h3>
+          <p style="color: #3b0764;">Cuando no sepas qué escribir, rellena estas plantillas y pégalas tal cual:</p>
+          <div class="task-example" style="background: rgba(255,255,255,0.35); color: #2e1065; margin-top: 14px; font-size: 1rem; line-height: 1.7;">
+            <strong style="color: #2e1065;">Para imágenes:</strong><br>
+            «Genera una imagen de <em>[qué escena/concepto]</em>, estilo <em>[realista/infografía/esquema/pictórico]</em>, para alumnos de <em>[curso y edad]</em>, con <em>[detalles de ambientación, colores, época]</em>. Para la asignatura de <em>[asignatura]</em>»
+          </div>
+          <div class="task-example" style="background: rgba(255,255,255,0.35); color: #2e1065; margin-top: 10px; font-size: 1rem; line-height: 1.7;">
+            <strong style="color: #2e1065;">Para vídeos:</strong><br>
+            «Crea un clip de <em>[duración]</em> que muestre <em>[qué escena o proceso]</em>, estilo <em>[realista/animación/cinematográfico]</em>, formato <em>[16:9 o 9:16]</em>, con audio <em>[ambiente/diálogo/música]</em>. Para <em>[asignatura, curso]</em>»
+          </div>
+          <div class="task-example" style="background: rgba(255,255,255,0.35); color: #2e1065; margin-top: 10px; font-size: 1rem; line-height: 1.7;">
+            <strong style="color: #2e1065;">Para materiales/exámenes:</strong><br>
+            «Elabora <em>[examen/actividades/rúbrica]</em> de <em>[asignatura]</em> para <em>[curso]</em>, tema: <em>[tema]</em>. Incluye <em>[nº preguntas, tipo, estructura]</em>. Nivel: <em>[básico/medio/avanzado]</em>. Añade <em>[clave de corrección/criterios de puntuación]</em>»
+          </div>
+          <div class="task-example" style="background: rgba(255,255,255,0.35); color: #2e1065; margin-top: 10px; font-size: 1rem; line-height: 1.7;">
+            <strong style="color: #2e1065;">Para adaptaciones NEE:</strong><br>
+            «Adapta este material para un alumno con <em>[perfil: dificultad lectora/TDAH/altas capacidades/TEA…]</em>: <em>[simplifica vocabulario / reduce preguntas / añade apoyos visuales / incluye ampliación…]</em>. Mantén los mismos contenidos pero ajusta <em>[formato/extensión/complejidad]</em>»
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    Taller de IA · Colegio El Buen Pastor · Febrero 2026<br>
+    Preparado con 💛 por Manu
+  </footer>
+
+</div>
+
+
+<script src="js/app.js"></script>
+</body>
+</html>
