@@ -826,6 +826,15 @@
     line-height: 1.2;
     margin-bottom: 10px;
   }
+  .landing-header h1 .gradient-text {
+    background: linear-gradient(135deg, #ff7b54, #7c5cbf, #2ec4a0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .landing-header h1 .word-green { color: #059669; }
+  .landing-header h1 .word-blue { color: #2563eb; }
+  .landing-header h1 .word-purple { color: #7c3aed; }
   .landing-header p {
     font-size: 1.1rem;
     color: var(--text-medium);
