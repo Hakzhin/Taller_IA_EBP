@@ -865,51 +865,62 @@
   }
 
   .pathway-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: 1.5px solid var(--glass-border);
-    border-radius: 24px;
+    backdrop-filter: blur(24px) saturate(1.8);
+    -webkit-backdrop-filter: blur(24px) saturate(1.8);
+    border-radius: 28px;
     padding: 40px 28px 36px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 32px var(--glass-shadow);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
   }
-  .pathway-card::before {
+  .pathway-card::after {
     content: '';
     position: absolute;
-    inset: 0;
-    border-radius: 24px;
-    opacity: 0.04;
-    transition: opacity 0.35s;
-    z-index: 0;
+    top: 0; left: 0;
+    width: 100%; height: 45%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, transparent 100%);
+    border-radius: 28px 28px 0 0;
+    pointer-events: none;
   }
   .pathway-card:hover {
     transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 16px 48px rgba(0,0,0,0.15);
-  }
-  .pathway-card:hover::before {
-    opacity: 0.12;
   }
   .pathway-card:active {
     transform: translateY(-2px) scale(0.98);
   }
 
-  /* Card theme colors */
-  .pathway-card-infantil::before { background: linear-gradient(135deg, #059669, #14b8a6); }
-  .pathway-card-infantil { border-color: rgba(5,150,105,0.25); background: linear-gradient(165deg, rgba(5,150,105,0.06) 0%, rgba(20,184,166,0.03) 100%); }
-  .pathway-card-infantil:hover { border-color: #059669; }
+  /* Card theme colors — Tinted Liquid Glass */
+  .pathway-card-infantil {
+    background: linear-gradient(160deg, rgba(5,150,105,0.12) 0%, rgba(255,255,255,0.5) 40%, rgba(20,184,166,0.08) 100%);
+    border: 1.5px solid rgba(5,150,105,0.25);
+    box-shadow: 0 8px 32px rgba(5,150,105,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
+  }
+  .pathway-card-infantil:hover {
+    border-color: rgba(5,150,105,0.45);
+    box-shadow: 0 16px 48px rgba(5,150,105,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
+  }
 
-  .pathway-card-primaria::before { background: linear-gradient(135deg, #2563eb, #38bdf8); }
-  .pathway-card-primaria { border-color: rgba(37,99,235,0.25); background: linear-gradient(165deg, rgba(37,99,235,0.06) 0%, rgba(56,189,248,0.03) 100%); }
-  .pathway-card-primaria:hover { border-color: #2563eb; }
+  .pathway-card-primaria {
+    background: linear-gradient(160deg, rgba(37,99,235,0.12) 0%, rgba(255,255,255,0.5) 40%, rgba(56,189,248,0.08) 100%);
+    border: 1.5px solid rgba(37,99,235,0.25);
+    box-shadow: 0 8px 32px rgba(37,99,235,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
+  }
+  .pathway-card-primaria:hover {
+    border-color: rgba(37,99,235,0.45);
+    box-shadow: 0 16px 48px rgba(37,99,235,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
+  }
 
-  .pathway-card-eso::before { background: linear-gradient(135deg, #7c3aed, #4f46e5); }
-  .pathway-card-eso { border-color: rgba(124,58,237,0.25); background: linear-gradient(165deg, rgba(124,58,237,0.06) 0%, rgba(79,70,229,0.03) 100%); }
-  .pathway-card-eso:hover { border-color: #7c3aed; }
+  .pathway-card-eso {
+    background: linear-gradient(160deg, rgba(124,58,237,0.12) 0%, rgba(255,255,255,0.5) 40%, rgba(79,70,229,0.08) 100%);
+    border: 1.5px solid rgba(124,58,237,0.25);
+    box-shadow: 0 8px 32px rgba(124,58,237,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
+  }
+  .pathway-card-eso:hover {
+    border-color: rgba(124,58,237,0.45);
+    box-shadow: 0 16px 48px rgba(124,58,237,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
+  }
 
   .pathway-icon {
     font-size: 4rem;
