@@ -947,8 +947,8 @@
     letter-spacing: 0.3px;
   }
   .pathway-card-infantil .pathway-badge { background: linear-gradient(135deg, #ff9a56, #ff6b95); }
-  .pathway-card-primaria .pathway-badge { background: linear-gradient(135deg, #9ba3b0, #b0b8c4); cursor: default; }
-  .pathway-card-eso .pathway-badge { background: linear-gradient(135deg, #9ba3b0, #b0b8c4); cursor: default; }
+  .pathway-card-primaria .pathway-badge { background: linear-gradient(135deg, #667eea, #764ba2); }
+  .pathway-card-eso .pathway-badge { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #1a3a2a; }
 
   /* ── Mothership Card (transversal) ── */
   .mothership-wrapper {
