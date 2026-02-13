@@ -22,6 +22,18 @@ function showEsoSection(section) {
   window.scrollTo({ top: 300, behavior: 'smooth' });
 }
 
+// ── Section Navigation (within Primaria) ──
+function showPrimariaSection(section) {
+  document.querySelectorAll('#pathway-primaria .section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('#pathway-primaria .nav-pill').forEach(p => {
+    p.classList.remove('active-pri-image', 'active-pri-video', 'active-pri-notebook', 'active-pri-materials', 'active-pri-tips');
+  });
+
+  document.getElementById('section-' + section).classList.add('active');
+  document.getElementById('pill-' + section).classList.add('active-' + section);
+  window.scrollTo({ top: 300, behavior: 'smooth' });
+}
+
 // ── Step Detail Toggle ──
 function toggleDetail(stepEl) {
   const detail = stepEl.querySelector('.step-detail');
@@ -57,4 +69,3 @@ function updateProgress(section) {
     document.getElementById('label-' + section).textContent = '🎉 ¡Todos los pasos completados!';
   }
 }
-
