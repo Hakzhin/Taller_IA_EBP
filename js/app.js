@@ -1,3 +1,79 @@
+// ── Neural Particle Animation (Landing) ──
+(function () {
+  const canvas = document.getElementById('neural-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  const colors = ['#ff7b54', '#7c5cbf', '#2ec4a0', '#6366f1'];
+  const DURATION = 1400;
+  let particles = [];
+
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+  }
+
+  function createParticles() {
+    particles = [];
+    for (let i = 0; i < 45; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2.5 + 1,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vx: (Math.random() - 0.5) * 2,
+        vy: (Math.random() - 0.5) * 2
+      });
+    }
+  }
+
+  function animate() {
+    resize();
+    createParticles();
+    const cx = canvas.width / 2;
+    const cy = canvas.height * 0.32;
+    const start = performance.now();
+
+    function draw(now) {
+      const t = Math.min((now - start) / DURATION, 1);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const pull = t * t;
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.vx * (1 - pull) + (cx - p.x) * pull * 0.05;
+        p.y += p.vy * (1 - pull) + (cy - p.y) * pull * 0.05;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * (1 - t * 0.5), 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = 1 - t * 0.8;
+        ctx.fill();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const q = particles[j];
+          const dist = Math.hypot(p.x - q.x, p.y - q.y);
+          if (dist < 110) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.strokeStyle = p.color;
+            ctx.globalAlpha = (1 - dist / 110) * (1 - t * 0.9) * 0.35;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+      }
+      ctx.globalAlpha = 1;
+      if (t < 1) requestAnimationFrame(draw);
+    }
+    requestAnimationFrame(draw);
+  }
+
+  animate();
+})();
+
 // ── Section Navigation (within Infantil) ──
 function showSection(section) {
   document.querySelectorAll('#pathway-infantil .section-panel').forEach(p => p.classList.remove('active'));
