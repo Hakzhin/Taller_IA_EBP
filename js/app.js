@@ -66,7 +66,11 @@
         }
       }
       ctx.globalAlpha = 1;
-      if (t < 1) requestAnimationFrame(draw);
+      if (t < 1) {
+        requestAnimationFrame(draw);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
     }
     requestAnimationFrame(draw);
   }
