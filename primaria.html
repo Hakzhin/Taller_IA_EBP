@@ -9,25 +9,24 @@
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <!-- ═══════════════════════════════════════ -->
-  <!-- PATHWAY: PRIMARIA                           -->
-  <!-- ═══════════════════════════════════════ -->
   <div id="pathway-primaria" class="pathway-content active">
     <button class="btn-back" onclick="window.location.href='index.html'">← Volver al inicio</button>
 
     <header class="header">
       <div class="header-badge">📚 Itinerario Primaria</div>
       <h1>Taller de <span class="gradient-text">IA para Primaria</span></h1>
-      <p>Herramientas de Inteligencia Artificial para crear recursos, vídeos y materiales adaptadas al aula de Educación Primaria</p>
+      <p>¿Qué quieres crear hoy? Elige una categoría y una herramienta para empezar 👇</p>
     </header>
 
-    <!-- Primaria Navigation -->
     <nav class="nav-pills">
       <button class="nav-pill active-pri-image" onclick="showPrimariaSection('pri-image')" id="pill-pri-image">
         <span class="pill-icon">🎨</span> Imágenes
       </button>
       <button class="nav-pill" onclick="showPrimariaSection('pri-video')" id="pill-pri-video">
         <span class="pill-icon">🎬</span> Vídeos
+      </button>
+      <button class="nav-pill" onclick="showPrimariaSection('pri-music')" id="pill-pri-music">
+        <span class="pill-icon">🎵</span> Música
       </button>
       <button class="nav-pill" onclick="showPrimariaSection('pri-notebook')" id="pill-pri-notebook">
         <span class="pill-icon">📓</span> NotebookLM
@@ -40,482 +39,693 @@
       </button>
     </nav>
 
-    <!-- ════════════════════════════════════ -->
-    <!-- PRIMARIA SECTION 1: IMAGES               -->
-    <!-- ════════════════════════════════════ -->
-    <div class="section-panel active" id="section-pri-image">
-      <div class="glass-card">
-        <div class="section-header">
-          <div class="section-icon-circle icon-pri-image">🎨</div>
-          <div>
-            <div class="section-title">Crear Imágenes con IA</div>
-            <div class="section-subtitle">Genera ilustraciones y recursos visuales para tus clases de ESO</div>
+  <div class="section-panel active" id="section-pri-image" style="">
+    <div class="tool-grid">
+    <div class="tool-card tool-card-gemini" id="card-pri-gemini-img" onclick="toggleTool('pri-gemini-img')">
+      <div class="tool-logo-wrap"><img src="img/logos/gemini.png" alt="✦"></div>
+      <div class="tool-card-name">Gemini</div>
+      <div class="tool-card-tagline">Genera imágenes desde texto con el motor de Google</div>
+      <div class="tool-card-arrow" id="arrow-pri-gemini-img">→</div>
+    </div>
+    
+    <div class="tool-card tool-card-grok" id="card-pri-grok" onclick="toggleTool('pri-grok')">
+      <div class="tool-logo-wrap"><img src="img/logos/grok.png" alt="𝕏"></div>
+      <div class="tool-card-name">Grok (Aurora) <span class="chip-new">Nuevo</span></div>
+      <div class="tool-card-tagline">Generador gratuito de xAI — varias opciones por cada petición</div>
+      <div class="tool-card-arrow" id="arrow-pri-grok">→</div>
+    </div>
+    <div class="tool-card tool-card-copilot" id="card-pri-copilot" onclick="toggleTool('pri-copilot')">
+      <div class="tool-logo-wrap"><img src="img/logos/copilot.png" alt="🪟"></div>
+      <div class="tool-card-name">Copilot (DALL-E) <span class="chip-new">Nuevo</span></div>
+      <div class="tool-card-tagline">Chat de Microsoft con generación de imágenes integrada</div>
+      <div class="tool-card-arrow" id="arrow-pri-copilot">→</div>
+    </div>
+</div>
+  <div class="tutorial-panel" id="panel-pri-gemini-img">
+    <div class="tutorial-inner tut-gemini">
+      <div class="tut-info"><strong>¿Qué es?</strong> Nano Banana Pro es el generador de imágenes de Google, integrado en Gemini. Le describes lo que necesitas y genera la imagen en segundos. Ideal para crear portadas de temas, mapas conceptuales visuales, ilustraciones históricas, infografías o material de apoyo para cualquier asignatura.</div>
+      <div class="tut-steps">
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">1</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Abre Google Gemini</div>
+            <div class="tut-step-desc">Accede al generador de imágenes desde tu navegador</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Abre Chrome en tu Chromebook y ve a <code>gemini.google.com</code>. Inicia sesión con tu cuenta de Google (la del colegio). Una vez dentro, verás un cuadro de texto donde escribir tu petición. Gemini entiende perfectamente el español.</div>
           </div>
         </div>
-
-        <div class="tool-badge badge-pri-image">🔧 Herramienta: Nano Banana Pro (Google Gemini)</div>
-
-        <div class="info-box info-box-warm">
-          <strong>¿Qué es?</strong> Nano Banana Pro es el generador de imágenes de Google, integrado en Gemini. Le describes lo que necesitas y genera la imagen en segundos. Ideal para crear portadas de temas, mapas conceptuales visuales, ilustraciones históricas, infografías o material de apoyo para cualquier asignatura.
-        </div>
-
-        <!-- Steps -->
-        <div class="steps-container">
-          <div class="step" onclick="toggleDetail(this)">
-            <div class="step-number step-number-pri-image">1</div>
-            <div class="step-content">
-              <div class="step-title">Abre Google Gemini</div>
-              <div class="step-description">Accede al generador de imágenes desde tu navegador</div>
-              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
-              <div class="step-detail">
-                Abre Chrome en tu Chromebook y ve a <code>gemini.google.com</code>. Inicia sesión con tu cuenta de Google (la del colegio). Una vez dentro, verás un cuadro de texto donde escribir tu petición. Gemini entiende perfectamente el español.
-              </div>
-            </div>
-          </div>
-
-          <div class="step" onclick="toggleDetail(this)">
-            <div class="step-number step-number-pri-image">2</div>
-            <div class="step-content">
-              <div class="step-title">Describe la imagen que necesitas</div>
-              <div class="step-description">Sé concreto: asignatura, tema, estilo y uso que le darás</div>
-              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
-              <div class="step-detail">
-                Escribe algo como: <code>Genera una imagen de estilo infografía educativa que muestre las partes del aparato digestivo humano, con etiquetas claras, colores vivos y fondo blanco, para alumnos de 3º ESO</code>. Cuanto más contexto des (nivel, estilo, finalidad), mejor será el resultado.
-              </div>
-            </div>
-          </div>
-
-          <div class="step" onclick="toggleDetail(this)">
-            <div class="step-number step-number-pri-image">3</div>
-            <div class="step-content">
-              <div class="step-title">Pulsa «Enviar» y revisa</div>
-              <div class="step-description">Gemini generará la imagen en unos segundos</div>
-              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
-              <div class="step-detail">
-                Haz clic en enviar (➤) o pulsa <code>Enter</code>. Espera 10-15 segundos. Si la imagen no es lo que esperabas, puedes pedir cambios: <code>Pon las etiquetas más grandes</code>, <code>Cambia el estilo a acuarela</code> o <code>Añade un título arriba</code>. Itera hasta que te convenza.
-              </div>
-            </div>
-          </div>
-
-          <div class="step" onclick="toggleDetail(this)">
-            <div class="step-number step-number-pri-image">4</div>
-            <div class="step-content">
-              <div class="step-title">Descarga y utiliza la imagen</div>
-              <div class="step-description">Guárdala para usarla en presentaciones, fichas o exámenes</div>
-              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
-              <div class="step-detail">
-                Clic derecho sobre la imagen → <code>Guardar imagen como...</code>. Guárdala en una carpeta organizada (p. ej., «Recursos IA»). Ya puedes insertarla en tus documentos de Google, presentaciones de Slides o fichas de trabajo para los alumnos.
-              </div>
-            </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">2</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Describe la imagen que necesitas</div>
+            <div class="tut-step-desc">Sé concreto: asignatura, tema, estilo y uso que le darás</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Escribe algo como: <code>Genera una imagen de estilo infografía educativa que muestre las partes del aparato digestivo humano, con etiquetas claras, colores vivos y fondo blanco, para alumnos de 3º ESO</code>. Cuanto más contexto des (nivel, estilo, finalidad), mejor será el resultado.</div>
           </div>
         </div>
-
-        <!-- Task -->
-        <div class="task-card task-pri-image">
-          <h3>🎯 Tu misión</h3>
-          <p>Crea una imagen que puedas usar en una de tus asignaturas de ESO: una ilustración histórica, un mapa conceptual visual, una portada de tema o un recurso para una ficha.</p>
-          <div class="task-example">
-            <strong>💡 Ejemplo de instrucción:</strong>
-            «Genera una imagen educativa de estilo realista que represente un ágora griega durante una asamblea democrática en Atenas, siglo V a.C., con ciudadanos debatiendo, columnas dóricas al fondo y cielo mediterráneo. Para una clase de Geografía e Historia de 2º ESO»
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">3</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Pulsa «Enviar» y revisa</div>
+            <div class="tut-step-desc">Gemini generará la imagen en unos segundos</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Haz clic en enviar (➤) o pulsa <code>Enter</code>. Espera 10-15 segundos. Si la imagen no es lo que esperabas, puedes pedir cambios: <code>Pon las etiquetas más grandes</code>, <code>Cambia el estilo a acuarela</code> o <code>Añade un título arriba</code>. Itera hasta que te convenza.</div>
           </div>
         </div>
-
-        <a href="https://gemini.google.com" target="_blank" class="link-btn link-btn-pri-image">
-          Abrir Gemini ↗
-        </a>
-
-        <!-- Progress -->
-        <div class="progress-wrapper" id="progress-pri-image">
-          <div class="progress-bar-bg"><div class="progress-bar-fill fill-pri-image" id="fill-pri-image"></div></div>
-          <div class="progress-label" id="label-pri-image">0 de 4 pasos completados</div>
-        </div>
-
-        <!-- Checklist -->
-        <div class="tips-section">
-          <h4>📋 Tu progreso</h4>
-          <div class="checklist-item" onclick="toggleCheck(this, 'pri-image')">
-            <div class="check-box"></div>
-            <span class="check-label">He abierto Gemini en Chrome</span>
-          </div>
-          <div class="checklist-item" onclick="toggleCheck(this, 'pri-image')">
-            <div class="check-box"></div>
-            <span class="check-label">He descrito una imagen para mi asignatura</span>
-          </div>
-          <div class="checklist-item" onclick="toggleCheck(this, 'pri-image')">
-            <div class="check-box"></div>
-            <span class="check-label">He generado la imagen</span>
-          </div>
-          <div class="checklist-item" onclick="toggleCheck(this, 'pri-image')">
-            <div class="check-box"></div>
-            <span class="check-label">He descargado la imagen</span>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">4</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Descarga y utiliza la imagen</div>
+            <div class="tut-step-desc">Guárdala para usarla en presentaciones, fichas o exámenes</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Clic derecho sobre la imagen → <code>Guardar imagen como...</code>. Guárdala en una carpeta organizada (p. ej., «Recursos IA»). Ya puedes insertarla en tus documentos de Google, presentaciones de Slides o fichas de trabajo para los alumnos.</div>
           </div>
         </div>
       </div>
+      <div class="tut-task">
+        <h4>🎯 Tu misión</h4>
+        <p>Crea una imagen que puedas usar en una de tus asignaturas: una ilustración histórica, un mapa conceptual visual, una portada de tema o un recurso para una ficha.</p>
+        <div class="tut-task-example"><strong>💡 Ejemplo:</strong> «Genera una imagen educativa de estilo realista que represente un ágora griega durante una asamblea democrática en Atenas, siglo V a.C., con ciudadanos debatiendo, columnas dóricas al fondo y cielo mediterráneo. Para una clase de Geografía e Historia de 2º ESO»</div>
+      </div>
+      <a href="https://gemini.google.com" target="_blank" class="tut-open-btn">Abrir Gemini ↗</a>
     </div>
-
-    <!-- ════════════════════════════════════ -->
-    <!-- PRIMARIA SECTION 2: VIDEOS               -->
-    <!-- ════════════════════════════════════ -->
-    <div class="section-panel" id="section-pri-video">
-      <div class="glass-card">
-        <div class="section-header">
-          <div class="section-icon-circle icon-pri-video">🎬</div>
-          <div>
-            <div class="section-title">Crear Vídeos con IA</div>
-            <div class="section-subtitle">Genera clips de vídeo a partir de texto o imágenes para tus clases</div>
+  </div>
+  <div class="tutorial-panel" id="panel-pri-grok">
+    <div class="tutorial-inner tut-grok">
+      <div class="tut-info"><strong>¿Qué es?</strong> Grok es el asistente de IA de xAI, con un generador de imágenes gratuito basado en el modelo Aurora. Genera varias opciones por petición y es especialmente bueno con prompts descriptivos y detallados. Acceso en <code>grok.com</code>, sin instalar nada.</div>
+      <div class="tut-steps">
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">1</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Entra en Grok</div>
+            <div class="tut-step-desc">Accede desde cualquier navegador</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Ve a <code>grok.com</code> e inicia sesión (puedes usar tu cuenta de Google). La interfaz es un chat donde escribes tus peticiones directamente. El tier gratuito te permite generar hasta 10 imágenes cada 2 horas.</div>
           </div>
         </div>
-
-        <div class="tool-badge badge-pri-video">🔧 Herramienta: Google Flow (motor Veo 3.1)</div>
-
-        <div class="info-box info-box-blue">
-          <strong>¿Qué es?</strong> Google Flow es la herramienta de creación de vídeo con IA de Google, impulsada por Veo 3.1. Le describes una escena con palabras y genera un clip de vídeo realista con audio sincronizado (sonido ambiente, diálogos, efectos). Puedes usarlo para crear vídeos explicativos, recreaciones históricas, visualizaciones de fenómenos naturales o intros para tus temas.
-        </div>
-
-        <div class="info-box info-box-blue" style="border-left-color: #1e40af;">
-          <strong>💰 Acceso:</strong> Si tu colegio usa Google Workspace for Education, tienes 100 créditos mensuales gratis en Flow. También puedes acceder con Google AI Pro (19,99 $/mes, 1.000 créditos). Cada vídeo consume entre 10 y 50 créditos según el modelo y la duración.
-        </div>
-
-        <!-- Steps -->
-        <div class="steps-container">
-          <div class="step" onclick="toggleDetail(this)">
-            <div class="step-number step-number-pri-video">1</div>
-            <div class="step-content">
-              <div class="step-title">Abre Google Flow</div>
-              <div class="step-description">Accede a la plataforma de creación de vídeo</div>
-              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
-              <div class="step-detail">
-                Abre Chrome y ve a <code>labs.google/flow</code>. Inicia sesión con tu cuenta de Google. Verás la interfaz de Flow con un espacio para crear proyectos. Si es tu primera vez, explora los vídeos de ejemplo en «Flow TV» para hacerte una idea de lo que se puede lograr.
-              </div>
-            </div>
-          </div>
-
-          <div class="step" onclick="toggleDetail(this)">
-            <div class="step-number step-number-pri-video">2</div>
-            <div class="step-content">
-              <div class="step-title">Describe la escena que quieres</div>
-              <div class="step-description">Escribe con detalle qué debe mostrar el vídeo</div>
-              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
-              <div class="step-detail">
-                Crea un nuevo proyecto y escribe tu descripción. Sé concreto con el encuadre, la ambientación y la acción. Por ejemplo: <code>Una animación educativa que muestra el ciclo del agua: gotas de lluvia cayendo sobre montañas, agua fluyendo por un río hasta el mar, evaporación con el sol, formación de nubes y nueva lluvia. Estilo realista, colores vivos, movimiento suave.</code> Elige formato horizontal (16:9) para presentaciones o vertical (9:16) para móvil.
-              </div>
-            </div>
-          </div>
-
-          <div class="step" onclick="toggleDetail(this)">
-            <div class="step-number step-number-pri-video">3</div>
-            <div class="step-content">
-              <div class="step-title">Genera y revisa el clip</div>
-              <div class="step-description">Flow creará un vídeo de hasta 8 segundos con audio</div>
-              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
-              <div class="step-detail">
-                Pulsa generar y espera entre 30 segundos y 2 minutos. Flow generará un clip de hasta 8 segundos en 1080p con sonido ambiente sincronizado. Revisa el resultado: si necesitas ajustes, puedes usar las herramientas de edición para insertar o eliminar objetos, o extender la duración del clip. Puedes encadenar varios clips para crear un vídeo más largo.
-              </div>
-            </div>
-          </div>
-
-          <div class="step" onclick="toggleDetail(this)">
-            <div class="step-number step-number-pri-video">4</div>
-            <div class="step-content">
-              <div class="step-title">Descarga o comparte</div>
-              <div class="step-description">Guarda el vídeo para usarlo en clase</div>
-              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
-              <div class="step-detail">
-                Cuando el vídeo te convenza, expórtalo o descárgalo. Podrás insertarlo en tus presentaciones de Google Slides, compartirlo en Google Classroom o proyectarlo directamente en clase. Recuerda que los vídeos generados con IA incluyen una marca de agua digital (SynthID) de Google. Puedes combinarlo con imágenes generadas en Gemini como «ingredientes» para lograr mayor consistencia visual.
-              </div>
-            </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">2</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Describe la imagen con contexto educativo</div>
+            <div class="tut-step-desc">Sé específico con el tema, el estilo y el nivel</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Escribe tu petición con detalle. Por ejemplo: <code>Genera una imagen realista de una caravana de mercaderes cruzando el desierto del Sahara en el siglo XIV, con camellos cargados de mercancías, dunas al atardecer y una ciudad amurallada al fondo. Para una clase de Historia de 2º ESO</code>.</div>
           </div>
         </div>
-
-        <!-- Task -->
-        <div class="task-card task-pri-video">
-          <h3>🎯 Tu misión</h3>
-          <p>Crea un clip de vídeo corto que puedas proyectar al iniciar un tema en clase. Puede ser una recreación histórica, un fenómeno geográfico, una metáfora visual para Lengua o una escena filosófica.</p>
-          <div class="task-example">
-            <strong>💡 Ejemplo de instrucción:</strong>
-            «Un plano cinematográfico de un mercado medieval bullicioso en la Europa del siglo XIII: puestos de tela y especias, campesinos y mercaderes negociando, una catedral gótica al fondo, luz de atardecer dorada. Audio ambiente con voces y sonidos de mercado. Estilo realista, formato 16:9»
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">3</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Revisa las opciones generadas</div>
+            <div class="tut-step-desc">Grok genera múltiples versiones para elegir</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">En pocos segundos tendrás varias versiones. Compáralas y elige la mejor. Si necesitas ajustes, pide cambios en el mismo chat: <code>Añade un cielo más dramático</code> o <code>Hazla en estilo infografía</code>. Grok mantiene el contexto de la conversación.</div>
           </div>
         </div>
-
-        <a href="https://labs.google/flow" target="_blank" class="link-btn link-btn-pri-video">
-          Abrir Google Flow ↗
-        </a>
-
-        <!-- Progress -->
-        <div class="progress-wrapper" id="progress-pri-video">
-          <div class="progress-bar-bg"><div class="progress-bar-fill fill-pri-video" id="fill-pri-video"></div></div>
-          <div class="progress-label" id="label-pri-video">0 de 4 pasos completados</div>
-        </div>
-
-        <!-- Checklist -->
-        <div class="tips-section">
-          <h4>📋 Tu progreso</h4>
-          <div class="checklist-item" onclick="toggleCheck(this, 'pri-video')">
-            <div class="check-box"></div>
-            <span class="check-label">He abierto Google Flow</span>
-          </div>
-          <div class="checklist-item" onclick="toggleCheck(this, 'pri-video')">
-            <div class="check-box"></div>
-            <span class="check-label">He descrito una escena para mi asignatura</span>
-          </div>
-          <div class="checklist-item" onclick="toggleCheck(this, 'pri-video')">
-            <div class="check-box"></div>
-            <span class="check-label">He generado un clip de vídeo</span>
-          </div>
-          <div class="checklist-item" onclick="toggleCheck(this, 'pri-video')">
-            <div class="check-box"></div>
-            <span class="check-label">He descargado o compartido el vídeo</span>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">4</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Descarga y utiliza</div>
+            <div class="tut-step-desc">Guárdala para presentaciones, fichas o proyecciones en clase</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Haz clic en la imagen elegida y descárgala. Ya puedes insertarla en Google Slides, documentos o fichas de trabajo. Comparar resultados de Grok, Gemini y Copilot con el mismo prompt es un ejercicio muy útil para ver las diferencias entre generadores.</div>
           </div>
         </div>
       </div>
+      <div class="tut-task">
+        <h4>🎯 Tu misión</h4>
+        <p>Usa Grok para generar una imagen educativa para tu asignatura. Prueba el mismo prompt que usaste en Gemini y compara los resultados.</p>
+        <div class="tut-task-example"><strong>💡 Ejemplo:</strong> «Imagen realista de un scriptorium medieval con monjes copistas trabajando a la luz de velas, pergaminos y libros en estanterías de madera. Estilo pintura al óleo, iluminación cálida. Para Geografía e Historia de 2º ESO»</div>
+      </div>
+      <a href="https://grok.com" target="_blank" class="tut-open-btn">Abrir Grok ↗</a>
     </div>
-
-    <!-- ════════════════════════════════════ -->
-    <!-- PRIMARIA SECTION 3: NOTEBOOKLM           -->
-    <!-- ════════════════════════════════════ -->
-    <div class="section-panel" id="section-pri-notebook">
-      <div class="glass-card">
-        <div class="section-header">
-          <div class="section-icon-circle icon-pri-notebook">📓</div>
-          <div>
-            <div class="section-title">NotebookLM</div>
-            <div class="section-subtitle">Tu asistente de investigación que solo trabaja con tus fuentes</div>
+  </div>
+  <div class="tutorial-panel" id="panel-pri-copilot">
+    <div class="tutorial-inner tut-copilot">
+      <div class="tut-info"><strong>¿Qué es?</strong> Microsoft Copilot integra un generador de imágenes gratuito basado en DALL-E. Funciona como un chat conversacional: describes lo que necesitas y genera la imagen en la misma ventana. Ideal si ya usas herramientas Microsoft en tu centro.</div>
+      <div class="tut-steps">
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">1</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Abre Microsoft Copilot</div>
+            <div class="tut-step-desc">Accede desde cualquier navegador</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Ve a <code>copilot.microsoft.com</code> e inicia sesión con tu cuenta de Microsoft (si la tienes). También funciona sin cuenta. La interfaz es un chat limpio donde escribes tus peticiones.</div>
           </div>
         </div>
-
-        <div class="tool-badge badge-pri-notebook">🔧 Herramienta: Google NotebookLM (gratuita)</div>
-
-        <div class="info-box info-box-red">
-          <strong>¿Qué es?</strong> NotebookLM es un asistente de investigación de Google basado en IA. Su diferencia clave: solo trabaja con los documentos que tú le proporcionas, no inventa información ni busca en internet. Subes tus PDFs, apuntes, vídeos de YouTube o webs, y NotebookLM se convierte en un experto en ese material. Puede generar resúmenes, guías de estudio, cuestionarios, cronologías e incluso podcasts en audio a partir de tus fuentes.
-        </div>
-
-        <div class="info-box info-box-red" style="border-left-color: #b91c1c;">
-          <strong>💰 Acceso:</strong> NotebookLM es gratuito para todos los centros educativos con Google Workspace for Education. Está cubierto bajo los Términos de Servicio de Workspace (los datos no se usan para entrenar IA). Disponible para usuarios de todas las edades, con protecciones adicionales para menores.
-        </div>
-
-        <!-- Steps -->
-        <div class="steps-container">
-          <div class="step" onclick="toggleDetail(this)">
-            <div class="step-number step-number-pri-notebook">1</div>
-            <div class="step-content">
-              <div class="step-title">Abre NotebookLM y crea un cuaderno</div>
-              <div class="step-description">Cada cuaderno es un espacio de trabajo sobre un tema</div>
-              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
-              <div class="step-detail">
-                Ve a <code>notebooklm.google.com</code> e inicia sesión con tu cuenta de Google. Haz clic en <code>Nuevo cuaderno</code> y ponle un nombre descriptivo, por ejemplo: «Tema 5 · La Edad Media – 2º ESO» o «Análisis Lazarillo de Tormes – 3º ESO». Puedes tener hasta 100 cuadernos.
-              </div>
-            </div>
-          </div>
-
-          <div class="step" onclick="toggleDetail(this)">
-            <div class="step-number step-number-pri-notebook">2</div>
-            <div class="step-content">
-              <div class="step-title">Sube tus fuentes</div>
-              <div class="step-description">Añade PDFs, Docs, Slides, vídeos de YouTube o webs</div>
-              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
-              <div class="step-detail">
-                Haz clic en <code>Añadir fuente</code> (panel izquierdo). Puedes subir: PDFs del libro de texto, documentos de Google Drive, presentaciones de Slides, enlaces a vídeos de YouTube, sitios web o archivos de audio. Cada cuaderno admite hasta 50 fuentes. NotebookLM leerá y analizará todo el contenido automáticamente, generando un resumen inicial.
-              </div>
-            </div>
-          </div>
-
-          <div class="step" onclick="toggleDetail(this)">
-            <div class="step-number step-number-pri-notebook">3</div>
-            <div class="step-content">
-              <div class="step-title">Pregunta y explora el contenido</div>
-              <div class="step-description">Haz preguntas concretas y obtén respuestas con citas a tus fuentes</div>
-              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
-              <div class="step-detail">
-                En el cuadro de chat (parte inferior), escribe lo que necesites. Ejemplos: <code>¿Cuáles son las causas principales de la caída del Imperio Romano según mis fuentes?</code>, <code>Resume el capítulo 3 en 5 puntos clave</code>, <code>Crea una cronología de los eventos principales</code>. Cada respuesta incluye citas directas a tus documentos para que puedas verificar la información.
-              </div>
-            </div>
-          </div>
-
-          <div class="step" onclick="toggleDetail(this)">
-            <div class="step-number step-number-pri-notebook">4</div>
-            <div class="step-content">
-              <div class="step-title">Genera materiales listos para usar</div>
-              <div class="step-description">Crea guías de estudio, cuestionarios, resúmenes de audio y vídeo</div>
-              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
-              <div class="step-detail">
-                En el panel derecho encontrarás herramientas para generar automáticamente: <strong>Guías de estudio</strong> con preguntas y respuestas, <strong>Resúmenes</strong> del contenido, <strong>Preguntas frecuentes</strong>, <strong>Cronologías</strong>, <strong>Resúmenes de audio</strong> (dos voces de IA comentan tu material como un podcast) y <strong>Resúmenes de vídeo</strong> (vídeos explicativos cortos). Puedes copiar y compartir estos materiales con tus alumnos.
-              </div>
-            </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">2</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Describe la imagen con detalle educativo</div>
+            <div class="tut-step-desc">Incluye asignatura, época, estilo y uso</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Escribe tu petición en el chat. Por ejemplo: <code>Crea una imagen educativa que muestre una ciudad romana con su foro, anfiteatro, acueducto y termas, vista aérea en estilo maqueta arquitectónica con etiquetas. Para una clase de Historia de 2º ESO</code>.</div>
           </div>
         </div>
-
-        <!-- Task -->
-        <div class="task-card task-pri-notebook">
-          <h3>🎯 Tu misión</h3>
-          <p>Crea un cuaderno de NotebookLM sobre un tema de tu asignatura. Sube al menos 2 fuentes (un PDF y un vídeo de YouTube o web) y genera una guía de estudio o un resumen de audio para tus alumnos.</p>
-          <div class="task-example">
-            <strong>💡 Ideas para probarlo:</strong>
-            Sube el PDF de un tema del libro de texto + un vídeo de YouTube sobre el mismo contenido. Pide a NotebookLM: «Crea un cuestionario de 10 preguntas tipo test sobre este tema, con 4 opciones cada una y la respuesta correcta señalada». Luego genera un «Audio Overview» y tendrás un podcast del tema.
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">3</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Itera sobre el resultado</div>
+            <div class="tut-step-desc">Pide cambios en el mismo chat</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Copilot mostrará la imagen en el chat. Si necesitas ajustes: <code>Hazla más esquemática</code>, <code>Añade más color</code> o <code>Cambia la perspectiva a vista frontal</code>. Cada ajuste refina el resultado sin perder el contexto.</div>
           </div>
         </div>
-
-        <a href="https://notebooklm.google.com" target="_blank" class="link-btn link-btn-pri-notebook">
-          Abrir NotebookLM ↗
-        </a>
-
-        <!-- Progress -->
-        <div class="progress-wrapper" id="progress-pri-notebook">
-          <div class="progress-bar-bg"><div class="progress-bar-fill fill-pri-notebook" id="fill-pri-notebook"></div></div>
-          <div class="progress-label" id="label-pri-notebook">0 de 4 pasos completados</div>
-        </div>
-
-        <!-- Checklist -->
-        <div class="tips-section">
-          <h4>📋 Tu progreso</h4>
-          <div class="checklist-item" onclick="toggleCheck(this, 'pri-notebook')">
-            <div class="check-box"></div>
-            <span class="check-label">He abierto NotebookLM y creado un cuaderno</span>
-          </div>
-          <div class="checklist-item" onclick="toggleCheck(this, 'pri-notebook')">
-            <div class="check-box"></div>
-            <span class="check-label">He subido al menos 2 fuentes</span>
-          </div>
-          <div class="checklist-item" onclick="toggleCheck(this, 'pri-notebook')">
-            <div class="check-box"></div>
-            <span class="check-label">He hecho preguntas sobre mis fuentes</span>
-          </div>
-          <div class="checklist-item" onclick="toggleCheck(this, 'pri-notebook')">
-            <div class="check-box"></div>
-            <span class="check-label">He generado una guía de estudio o resumen de audio</span>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">4</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Descarga y utiliza</div>
+            <div class="tut-step-desc">Insértala en tus materiales de clase</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Descarga la imagen y úsala en Google Slides, documentos de texto o fichas impresas. Copilot es especialmente bueno generando imágenes con estilo "infografía" y "diagrama educativo".</div>
           </div>
         </div>
       </div>
+      <div class="tut-task">
+        <h4>🎯 Tu misión</h4>
+        <p>Genera una imagen educativa con Copilot para tu asignatura. Intenta un estilo tipo infografía o diagrama, donde Copilot suele destacar.</p>
+        <div class="tut-task-example"><strong>💡 Ejemplo:</strong> «Crea una infografía visual que compare la sociedad feudal europea (rey, nobles, clero, campesinos) con una pirámide estamental ilustrada, colores diferenciados por estamento, estilo educativo limpio. Para Geografía e Historia 2º ESO»</div>
+      </div>
+      <a href="https://copilot.microsoft.com" target="_blank" class="tut-open-btn">Abrir Copilot ↗</a>
     </div>
-
-    <!-- ════════════════════════════════════ -->
-    <!-- PRIMARIA SECTION 4: MATERIALS & NEE      -->
-    <!-- ════════════════════════════════════ -->
-    <div class="section-panel" id="section-pri-materials">
-      <div class="glass-card">
-        <div class="section-header">
-          <div class="section-icon-circle icon-pri-materials">📝</div>
-          <div>
-            <div class="section-title">Materiales y Adaptaciones NEE</div>
-            <div class="section-subtitle">Genera temarios, actividades, exámenes y adaptaciones con IA</div>
+  </div>
+  </div>
+  <div class="section-panel" id="section-pri-video">
+    <div class="tool-grid">
+    <div class="tool-card tool-card-flow" id="card-pri-flow" onclick="toggleTool('pri-flow')">
+      <div class="tool-logo-wrap"><img src="img/logos/flow.png" alt="🎬"></div>
+      <div class="tool-card-name">Google Flow (Veo 3.1)</div>
+      <div class="tool-card-tagline">Clips de vídeo realistas con audio sincronizado a partir de texto</div>
+      <div class="tool-card-arrow" id="arrow-pri-flow">→</div>
+    </div>
+    
+    <div class="tool-card tool-card-grok" id="card-pri-grok-vid" onclick="toggleTool('pri-grok-vid')">
+      <div class="tool-logo-wrap"><img src="img/logos/grok.png" alt="𝕏"></div>
+      <div class="tool-card-name">Grok Imagine <span class="chip-new">Nuevo</span></div>
+      <div class="tool-card-tagline">Clips de 6-15s con audio sincronizado desde texto o imagen</div>
+      <div class="tool-card-arrow" id="arrow-pri-grok-vid">→</div>
+    </div>
+    <div class="tool-card tool-card-luma" id="card-pri-luma" onclick="toggleTool('pri-luma')">
+      <div class="tool-logo-wrap"><img src="img/logos/luma.png" alt="🌙"></div>
+      <div class="tool-card-name">Luma Dream Machine <span class="chip-new">Nuevo</span></div>
+      <div class="tool-card-tagline">Vídeos cinematográficos con movimiento de cámara fluido</div>
+      <div class="tool-card-arrow" id="arrow-pri-luma">→</div>
+    </div>
+</div>
+  <div class="tutorial-panel" id="panel-pri-flow">
+    <div class="tutorial-inner tut-flow">
+      <div class="tut-info"><strong>¿Qué es?</strong> Google Flow es la herramienta de creación de vídeo con IA de Google, impulsada por Veo 3.1. Le describes una escena con palabras y genera un clip de vídeo realista con audio sincronizado (sonido ambiente, diálogos, efectos). Puedes usarlo para crear vídeos explicativos, recreaciones históricas, visualizaciones de fenómenos naturales o intros para tus temas.</div>
+    <div class="tut-info" style="border-left: 3px solid var(--tut-accent);"><strong>💰 Acceso:</strong> Si tu colegio usa Google Workspace for Education, tienes 100 créditos mensuales gratis en Flow. También puedes acceder con Google AI Pro (19,99 $/mes, 1.000 créditos). Cada vídeo consume entre 10 y 50 créditos según el modelo y la duración.</div>
+      <div class="tut-steps">
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">1</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Abre Google Flow</div>
+            <div class="tut-step-desc">Accede a la plataforma de creación de vídeo</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Abre Chrome y ve a <code>labs.google/flow</code>. Inicia sesión con tu cuenta de Google. Verás la interfaz de Flow con un espacio para crear proyectos. Si es tu primera vez, explora los vídeos de ejemplo en «Flow TV» para hacerte una idea de lo que se puede lograr.</div>
           </div>
         </div>
-
-        <div class="tool-badge badge-pri-materials">🔧 Herramienta: Google Gemini</div>
-
-        <div class="info-box info-box-amber">
-          <strong>¿Qué es?</strong> Gemini es el asistente de IA de Google. Puedes pedirle que elabore temarios, actividades, exámenes tipo test o de desarrollo, rúbricas de evaluación y, lo más valioso, adaptaciones personalizadas para alumnos con Necesidades Educativas Especiales (NEE). La clave está en darle el contexto preciso: asignatura, nivel, criterios de evaluación y tipo de adaptación necesaria.
-        </div>
-
-        <div class="info-box info-box-amber" style="border-left-color: #d97706;">
-          <strong>⚠️ Importante:</strong> Gemini genera borradores que siempre debes revisar y adaptar. Nunca incluyas datos personales de alumnos (nombres, diagnósticos concretos…) al escribir tus peticiones — describe el perfil de necesidades sin identificar al alumno, conforme a la normativa de protección de datos.
-        </div>
-
-        <!-- Steps -->
-        <div class="steps-container">
-          <div class="step" onclick="toggleDetail(this)">
-            <div class="step-number step-number-pri-materials">1</div>
-            <div class="step-content">
-              <div class="step-title">Abre Gemini y define el contexto</div>
-              <div class="step-description">Dile a Gemini qué asignatura, curso y tema vas a trabajar</div>
-              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
-              <div class="step-detail">
-                Ve a <code>gemini.google.com</code> e inicia sesión. Lo primero es dar a Gemini un contexto rico. Empieza con algo como: <code>Eres un asistente educativo experto en la legislación LOMLOE para ESO en la Región de Murcia. Voy a pedirte que generes materiales para la asignatura de Geografía e Historia de 2º ESO, Tema 6: El Islam y Al-Ándalus. Los alumnos tienen entre 13 y 14 años.</code>
-              </div>
-            </div>
-          </div>
-
-          <div class="step" onclick="toggleDetail(this)">
-            <div class="step-number step-number-pri-materials">2</div>
-            <div class="step-content">
-              <div class="step-title">Solicita el material que necesitas</div>
-              <div class="step-description">Temarios, actividades, exámenes tipo test o de desarrollo</div>
-              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
-              <div class="step-detail">
-                Ahora pide lo que necesites de forma concreta. Ejemplos:
-                <br>• <code>Elabora un resumen del tema en 10 puntos clave, usando vocabulario accesible para alumnos de 13 años</code>
-                <br>• <code>Crea un examen tipo test de 15 preguntas con 4 opciones (a, b, c, d) sobre este tema. Incluye la hoja de respuestas aparte</code>
-                <br>• <code>Diseña 5 actividades variadas (una línea del tiempo, un mapa, un texto con huecos, un debate y un trabajo en grupo) con sus instrucciones completas</code>
-                <br>• <code>Genera una rúbrica de evaluación para un trabajo de investigación sobre este tema, con 4 niveles de logro y 5 criterios</code>
-              </div>
-            </div>
-          </div>
-
-          <div class="step" onclick="toggleDetail(this)">
-            <div class="step-number step-number-pri-materials">3</div>
-            <div class="step-content">
-              <div class="step-title">Pide la adaptación para NEE</div>
-              <div class="step-description">Genera versiones adaptadas según el perfil de necesidades</div>
-              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
-              <div class="step-detail">
-                Una vez tengas el material base, pide la adaptación sin datos personales del alumno. Ejemplo: <code>Adapta este examen para un alumno con dificultades de comprensión lectora: reduce a 10 preguntas, simplifica el vocabulario, añade un pequeño texto de apoyo antes de cada bloque de preguntas, utiliza frases cortas y directas, y aumenta el tamaño de letra a 14pt.</code>
-                <br><br>Otro ejemplo: <code>Adapta estas actividades para un alumno con altas capacidades: añade una actividad de ampliación que requiera investigación autónoma, conexión con la actualidad y pensamiento crítico.</code>
-                <br><br>O bien: <code>Adapta este resumen para un alumno con TDAH: usa esquemas visuales con viñetas, destaca las palabras clave en negrita, incluye iconos de tipo emoji al inicio de cada punto para facilitar la lectura y reduce los párrafos a máximo 3 líneas.</code>
-              </div>
-            </div>
-          </div>
-
-          <div class="step" onclick="toggleDetail(this)">
-            <div class="step-number step-number-pri-materials">4</div>
-            <div class="step-content">
-              <div class="step-title">Revisa, ajusta y exporta</div>
-              <div class="step-description">Siempre revisa el contenido antes de usarlo con tus alumnos</div>
-              <div class="step-toggle-hint">Toca aquí para ver más detalles ▼</div>
-              <div class="step-detail">
-                Lee el material generado con atención crítica: comprueba que los datos son correctos, el nivel lingüístico es adecuado y las adaptaciones responden realmente a las necesidades del alumno. Copia el texto a un Google Doc para maquetarlo con el formato de tu centro. Puedes pedirle a Gemini que lo refine: <code>Reescribe la pregunta 5 con un lenguaje más sencillo</code> o <code>Añade un ejemplo a la actividad 3</code>. La IA te da un borrador sólido; tu criterio profesional hace el resto.
-              </div>
-            </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">2</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Describe la escena que quieres</div>
+            <div class="tut-step-desc">Escribe con detalle qué debe mostrar el vídeo</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Crea un nuevo proyecto y escribe tu descripción. Sé concreto con el encuadre, la ambientación y la acción. Por ejemplo: <code>Una animación educativa que muestra el ciclo del agua: gotas de lluvia cayendo sobre montañas, agua fluyendo por un río hasta el mar, evaporación con el sol, formación de nubes y nueva lluvia. Estilo realista, colores vivos, movimiento suave.</code> Elige formato horizontal (16:9) para presentaciones o vertical (9:16) para móvil.</div>
           </div>
         </div>
-
-        <!-- Task -->
-        <div class="task-card task-pri-materials">
-          <h3>🎯 Tu misión</h3>
-          <p>Genera un material completo (examen o actividad) para una de tus asignaturas y crea una adaptación para un perfil NEE. Revisa que el contenido sea correcto y adecuado al nivel.</p>
-          <div class="task-example">
-            <strong>💡 Ejemplo paso a paso:</strong>
-            1) Pídele a Gemini un examen de 15 preguntas tipo test sobre «La narrativa del siglo XVI: el Lazarillo» para 3º ESO.
-            2) Luego pide: «Adapta este examen para un alumno con dislexia: usa tipografía clara, aumenta el interlineado, reduce las opciones a 3 por pregunta y añade un fragmento del texto antes de cada bloque de preguntas como apoyo visual».
-            3) Copia ambas versiones a un Google Doc y compáralas.
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">3</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Genera y revisa el clip</div>
+            <div class="tut-step-desc">Flow creará un vídeo de hasta 8 segundos con audio</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Pulsa generar y espera entre 30 segundos y 2 minutos. Flow generará un clip de hasta 8 segundos en 1080p con sonido ambiente sincronizado. Revisa el resultado: si necesitas ajustes, puedes usar las herramientas de edición para insertar o eliminar objetos, o extender la duración del clip. Puedes encadenar varios clips para crear un vídeo más largo.</div>
           </div>
         </div>
-
-        <a href="https://gemini.google.com" target="_blank" class="link-btn link-btn-pri-materials">
-          Abrir Gemini ↗
-        </a>
-
-        <!-- Progress -->
-        <div class="progress-wrapper" id="progress-pri-materials">
-          <div class="progress-bar-bg"><div class="progress-bar-fill fill-pri-materials" id="fill-pri-materials"></div></div>
-          <div class="progress-label" id="label-pri-materials">0 de 4 pasos completados</div>
-        </div>
-
-        <!-- Checklist -->
-        <div class="tips-section">
-          <h4>📋 Tu progreso</h4>
-          <div class="checklist-item" onclick="toggleCheck(this, 'pri-materials')">
-            <div class="check-box"></div>
-            <span class="check-label">He dado contexto a Gemini (asignatura, curso, tema)</span>
-          </div>
-          <div class="checklist-item" onclick="toggleCheck(this, 'pri-materials')">
-            <div class="check-box"></div>
-            <span class="check-label">He generado un material (examen, actividad o temario)</span>
-          </div>
-          <div class="checklist-item" onclick="toggleCheck(this, 'pri-materials')">
-            <div class="check-box"></div>
-            <span class="check-label">He pedido una adaptación para un perfil NEE</span>
-          </div>
-          <div class="checklist-item" onclick="toggleCheck(this, 'pri-materials')">
-            <div class="check-box"></div>
-            <span class="check-label">He revisado y copiado el material a un documento</span>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">4</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Descarga o comparte</div>
+            <div class="tut-step-desc">Guarda el vídeo para usarlo en clase</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Cuando el vídeo te convenza, expórtalo o descárgalo. Podrás insertarlo en tus presentaciones de Google Slides, compartirlo en Google Classroom o proyectarlo directamente en clase. Recuerda que los vídeos generados con IA incluyen una marca de agua digital (SynthID) de Google. Puedes combinarlo con imágenes generadas en Gemini como «ingredientes» para lograr mayor consistencia visual.</div>
           </div>
         </div>
       </div>
+      <div class="tut-task">
+        <h4>🎯 Tu misión</h4>
+        <p>Crea un clip de vídeo corto que puedas proyectar al iniciar un tema en clase. Puede ser una recreación histórica, un fenómeno geográfico, una metáfora visual para Lengua o una escena filosófica.</p>
+        <div class="tut-task-example"><strong>💡 Ejemplo:</strong> «Un plano cinematográfico de un mercado medieval bullicioso en la Europa del siglo XIII: puestos de tela y especias, campesinos y mercaderes negociando, una catedral gótica al fondo, luz de atardecer dorada. Audio ambiente con voces y sonidos de mercado. Estilo realista, formato 16:9»</div>
+      </div>
+      <a href="https://labs.google/flow" target="_blank" class="tut-open-btn">Abrir Google Flow ↗</a>
     </div>
-
-    <!-- ════════════════════════════════════ -->
-    <!-- PRIMARIA SECTION 5: TRUCOS DE PROMPTING  -->
-    <!-- ════════════════════════════════════ -->
-    <div class="section-panel" id="section-pri-tips">
+  </div>
+  <div class="tutorial-panel" id="panel-pri-grok-vid">
+    <div class="tutorial-inner tut-grok">
+      <div class="tut-info"><strong>¿Qué es?</strong> Grok Imagine es la herramienta de generación de vídeo de xAI. Convierte texto o imágenes estáticas en clips de 6-15 segundos con audio sincronizado (música, efectos, sonido ambiente). Acceso gratuito desde <code>grok.com</code> con la misma cuenta que usas para imágenes.</div>
+      <div class="tut-steps">
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">1</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Entra en Grok</div>
+            <div class="tut-step-desc">Abre grok.com con tu cuenta</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Ve a <code>grok.com</code> e inicia sesión. Si ya tienes cuenta de la sección de imágenes, no necesitas crear otra. En el menú lateral busca la opción <code>Imagine</code> o simplemente escribe tu petición de vídeo en el chat.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">2</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Describe la escena o sube una imagen</div>
+            <div class="tut-step-desc">Puedes crear un vídeo desde texto o animar una foto</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Tienes dos opciones: <strong>Texto a vídeo:</strong> describe la escena directamente, p. ej. <code>Vídeo de un volcán en erupción con lava fluyendo por la ladera, cielo nocturno, estilo cinematográfico</code>. <strong>Imagen a vídeo:</strong> sube una imagen (por ejemplo, una que generaste en Grok o Gemini) y Grok la animará añadiendo movimiento y audio.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">3</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Elige el modo y genera</div>
+            <div class="tut-step-desc">Normal para contenido educativo, Fun para algo más expresivo</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Selecciona el modo <code>Normal</code> (el más adecuado para uso educativo: resultados realistas y profesionales). Elige la relación de aspecto: <code>16:9</code> para proyectar en clase o <code>9:16</code> para móvil. Pulsa generar y espera 30-60 segundos.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">4</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Descarga el clip</div>
+            <div class="tut-step-desc">Tu vídeo incluye audio sincronizado automáticamente</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">El vídeo generado incluye sonido ambiente sincronizado sin necesidad de edición posterior. Descárgalo y úsalo en presentaciones de Google Slides, proyéctalo en clase o compártelo en Google Classroom.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tut-task">
+        <h4>🎯 Tu misión</h4>
+        <p>Genera un clip de vídeo con Grok Imagine para un tema de tu asignatura. Prueba tanto el modo texto-a-vídeo como animar una imagen que ya tengas.</p>
+        <div class="tut-task-example"><strong>💡 Ejemplo:</strong> «Vídeo cinematográfico de una caravana de la Ruta de la Seda cruzando un paso de montaña nevado, camellos cargados, comerciantes con ropas de la época, luz de amanecer dorada. Modo Normal, formato 16:9»</div>
+      </div>
+      <a href="https://grok.com" target="_blank" class="tut-open-btn">Abrir Grok ↗</a>
+    </div>
+  </div>
+  <div class="tutorial-panel" id="panel-pri-luma">
+    <div class="tutorial-inner tut-luma">
+      <div class="tut-info"><strong>¿Qué es?</strong> Luma Dream Machine es un generador de vídeo con IA conocido por su calidad cinematográfica. El tier gratuito permite crear hasta 8 vídeos al mes. Es especialmente bueno con movimientos de cámara fluidos y escenas con profundidad visual. Acceso en <code>lumalabs.ai/dream-machine</code>.</div>
+      <div class="tut-steps">
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">1</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Abre Luma Dream Machine</div>
+            <div class="tut-step-desc">Crea tu cuenta gratuita</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Ve a <code>lumalabs.ai/dream-machine</code> en Chrome. Crea una cuenta con tu email o con Google. La versión gratuita te da 8 generaciones al mes en modo borrador (con marca de agua sutil). Suficiente para probar y crear clips para clase.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">2</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Escribe tu prompt o usa keyframes</div>
+            <div class="tut-step-desc">Describe la escena o define imagen de inicio y fin</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Opción 1: escribe una descripción detallada de la escena. Opción 2 (más potente): sube una <strong>imagen de inicio</strong> y opcionalmente una <strong>imagen de fin</strong>, y Luma creará una transición animada entre ambas. Esto es muy útil para mostrar procesos o transformaciones (p. ej. un paisaje pasando de verano a invierno).</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">3</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Genera y previsualiza</div>
+            <div class="tut-step-desc">Los clips duran unos 5 segundos con calidad cinematográfica</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Pulsa generar y espera entre 30 segundos y 2 minutos. Luma generará un clip con movimiento de cámara fluido y buena iluminación. Los resultados son especialmente buenos para escenas paisajísticas, arquitectónicas e históricas.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">4</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Descarga tu clip</div>
+            <div class="tut-step-desc">Guárdalo para usarlo en tus presentaciones</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Descarga el vídeo desde la interfaz de Luma. Ten en cuenta que en el plan gratuito los vídeos tienen marca de agua y resolución limitada, pero son perfectamente usables para proyectar en clase o incluir en presentaciones.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tut-task">
+        <h4>🎯 Tu misión</h4>
+        <p>Crea un clip con Luma Dream Machine. Si puedes, prueba la función de keyframes: genera dos imágenes con Gemini o Grok (una de inicio y otra de fin) y deja que Luma cree la transición.</p>
+        <div class="tut-task-example"><strong>💡 Ejemplo:</strong> «Plano aéreo cinematográfico sobrevolando una ciudad griega antigua con templos de mármol blanco, el mar Egeo al fondo y barcos de vela, luz de atardecer dorada, movimiento de cámara lento y fluido»</div>
+      </div>
+      <a href="https://lumalabs.ai/dream-machine" target="_blank" class="tut-open-btn">Abrir Luma ↗</a>
+    </div>
+  </div>
+  </div>
+  <div class="section-panel" id="section-pri-music">
+    <div class="tool-grid">
+    <div class="tool-card tool-card-suno" id="card-pri-suno" onclick="toggleTool('pri-suno')">
+      <div class="tool-logo-wrap"><img src="img/logos/suno.png" alt="🎶"></div>
+      <div class="tool-card-name">Suno</div>
+      <div class="tool-card-tagline">Canciones completas con letra, música y voz a partir de texto</div>
+      <div class="tool-card-arrow" id="arrow-pri-suno">→</div>
+    </div>
+    <div class="tool-card tool-card-gemini" id="card-pri-gemini-music" onclick="toggleTool('pri-gemini-music')">
+      <div class="tool-logo-wrap"><img src="img/logos/gemini.png" alt="✦"></div>
+      <div class="tool-card-name">Gemini <span class="chip-new">Nuevo</span></div>
+      <div class="tool-card-tagline">Crea música directamente desde Gemini, sin salir del ecosistema Google</div>
+      <div class="tool-card-arrow" id="arrow-pri-gemini-music">→</div>
+    </div>
+    </div>
+  <div class="tutorial-panel" id="panel-pri-suno">
+    <div class="tutorial-inner tut-suno">
+      <div class="tut-info"><strong>¿Qué es?</strong> Suno crea canciones completas (con letra, música y voz) a partir de una descripción. Ideal para crear canciones temáticas sobre contenidos curriculares, jingles para proyectos o música de ambiente para actividades.</div>
+      <div class="tut-steps">
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">1</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Entra en Suno AI</div>
+            <div class="tut-step-desc">Abre la web y crea tu cuenta gratuita</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Abre Chrome y ve a <code>suno.com</code>. Haz clic en <code>Sign Up</code> o <code>Registrarse</code>. Puedes usar tu cuenta de Google para entrar más rápido (botón "Continue with Google"). La versión gratuita te deja crear varias canciones al día.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">2</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Pulsa «Create» (Crear)</div>
+            <div class="tut-step-desc">Busca el botón de creación en la pantalla principal</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Una vez dentro, busca el botón <code>Create</code> (suele estar arriba o a la izquierda). Se abrirá un cuadro donde puedes describir la canción que quieres.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">3</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Describe tu canción</div>
+            <div class="tut-step-desc">Escribe qué tipo de canción quieres y sobre qué tema</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">En el cuadro de texto, escribe en español lo que quieres. Por ejemplo: <code>Una canción infantil alegre y pegadiza sobre los días de la semana, con ritmo pop suave, cantada por una voz femenina dulce, en español</code>. Puedes especificar el estilo musical, el idioma, el tema y el tono.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">4</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Genera y escucha</div>
+            <div class="tut-step-desc">Pulsa crear y escucha el resultado</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Pulsa el botón de crear y espera entre 30 segundos y un minuto. Suno generará dos versiones de tu canción. Escúchalas y elige la que más te guste. ¡Puedes descargarla con el botón de descarga (tres puntitos → Download)!</div>
+          </div>
+        </div>
+      </div>
+      <div class="tut-task">
+        <h4>🎯 Tu misión</h4>
+        <p>Crea una canción que refuerce un contenido curricular de Primaria: tablas de multiplicar, el sistema solar, las comunidades autónomas, normas de convivencia…</p>
+        <div class="tut-task-example"><strong>💡 Ejemplo:</strong> «Canción pop alegre en español, voz infantil, sobre las fases de la luna para alumnos de 4º de Primaria. Que sea pegadiza y mencione luna nueva, cuarto creciente, luna llena y cuarto menguante. Duración 1 minuto»</div>
+      </div>
+      <a href="https://suno.com" target="_blank" class="tut-open-btn">Abrir Suno AI ↗</a>
+    </div>
+  </div>
+  <div class="tutorial-panel" id="panel-pri-gemini-music">
+    <div class="tutorial-inner tut-gemini">
+      <div class="tut-info"><strong>¿Qué es?</strong> Google Gemini ahora permite crear música directamente desde su interfaz. Ideal si ya usas Gemini para otras tareas (imágenes, cuentos). Todo desde el mismo sitio, sin crear cuentas nuevas.</div>
+      <div class="tut-steps">
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">1</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Abre Google Gemini</div>
+            <div class="tut-step-desc">Entra con tu cuenta de Google habitual</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Ve a <code>gemini.google.com</code> con tu cuenta de Google. Si ya usas Gemini para imágenes o cuentos, no necesitas hacer nada extra.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">2</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Selecciona «Crear música»</div>
+            <div class="tut-step-desc">Busca la opción de música en el menú de herramientas</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">En la pantalla principal de Gemini, busca el icono de herramientas o el menú lateral. Verás la opción <code>Crear música</code> junto a las de imágenes y vídeos. Haz clic para abrir el editor musical.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">3</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Describe lo que necesitas</div>
+            <div class="tut-step-desc">Pide tu canción o pieza musical en lenguaje natural</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Escribe lo que quieres en el cuadro de texto. Por ejemplo: <code>Crea una melodía suave de xilófono para una actividad de relajación en infantil, 1 minuto de duración</code>. Gemini generará la música y podrás previsualizarla.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">4</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Previsualiza y descarga</div>
+            <div class="tut-step-desc">Escucha el resultado y guárdalo</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Gemini te mostrará un reproductor con el audio generado. Escúchalo, y si te gusta, descárgalo con el botón de descarga. Si quieres ajustes, simplemente pide cambios en el chat: "hazla más lenta", "cámbiala a piano", etc.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tut-task">
+        <h4>🎯 Tu misión</h4>
+        <p>Crea una pieza musical para tu aula de Primaria: un fondo para trabajo individual, una melodía para transiciones entre actividades, o una canción temática.</p>
+        <div class="tut-task-example"><strong>💡 Ejemplo:</strong> «Música instrumental alegre con ukelele y percusión suave, 2 minutos, para acompañar una actividad de manualidades en 3º de Primaria. Ritmo medio, tono positivo y enérgico»</div>
+      </div>
+      <a href="https://gemini.google.com" target="_blank" class="tut-open-btn">Abrir Gemini ↗</a>
+    </div>
+  </div>
+  </div>
+  <div class="section-panel" id="section-pri-notebook">
+    <div class="tool-grid">
+    <div class="tool-card tool-card-notebooklm" id="card-pri-notebooklm" onclick="toggleTool('pri-notebooklm')">
+      <div class="tool-logo-wrap"><img src="img/logos/notebooklm.png" alt="📓"></div>
+      <div class="tool-card-name">NotebookLM</div>
+      <div class="tool-card-tagline">Sube tus documentos y genera resúmenes, guías de estudio y podcasts automáticos</div>
+      <div class="tool-card-arrow" id="arrow-pri-notebooklm">→</div>
+    </div>
+    </div>
+  <div class="tutorial-panel" id="panel-pri-notebooklm">
+    <div class="tutorial-inner tut-notebooklm">
+      <div class="tut-info"><strong>¿Qué es?</strong> NotebookLM es un asistente de investigación de Google basado en IA. Su diferencia clave: solo trabaja con los documentos que tú le proporcionas, no inventa información ni busca en internet. Subes tus PDFs, apuntes, vídeos de YouTube o webs, y NotebookLM se convierte en un experto en ese material. Puede generar resúmenes, guías de estudio, cuestionarios, cronologías e incluso podcasts en audio a partir de tus fuentes.</div>
+    <div class="tut-info" style="border-left: 3px solid var(--tut-accent);"><strong>💰 Acceso:</strong> NotebookLM es gratuito para todos los centros educativos con Google Workspace for Education. Está cubierto bajo los Términos de Servicio de Workspace (los datos no se usan para entrenar IA). Disponible para usuarios de todas las edades, con protecciones adicionales para menores.</div>
+      <div class="tut-steps">
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">1</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Abre NotebookLM y crea un cuaderno</div>
+            <div class="tut-step-desc">Cada cuaderno es un espacio de trabajo sobre un tema</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Ve a <code>notebooklm.google.com</code> e inicia sesión con tu cuenta de Google. Haz clic en <code>Nuevo cuaderno</code> y ponle un nombre descriptivo, por ejemplo: «Tema 5 · La Edad Media – 2º ESO» o «Análisis Lazarillo de Tormes – 3º ESO». Puedes tener hasta 100 cuadernos.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">2</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Sube tus fuentes</div>
+            <div class="tut-step-desc">Añade PDFs, Docs, Slides, vídeos de YouTube o webs</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Haz clic en <code>Añadir fuente</code> (panel izquierdo). Puedes subir: PDFs del libro de texto, documentos de Google Drive, presentaciones de Slides, enlaces a vídeos de YouTube, sitios web o archivos de audio. Cada cuaderno admite hasta 50 fuentes. NotebookLM leerá y analizará todo el contenido automáticamente, generando un resumen inicial.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">3</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Pregunta y explora el contenido</div>
+            <div class="tut-step-desc">Haz preguntas concretas y obtén respuestas con citas a tus fuentes</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">En el cuadro de chat (parte inferior), escribe lo que necesites. Ejemplos: <code>¿Cuáles son las causas principales de la caída del Imperio Romano según mis fuentes?</code>, <code>Resume el capítulo 3 en 5 puntos clave</code>, <code>Crea una cronología de los eventos principales</code>. Cada respuesta incluye citas directas a tus documentos para que puedas verificar la información.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">4</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Genera materiales listos para usar</div>
+            <div class="tut-step-desc">Crea guías de estudio, cuestionarios, resúmenes de audio y vídeo</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">En el panel derecho encontrarás herramientas para generar automáticamente: <strong>Guías de estudio</strong> con preguntas y respuestas, <strong>Resúmenes</strong> del contenido, <strong>Preguntas frecuentes</strong>, <strong>Cronologías</strong>, <strong>Resúmenes de audio</strong> (dos voces de IA comentan tu material como un podcast) y <strong>Resúmenes de vídeo</strong> (vídeos explicativos cortos). Puedes copiar y compartir estos materiales con tus alumnos.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tut-task">
+        <h4>🎯 Tu misión</h4>
+        <p>Crea un cuaderno de NotebookLM sobre un tema de tu asignatura. Sube al menos 2 fuentes (un PDF y un vídeo de YouTube o web) y genera una guía de estudio o un resumen de audio para tus alumnos.</p>
+        <div class="tut-task-example"><strong>💡 Ideas:</strong> Sube el PDF de un tema del libro de texto + un vídeo de YouTube sobre el mismo contenido. Pide a NotebookLM: «Crea un cuestionario de 10 preguntas tipo test sobre este tema, con 4 opciones cada una y la respuesta correcta señalada». Luego genera un «Audio Overview» y tendrás un podcast del tema.</div>
+      </div>
+      <a href="https://notebooklm.google.com" target="_blank" class="tut-open-btn">Abrir NotebookLM ↗</a>
+    </div>
+  </div>
+  </div>
+  <div class="section-panel" id="section-pri-materials">
+    <div class="tool-grid">
+    <div class="tool-card tool-card-gemini" id="card-pri-gemini-mat" onclick="toggleTool('pri-gemini-mat')">
+      <div class="tool-logo-wrap"><img src="img/logos/gemini.png" alt="✦"></div>
+      <div class="tool-card-name">Gemini</div>
+      <div class="tool-card-tagline">Exámenes, actividades, rúbricas y adaptaciones NEE con IA generativa</div>
+      <div class="tool-card-arrow" id="arrow-pri-gemini-mat">→</div>
+    </div>
+    
+    <div class="tool-card tool-card-chatgpt" id="card-pri-chatgpt-mat" onclick="toggleTool('pri-chatgpt-mat')">
+      <div class="tool-logo-wrap"><img src="img/logos/chatgpt.png" alt="💬"></div>
+      <div class="tool-card-name">ChatGPT <span class="chip-new">Nuevo</span></div>
+      <div class="tool-card-tagline">El chatbot de IA más popular — exámenes, fichas y rúbricas en segundos</div>
+      <div class="tool-card-arrow" id="arrow-pri-chatgpt-mat">→</div>
+    </div>
+    <div class="tool-card tool-card-claude" id="card-pri-claude-mat" onclick="toggleTool('pri-claude-mat')">
+      <div class="tool-logo-wrap"><img src="img/logos/claude.png" alt="🟠"></div>
+      <div class="tool-card-name">Claude <span class="chip-new">Nuevo</span></div>
+      <div class="tool-card-tagline">Redacción de calidad y análisis de documentos largos</div>
+      <div class="tool-card-arrow" id="arrow-pri-claude-mat">→</div>
+    </div>
+</div>
+  <div class="tutorial-panel" id="panel-pri-gemini-mat">
+    <div class="tutorial-inner tut-gemini">
+      <div class="tut-info"><strong>¿Qué es?</strong> Gemini es el asistente de IA de Google. Puedes pedirle que elabore temarios, actividades, exámenes tipo test o de desarrollo, rúbricas de evaluación y, lo más valioso, adaptaciones personalizadas para alumnos con Necesidades Educativas Especiales (NEE). La clave está en darle el contexto preciso: asignatura, nivel, criterios de evaluación y tipo de adaptación necesaria.</div>
+    <div class="tut-info" style="border-left: 3px solid var(--tut-accent);"><strong>⚠️ Importante:</strong> Gemini genera borradores que siempre debes revisar y adaptar. Nunca incluyas datos personales de alumnos (nombres, diagnósticos concretos…) al escribir tus peticiones — describe el perfil de necesidades sin identificar al alumno, conforme a la normativa de protección de datos.</div>
+      <div class="tut-steps">
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">1</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Abre Gemini y define el contexto</div>
+            <div class="tut-step-desc">Dile a Gemini qué asignatura, curso y tema vas a trabajar</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Ve a <code>gemini.google.com</code> e inicia sesión. Lo primero es dar a Gemini un contexto rico. Empieza con algo como: <code>Eres un asistente educativo experto en la legislación LOMLOE para ESO en la Región de Murcia. Voy a pedirte que generes materiales para la asignatura de Geografía e Historia de 2º ESO, Tema 6: El Islam y Al-Ándalus. Los alumnos tienen entre 13 y 14 años.</code></div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">2</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Solicita el material que necesitas</div>
+            <div class="tut-step-desc">Temarios, actividades, exámenes tipo test o de desarrollo</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Ahora pide lo que necesites de forma concreta. Ejemplos:<br>• <code>Elabora un resumen del tema en 10 puntos clave, usando vocabulario accesible para alumnos de 13 años</code><br>• <code>Crea un examen tipo test de 15 preguntas con 4 opciones (a, b, c, d) sobre este tema. Incluye la hoja de respuestas aparte</code><br>• <code>Diseña 5 actividades variadas con sus instrucciones completas</code><br>• <code>Genera una rúbrica de evaluación con 4 niveles de logro y 5 criterios</code></div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">3</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Pide la adaptación para NEE</div>
+            <div class="tut-step-desc">Genera versiones adaptadas según el perfil de necesidades</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Una vez tengas el material base, pide la adaptación sin datos personales del alumno. Ejemplo: <code>Adapta este examen para un alumno con dificultades de comprensión lectora: reduce a 10 preguntas, simplifica el vocabulario, añade un pequeño texto de apoyo antes de cada bloque de preguntas, utiliza frases cortas y directas, y aumenta el tamaño de letra a 14pt.</code></div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">4</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Revisa, ajusta y exporta</div>
+            <div class="tut-step-desc">Siempre revisa el contenido antes de usarlo con tus alumnos</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Lee el material generado con atención crítica: comprueba que los datos son correctos, el nivel lingüístico es adecuado y las adaptaciones responden realmente a las necesidades del alumno. Copia el texto a un Google Doc para maquetarlo. Puedes pedirle a Gemini que lo refine: <code>Reescribe la pregunta 5 con un lenguaje más sencillo</code>. La IA te da un borrador sólido; tu criterio profesional hace el resto.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tut-task">
+        <h4>🎯 Tu misión</h4>
+        <p>Genera un material completo (examen o actividad) para una de tus asignaturas y crea una adaptación para un perfil NEE. Revisa que el contenido sea correcto y adecuado al nivel.</p>
+        <div class="tut-task-example"><strong>💡 Ejemplo paso a paso:</strong> 1) Pídele a Gemini un examen de 15 preguntas tipo test sobre «La narrativa del siglo XVI: el Lazarillo» para 3º ESO. 2) Luego pide: «Adapta este examen para un alumno con dislexia: usa tipografía clara, aumenta el interlineado, reduce las opciones a 3 por pregunta». 3) Copia ambas versiones a un Google Doc y compáralas.</div>
+      </div>
+      <a href="https://gemini.google.com" target="_blank" class="tut-open-btn">Abrir Gemini ↗</a>
+    </div>
+  </div>
+  <div class="tutorial-panel" id="panel-pri-chatgpt-mat">
+    <div class="tutorial-inner tut-chatgpt">
+      <div class="tut-info"><strong>¿Qué es?</strong> ChatGPT es el chatbot de IA de OpenAI. Su tier gratuito ofrece 10 mensajes cada 5 horas con GPT-5.2, un modelo muy potente. Permite subir archivos, buscar en internet y generar contenido educativo de gran calidad. Es probablemente el chatbot de IA más conocido del mundo.</div>
+      <div class="tut-steps">
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">1</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Abre ChatGPT</div>
+            <div class="tut-step-desc">Accede desde el navegador con tu cuenta</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Ve a <code>chatgpt.com</code> y crea una cuenta gratuita (o inicia sesión con Google). La interfaz es un chat donde escribes tus peticiones. Los 10 mensajes del tier gratuito son con el modelo más potente; después baja a uno más ligero pero aún útil.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">2</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Dale contexto educativo al inicio</div>
+            <div class="tut-step-desc">Explica quién eres, qué asignatura y qué nivel</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Empieza dándole contexto. Por ejemplo: <code>Soy profesor de Educación Primaria (5º curso, alumnos de 10-11 años). Necesito que me ayudes a crear materiales para la asignatura de Ciencias Sociales, tema: La Edad Media en la Península Ibérica. Sigue la legislación LOMLOE.</code></div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">3</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Pide materiales específicos</div>
+            <div class="tut-step-desc">Exámenes, fichas, rúbricas, actividades...</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Ahora pide lo que necesites: <code>Crea un examen tipo test de 15 preguntas con 4 opciones sobre los reinos cristianos medievales. Incluye las respuestas correctas al final. Nivel adaptado a 5º de Primaria.</code> También puedes pedir rúbricas, actividades de refuerzo, adaptaciones curriculares, secuencias didácticas, etc.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">4</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Itera y refina</div>
+            <div class="tut-step-desc">Pide cambios en la misma conversación</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Si el resultado no te convence al 100%, pide ajustes: <code>Hazlo más fácil</code>, <code>Añade preguntas de desarrollo</code>, <code>Incluye una rúbrica de evaluación</code>. ChatGPT mantiene el contexto de la conversación. Copia el resultado y pégalo en tu documento de Google Docs o Word.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tut-task">
+        <h4>🎯 Tu misión</h4>
+        <p>Genera un material educativo completo con ChatGPT para tu asignatura: un examen, una ficha de actividades o una rúbrica. Compara el resultado con el de Gemini.</p>
+        <div class="tut-task-example"><strong>💡 Ejemplo:</strong> «Crea una ficha de actividades sobre el sistema solar para 5º de Primaria. Incluye: 5 preguntas de verdadero/falso, 3 de relacionar conceptos, 1 actividad de dibujo y 1 pregunta de reflexión. Con soluciones al final»</div>
+      </div>
+      <a href="https://chatgpt.com" target="_blank" class="tut-open-btn">Abrir ChatGPT ↗</a>
+    </div>
+  </div>
+  <div class="tutorial-panel" id="panel-pri-claude-mat">
+    <div class="tutorial-inner tut-claude">
+      <div class="tut-info"><strong>¿Qué es?</strong> Claude es el asistente de IA de Anthropic. Destaca especialmente en redacción de calidad, análisis de documentos largos y creación de contenido detallado y matizado. El tier gratuito usa Sonnet 4.5 con una ventana de contexto de 200K tokens (puede procesar documentos muy extensos). Acceso en <code>claude.ai</code>.</div>
+      <div class="tut-steps">
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">1</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Abre Claude</div>
+            <div class="tut-step-desc">Crea tu cuenta gratuita</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Ve a <code>claude.ai</code> y regístrate con tu email o con Google. La interfaz es un chat limpio y sencillo. El tier gratuito te da ~20-30 mensajes al día dependiendo de la longitud. Claude puede leer documentos adjuntos (PDF, Word) directamente en el chat.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">2</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Dale contexto y sube documentos si los tienes</div>
+            <div class="tut-step-desc">Claude puede analizar tus materiales existentes</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Puedes empezar con contexto: <code>Soy profesor de Primaria (6º curso). Necesito crear materiales para Lengua Castellana, tema: Los textos narrativos. LOMLOE, Región de Murcia.</code> Si tienes un documento de referencia (libro de texto en PDF, una programación), puedes adjuntarlo y Claude lo analizará para generar materiales alineados.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">3</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Genera materiales detallados</div>
+            <div class="tut-step-desc">Claude brilla en contenido largo y bien estructurado</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Pide materiales complejos: <code>Crea una unidad didáctica completa sobre los textos narrativos: introducción teórica adaptada a 6º de Primaria, 3 actividades progresivas (identificación, análisis, creación), una rúbrica de evaluación con 4 niveles, y una actividad de ampliación para alumnos avanzados.</code> Claude es especialmente bueno con textos largos y bien redactados.</div>
+          </div>
+        </div>
+        <div class="tut-step" onclick="toggleStepDetail(this)">
+          <div class="tut-step-num">4</div>
+          <div class="tut-step-body">
+            <div class="tut-step-title">Refina y aprovecha los Artifacts</div>
+            <div class="tut-step-desc">Claude puede crear documentos editables</div>
+            <div class="tut-step-hint">Toca para ver detalles ▼</div>
+            <div class="tut-step-detail">Claude genera "Artifacts" (documentos estructurados) que puedes copiar fácilmente. Pide ajustes: <code>Hazlo más visual con emojis para los títulos</code>, <code>Simplifica el lenguaje de la rúbrica</code>, <code>Añade una autoevaluación para el alumno</code>. Copia el resultado a Google Docs o descárgalo.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tut-task">
+        <h4>🎯 Tu misión</h4>
+        <p>Genera un material extenso con Claude: una unidad didáctica, un informe de evaluación o una adaptación curricular. Compara cómo redacta Claude frente a Gemini y ChatGPT.</p>
+        <div class="tut-task-example"><strong>💡 Ejemplo:</strong> «Crea una guía de lectura completa para el libro 'El Principito' adaptada a 6º de Primaria. Incluye: resumen por capítulos, preguntas de comprensión, actividades de escritura creativa, vocabulario clave y rúbrica de evaluación del proyecto lector»</div>
+      </div>
+      <a href="https://claude.ai" target="_blank" class="tut-open-btn">Abrir Claude ↗</a>
+    </div>
+  </div>
+  </div>
+<div class="section-panel" id="section-pri-tips">
       <div class="glass-card">
         <div class="section-header">
           <div class="section-icon-circle" style="background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);">✨</div>
@@ -524,6 +734,18 @@
             <div class="section-subtitle">Pequeños secretos para que los resultados sean mucho mejores</div>
           </div>
         </div>
+
+        <!-- Trucos Sub-Tabs -->
+        <div class="trucos-tabs">
+          <div class="trucos-tab-btn tt-active" id="ttb-pri-formula" onclick="showTrucosTab('formula','pri')">🧪 Fórmula</div>
+          <div class="trucos-tab-btn" id="ttb-pri-ejemplos" onclick="showTrucosTab('ejemplos','pri')">🔄 Ejemplos</div>
+          <div class="trucos-tab-btn" id="ttb-pri-etiquetas" onclick="showTrucosTab('etiquetas','pri')">🏷️ Etiquetas</div>
+          <div class="trucos-tab-btn" id="ttb-pri-imagenes" onclick="showTrucosTab('imagenes','pri')">📸 Imágenes</div>
+          <div class="trucos-tab-btn" id="ttb-pri-consejos" onclick="showTrucosTab('consejos','pri')">💡 Consejos</div>
+        </div>
+
+        <!-- TAB: Fórmula -->
+        <div class="trucos-panel tt-visible" id="tt-pri-formula">
 
         <div class="info-box" style="background: rgba(139,92,246,0.1); border-left: 4px solid #8b5cf6;">
           <strong>La idea clave:</strong> Hablar con una IA es como pedir comida en un restaurante. Si dices «ponme algo de comer», te traerán cualquier cosa. Pero si dices «quiero una ensalada templada con queso de cabra, nueces y vinagreta de miel», el resultado será exactamente lo que buscas. Con la IA pasa lo mismo: <strong>cuanto más contexto le des, mejor será el resultado</strong>.
@@ -565,6 +787,11 @@
             <div class="formula-example">«…tema: Al-Ándalus, Geo e Hª»<br>«…incluye rúbrica de evaluación»<br>«…formato horizontal 16:9»</div>
           </div>
         </div>
+
+        </div> <!-- /tt-pri-formula -->
+
+        <!-- TAB: Ejemplos -->
+        <div class="trucos-panel" id="tt-pri-ejemplos">
 
         <!-- Before / After -->
         <div style="margin: 36px 0 8px; padding: 0 4px;">
@@ -640,10 +867,197 @@
           </div>
         </div>
 
+        </div> <!-- /tt-pri-ejemplos -->
+
+        <!-- TAB: Etiquetas -->
+        <div class="trucos-panel" id="tt-pri-etiquetas">
+
+        <!-- Tag Families -->
+        <div style="margin: 36px 0 8px; padding: 0 4px;">
+          <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px;">
+            🏷️ Familias de etiquetas: tu vocabulario secreto
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-medium); margin-bottom: 18px; line-height: 1.5;">
+            Estas palabras clave son como <strong>ingredientes de cocina</strong>: cuantas más combines, más sabroso el plato. Copia las que necesites y añádelas a tus prompts:
+          </p>
+        </div>
+
+        <div class="tag-family tf-style">
+          <div class="tag-family-header">
+            <div class="tag-family-icon">🎨</div>
+            Estilo visual
+          </div>
+          <div class="tag-family-chips">
+            <span class="tag-chip">realista</span>
+            <span class="tag-chip">infografía</span>
+            <span class="tag-chip">esquema</span>
+            <span class="tag-chip">acuarela</span>
+            <span class="tag-chip">cartoon</span>
+            <span class="tag-chip">minimalista</span>
+            <span class="tag-chip">3D render</span>
+            <span class="tag-chip">ilustración infantil</span>
+            <span class="tag-chip">flat design</span>
+            <span class="tag-chip">collage</span>
+            <span class="tag-chip">dibujo a lápiz</span>
+            <span class="tag-chip">viñeta educativa</span>
+          </div>
+        </div>
+
+        <div class="tag-family tf-comp">
+          <div class="tag-family-header">
+            <div class="tag-family-icon">📐</div>
+            Composición y formato
+          </div>
+          <div class="tag-family-chips">
+            <span class="tag-chip">16:9 horizontal</span>
+            <span class="tag-chip">9:16 vertical</span>
+            <span class="tag-chip">1:1 cuadrado</span>
+            <span class="tag-chip">primer plano</span>
+            <span class="tag-chip">plano general</span>
+            <span class="tag-chip">vista aérea</span>
+            <span class="tag-chip">panorámico</span>
+            <span class="tag-chip">fondo blanco aislado</span>
+            <span class="tag-chip">con bordes decorativos</span>
+          </div>
+        </div>
+
+        <div class="tag-family tf-tone">
+          <div class="tag-family-header">
+            <div class="tag-family-icon">🎭</div>
+            Tono y atmósfera
+          </div>
+          <div class="tag-family-chips">
+            <span class="tag-chip">educativo</span>
+            <span class="tag-chip">divertido</span>
+            <span class="tag-chip">misterioso</span>
+            <span class="tag-chip">aventurero</span>
+            <span class="tag-chip">tranquilo</span>
+            <span class="tag-chip">dinámico</span>
+            <span class="tag-chip">cinematográfico</span>
+            <span class="tag-chip">documental</span>
+            <span class="tag-chip">épico</span>
+          </div>
+        </div>
+
+        <div class="tag-family tf-color">
+          <div class="tag-family-header">
+            <div class="tag-family-icon">🌈</div>
+            Color y luz
+          </div>
+          <div class="tag-family-chips">
+            <span class="tag-chip">colores pastel</span>
+            <span class="tag-chip">colores vivos</span>
+            <span class="tag-chip">blanco y negro</span>
+            <span class="tag-chip">tonos sepia</span>
+            <span class="tag-chip">luz natural</span>
+            <span class="tag-chip">atardecer dorado</span>
+            <span class="tag-chip">paleta fría</span>
+            <span class="tag-chip">paleta cálida</span>
+            <span class="tag-chip">arcoíris</span>
+          </div>
+        </div>
+
+        <div class="tag-family tf-struct">
+          <div class="tag-family-header">
+            <div class="tag-family-icon">📝</div>
+            Estructura de contenido <span style="font-weight: 400; font-size: 0.82rem; color: var(--text-light);">(materiales y exámenes)</span>
+          </div>
+          <div class="tag-family-chips">
+            <span class="tag-chip">tipo test</span>
+            <span class="tag-chip">verdadero / falso</span>
+            <span class="tag-chip">relacionar columnas</span>
+            <span class="tag-chip">completar huecos</span>
+            <span class="tag-chip">desarrollo breve</span>
+            <span class="tag-chip">rúbrica</span>
+            <span class="tag-chip">clave de corrección</span>
+            <span class="tag-chip">criterios de evaluación</span>
+            <span class="tag-chip">saberes básicos</span>
+            <span class="tag-chip">competencias clave</span>
+            <span class="tag-chip">adaptación NEE</span>
+          </div>
+        </div>
+
+        <div class="tag-family tf-audience">
+          <div class="tag-family-header">
+            <div class="tag-family-icon">👥</div>
+            Audiencia y nivel
+          </div>
+          <div class="tag-family-chips">
+            <span class="tag-chip">para 5º Primaria (10-11 años)</span>
+            <span class="tag-chip">para 6º Primaria (11-12 años)</span>
+            <span class="tag-chip">nivel básico</span>
+            <span class="tag-chip">nivel medio</span>
+            <span class="tag-chip">nivel avanzado</span>
+            <span class="tag-chip">adaptado TDAH</span>
+            <span class="tag-chip">adaptado TEA</span>
+            <span class="tag-chip">altas capacidades</span>
+            <span class="tag-chip">refuerzo</span>
+            <span class="tag-chip">ampliación</span>
+          </div>
+        </div>
+
+        </div> <!-- /tt-pri-etiquetas -->
+
+        <!-- TAB: Imágenes -->
+        <div class="trucos-panel" id="tt-pri-imagenes">
+
+        <!-- Image Reference Section -->
+        <div class="img-ref-card">
+          <h3>📸 Súper poder: usa imágenes como referencia</h3>
+          <p style="color: rgba(255,255,255,0.8); font-size: 0.98rem; line-height: 1.65;">
+            La mayoría de herramientas de IA aceptan imágenes como entrada, no solo texto. Puedes <strong>subir una foto, una captura o un dibujo</strong> y pedirle a la IA que trabaje con ella. Es como enseñarle algo a un compañero en vez de solo explicárselo.
+          </p>
+
+          <div class="img-ref-grid">
+            <div class="img-ref-item">
+              <div class="iri-icon">🖼️</div>
+              <div class="iri-title">Referencia de estilo</div>
+              <div class="iri-desc">Sube una imagen que te guste y pide algo similar con tu tema.</div>
+              <div class="iri-example">«Te adjunto esta lámina de ejemplo. Genera una similar pero sobre el sistema solar, manteniendo el mismo estilo colorido y los iconos»</div>
+              <div class="img-ref-badge" style="background: rgba(139,92,246,0.3); color: #c4b5fd;">Gemini · Grok · Copilot · ChatGPT · Claude</div>
+            </div>
+
+            <div class="img-ref-item">
+              <div class="iri-icon">✏️</div>
+              <div class="iri-title">Modificar una imagen</div>
+              <div class="iri-desc">Sube una imagen y pide cambios específicos sobre ella.</div>
+              <div class="iri-example">«Toma esta foto del parque del colegio y conviértela en un paisaje de la Era de los Dinosaurios: añade pterodáctilos volando y vegetación tropical»</div>
+              <div class="img-ref-badge" style="background: rgba(59,130,246,0.3); color: #93c5fd;">Gemini · Grok · ChatGPT</div>
+            </div>
+
+            <div class="img-ref-item">
+              <div class="iri-icon">🔍</div>
+              <div class="iri-title">Analizar y extraer información</div>
+              <div class="iri-desc">Sube fotos de textos, ejercicios o esquemas y que la IA los interprete.</div>
+              <div class="iri-example">«Te subo la foto de un ejercicio resuelto por un alumno. Corrígelo, indica los errores y genera la versión corregida»</div>
+              <div class="img-ref-badge" style="background: rgba(16,185,129,0.3); color: #6ee7b7;">Gemini · ChatGPT · Claude</div>
+            </div>
+
+            <div class="img-ref-item">
+              <div class="iri-icon">🎬</div>
+              <div class="iri-title">Imagen → Vídeo</div>
+              <div class="iri-desc">Sube un dibujo o foto y haz que cobre vida como vídeo animado.</div>
+              <div class="iri-example">«Toma este dibujo del ciclo del agua y anímalo: que la lluvia caiga, el río fluya y el vapor suba. 8 segundos, movimiento suave»</div>
+              <div class="img-ref-badge" style="background: rgba(124,58,237,0.3); color: #c4b5fd;">Luma · Grok Imagine · Google Flow</div>
+            </div>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.08); border-radius: 14px; padding: 16px 20px; margin-top: 18px;">
+            <p style="color: rgba(255,255,255,0.9); margin: 0; font-size: 0.92rem; line-height: 1.65;">
+              <strong>💡 Truco pro:</strong> Combina imagen + texto para instrucciones mucho más precisas. Por ejemplo, sube una foto de un mapa mudo y pide: <em>«Marca en este mapa los ríos principales de España con sus nombres»</em>. O sube un dibujo de un alumno y pide: <em>«Convierte este boceto en una ilustración profesional estilo acuarela»</em>. ¡La IA «ve» la imagen y trabaja sobre ella!
+            </p>
+          </div>
+        </div>
+
+        </div> <!-- /tt-pri-imagenes -->
+
+        <!-- TAB: Consejos -->
+        <div class="trucos-panel" id="tt-pri-consejos">
+
         <!-- Golden Tips -->
         <div style="margin: 36px 0 8px; padding: 0 4px;">
           <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px;">
-            💡 5 trucos de oro
+            💡 4 trucos de oro
           </h3>
         </div>
 
@@ -670,17 +1084,10 @@
             </div>
           </div>
           <div class="golden-tip">
-            <div class="golden-tip-icon">🌟</div>
-            <div class="golden-tip-content">
-              <strong>Usa palabras clave según la herramienta</strong>
-              <p>Para imágenes: <em>realista, infografía, esquema, estilo pictórico, colores vivos</em>. Para vídeos: <em>cinematográfico, movimiento suave, plano aéreo, 16:9</em>. Para materiales: <em>tipo test, rúbrica, adaptación, saberes básicos, criterios de evaluación</em>.</p>
-            </div>
-          </div>
-          <div class="golden-tip">
             <div class="golden-tip-icon">⚠️</div>
             <div class="golden-tip-content">
               <strong>Revisa siempre el resultado</strong>
-              <p>La IA genera borradores, no productos finales. Comprueba datos históricos, citas literarias, y que el nivel lingüístico sea adecuado. Tu criterio profesional es insustituible.</p>
+              <p>La IA genera borradores, no productos finales. Comprueba datos, vocabulario y que el nivel sea adecuado para tus alumnos. Tu criterio profesional es insustituible.</p>
             </div>
           </div>
         </div>
@@ -754,19 +1161,15 @@
           </div>
         </div>
 
+        </div> <!-- /tt-pri-consejos -->
+
       </div>
-    </div>
 
-  </div>
-
-  <!-- Footer -->
   <footer class="footer">
     Taller de IA · Colegio El Buen Pastor · Febrero 2026<br>
     Preparado con 💛 por Manu
   </footer>
-
-</div>
-
+  </div>
 
 <script src="js/app.js"></script>
 </body>
