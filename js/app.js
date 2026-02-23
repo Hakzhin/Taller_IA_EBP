@@ -78,8 +78,49 @@
   animate();
 })();
 
+// ── Tool Card Toggle (New UX) ──
+function toggleTool(toolId) {
+  const panel = document.getElementById('panel-' + toolId);
+  const card = document.getElementById('card-' + toolId);
+  if (!panel || !card) return;
+  const isOpen = panel.classList.contains('open');
+
+  // Close all panels and deactivate all cards
+  document.querySelectorAll('.tutorial-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
+
+  if (!isOpen) {
+    panel.classList.add('open');
+    card.classList.add('active');
+    setTimeout(() => {
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
+  }
+}
+
+// ── Tutorial Step Detail Toggle ──
+function toggleStepDetail(stepEl) {
+  const detail = stepEl.querySelector('.tut-step-detail');
+  const hint = stepEl.querySelector('.tut-step-hint');
+  if (!detail) return;
+  const isOpen = detail.classList.contains('open');
+
+  // Close all details in this panel
+  stepEl.closest('.tut-steps').querySelectorAll('.tut-step-detail').forEach(d => d.classList.remove('open'));
+  stepEl.closest('.tut-steps').querySelectorAll('.tut-step-hint').forEach(h => {
+    h.textContent = 'Toca para ver detalles ▼';
+  });
+
+  if (!isOpen) {
+    detail.classList.add('open');
+    if (hint) hint.textContent = 'Toca para ocultar ▲';
+  }
+}
+
 // ── Section Navigation (within Infantil) ──
 function showSection(section) {
+  document.querySelectorAll('.tutorial-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('#pathway-infantil .section-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('#pathway-infantil .nav-pill').forEach(p => {
     p.classList.remove('active-image', 'active-music', 'active-story', 'active-tips');
@@ -92,6 +133,8 @@ function showSection(section) {
 
 // ── Section Navigation (within ESO) ──
 function showEsoSection(section) {
+  document.querySelectorAll('.tutorial-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('#pathway-eso .section-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('#pathway-eso .nav-pill').forEach(p => {
     p.classList.remove('active-eso-image', 'active-eso-video', 'active-eso-notebook', 'active-eso-materials', 'active-eso-tips');
@@ -104,14 +147,35 @@ function showEsoSection(section) {
 
 // ── Section Navigation (within Primaria) ──
 function showPrimariaSection(section) {
+  document.querySelectorAll('.tutorial-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('#pathway-primaria .section-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('#pathway-primaria .nav-pill').forEach(p => {
-    p.classList.remove('active-pri-image', 'active-pri-video', 'active-pri-notebook', 'active-pri-materials', 'active-pri-tips');
+    p.classList.remove('active-pri-image', 'active-pri-video', 'active-pri-music', 'active-pri-notebook', 'active-pri-materials', 'active-pri-tips');
   });
 
   document.getElementById('section-' + section).classList.add('active');
   document.getElementById('pill-' + section).classList.add('active-' + section);
   window.scrollTo({ top: 300, behavior: 'smooth' });
+}
+
+// ── Trucos Sub-Tab Navigation ──
+function showTrucosTab(tabId, level) {
+  const prefix = level ? level + '-' : '';
+  // Hide all panels
+  document.querySelectorAll('.trucos-panel').forEach(p => {
+    if (p.id.startsWith('tt-' + prefix) || (!prefix && p.closest('.section-panel'))) {
+      p.classList.remove('tt-visible');
+    }
+  });
+  // Deactivate all buttons in same group
+  const container = document.getElementById('tt-' + prefix + tabId).closest('.section-panel') || document.getElementById('tt-' + prefix + tabId).parentElement;
+  container.querySelectorAll('.trucos-tab-btn').forEach(b => b.classList.remove('tt-active'));
+  container.querySelectorAll('.trucos-panel').forEach(p => p.classList.remove('tt-visible'));
+
+  // Show target panel and activate button
+  document.getElementById('tt-' + prefix + tabId).classList.add('tt-visible');
+  document.getElementById('ttb-' + prefix + tabId).classList.add('tt-active');
 }
 
 // ── Step Detail Toggle ──
