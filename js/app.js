@@ -1,3 +1,8 @@
+// ══════════════════════════════════════════
+//  Taller IA · Colegio El Buen Pastor
+//  Unified JavaScript (single source of truth)
+// ══════════════════════════════════════════
+
 // ── Neural Particle Animation (Landing) ──
 (function () {
   const canvas = document.getElementById('neural-canvas');
@@ -78,14 +83,27 @@
   animate();
 })();
 
-// ── Tool Card Toggle (New UX) ──
+// ── Pathway Navigation (Landing ↔ Itinerary) ──
+function showPathway(pathway) {
+  document.getElementById('landing-screen').style.display = 'none';
+  document.querySelectorAll('.pathway-content').forEach(p => p.classList.remove('active'));
+  document.getElementById('pathway-' + pathway).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goHome() {
+  document.querySelectorAll('.pathway-content').forEach(p => p.classList.remove('active'));
+  document.getElementById('landing-screen').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Tool Card Toggle ──
 function toggleTool(toolId) {
   const panel = document.getElementById('panel-' + toolId);
   const card = document.getElementById('card-' + toolId);
   if (!panel || !card) return;
   const isOpen = panel.classList.contains('open');
 
-  // Close all panels and deactivate all cards
   document.querySelectorAll('.tutorial-panel').forEach(p => p.classList.remove('open'));
   document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
 
@@ -105,7 +123,6 @@ function toggleStepDetail(stepEl) {
   if (!detail) return;
   const isOpen = detail.classList.contains('open');
 
-  // Close all details in this panel
   stepEl.closest('.tut-steps').querySelectorAll('.tut-step-detail').forEach(d => d.classList.remove('open'));
   stepEl.closest('.tut-steps').querySelectorAll('.tut-step-hint').forEach(h => {
     h.textContent = 'Toca para ver detalles ▼';
@@ -162,20 +179,22 @@ function showPrimariaSection(section) {
 // ── Trucos Sub-Tab Navigation ──
 function showTrucosTab(tabId, level) {
   const prefix = level ? level + '-' : '';
-  // Hide all panels
-  document.querySelectorAll('.trucos-panel').forEach(p => {
-    if (p.id.startsWith('tt-' + prefix) || (!prefix && p.closest('.section-panel'))) {
-      p.classList.remove('tt-visible');
-    }
-  });
-  // Deactivate all buttons in same group
-  const container = document.getElementById('tt-' + prefix + tabId).closest('.section-panel') || document.getElementById('tt-' + prefix + tabId).parentElement;
+  const targetPanel = document.getElementById('tt-' + prefix + tabId);
+  const targetBtn = document.getElementById('ttb-' + prefix + tabId);
+  
+  if (!targetPanel || !targetBtn) return;
+  
+  // Find the containing section-panel
+  const container = targetPanel.closest('.section-panel');
+  if (!container) return;
+  
+  // Deactivate all within this container
   container.querySelectorAll('.trucos-tab-btn').forEach(b => b.classList.remove('tt-active'));
   container.querySelectorAll('.trucos-panel').forEach(p => p.classList.remove('tt-visible'));
 
-  // Show target panel and activate button
-  document.getElementById('tt-' + prefix + tabId).classList.add('tt-visible');
-  document.getElementById('ttb-' + prefix + tabId).classList.add('tt-active');
+  // Activate target
+  targetPanel.classList.add('tt-visible');
+  targetBtn.classList.add('tt-active');
 }
 
 // ── Step Detail Toggle ──
@@ -202,14 +221,17 @@ function toggleCheck(item, section) {
 
 function updateProgress(section) {
   const panel = document.getElementById('section-' + section);
+  if (!panel) return;
   const total = panel.querySelectorAll('.checklist-item').length;
   const done = panel.querySelectorAll('.checklist-item.done').length;
   const pct = Math.round((done / total) * 100);
 
-  document.getElementById('fill-' + section).style.width = pct + '%';
-  document.getElementById('label-' + section).textContent = done + ' de ' + total + ' pasos completados';
-
-  if (done === total) {
-    document.getElementById('label-' + section).textContent = '🎉 ¡Todos los pasos completados!';
+  const fill = document.getElementById('fill-' + section);
+  const label = document.getElementById('label-' + section);
+  if (fill) fill.style.width = pct + '%';
+  if (label) {
+    label.textContent = done === total
+      ? '🎉 ¡Todos los pasos completados!'
+      : done + ' de ' + total + ' pasos completados';
   }
 }
