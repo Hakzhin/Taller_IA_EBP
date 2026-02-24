@@ -83,6 +83,13 @@
   animate();
 })();
 
+// ── Release cardFadeIn so hover transforms work ──
+document.querySelectorAll('.pathway-card').forEach(card => {
+  card.addEventListener('animationend', () => {
+    card.style.animation = 'none';
+  });
+});
+
 // ── Pathway Navigation (Landing ↔ Itinerary) ──
 function showPathway(pathway) {
   document.getElementById('landing-screen').style.display = 'none';
