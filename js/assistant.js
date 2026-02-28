@@ -65,6 +65,34 @@ Reglas:
       bulletin: BASE + `\n\nContexto adicional: Genera un consejo breve y practico del dia para profesores que usan IA en el aula.\nMenciona una herramienta concreta del catalogo.\nFormato: un titulo llamativo (max 8 palabras) y 2-3 frases de contenido.\nResponde SOLO con JSON valido: {"title": "...", "body": "...", "toolId": "..."}\nEl toolId debe ser un ID del catalogo como "pri-gemini", "eso-chatgpt", "inf-suno", etc.`,
       explore: `Eres "BupIA" en modo Explorador. Ayudas a profesores del Colegio El Buen Pastor (Madrid) a descubrir herramientas de IA EXTERNAS que NO estan en su plataforma.
 
+Tu publico son docentes con pocos o nulos conocimientos informaticos. Esto define TODO tu estilo:
+
+TONO Y ESTILO:
+- Cercano, humano, incluso con toques de humor o ironia suave ("Si, otra IA mas... pero esta merece la pena, prometido").
+- Nada de jerga tecnica. Si usas un termino tecnico, explicalo entre parentesis en lenguaje llano.
+- Frases cortas. Parrafos cortos. Que no parezca un manual de instrucciones.
+- Transmite que es FACIL y que ellos PUEDEN. Nada de "configura el endpoint" sino "entra, dale a crear y listo".
+- Cuando menciones una herramienta, explica para que sirve como se lo contarias a un companero en el cafe.
+
+FORMATO DE RESPUESTA (usa markdown):
+Para cada herramienta recomendada usa EXACTAMENTE este formato:
+
+---
+
+### [Icono] Nombre de la herramienta
+
+**Que es:** Explicacion breve y clara en lenguaje humano.
+
+**Lo bueno:** Que tiene de especial, por que merece la pena probarla.
+
+**Plan gratis:** Que puedes hacer sin pagar (y limites si los hay).
+
+**Ejemplo en el aula:** Un caso concreto adaptado a la etapa del profesor.
+
+[Enlace directo a la herramienta](https://url-real.com)
+
+---
+
 IMPORTANTE: Solo recomienda herramientas que usen Inteligencia Artificial como funcionalidad central (generacion de texto, imagenes, video, audio, analisis automatico, tutores IA, etc.). NO recomiendes herramientas genericas de productividad, diseno o gestion que no incorporen IA de forma significativa.
 
 Herramientas YA catalogadas (NO las recomiendes): Gemini, Grok/Aurora, Copilot/DALL-E, Suno, Flow/Runway, Luma Dream Machine, NotebookLM, ChatGPT, Claude, Storybook.
@@ -84,19 +112,12 @@ Criterios para recomendar una herramienta:
 5. Funciona razonablemente en espanol
 6. Aporta algo que Canva para Educadores NO cubre (o lo hace significativamente mejor)
 
-Para cada herramienta recomendada incluye:
-- **Nombre** y URL real (no inventes URLs)
-- **Que hace** en 1-2 frases
-- **Plan gratuito**: que incluye y limites
-- **Ejemplo de uso en el aula** adaptado a la etapa que pida el profesor
-
 Reglas:
 - Responde SIEMPRE en espanol
-- Se conciso y practico
-- Si no estas seguro de que una herramienta siga siendo gratuita, indicalo
+- Recomienda 2-3 herramientas por consulta, no mas
+- Si no estas seguro de que una herramienta siga siendo gratuita, dilo con naturalidad
 - No inventes URLs ni funcionalidades
-- Usa un tono cercano y motivador
-- Recomienda 2-3 herramientas por consulta, no mas`,
+- Los enlaces deben ser URLs reales y clicables con formato markdown: [texto](url)`,
     };
   })(),
 
@@ -761,21 +782,103 @@ Reglas:
     if (input) input.focus();
   },
 
+  // ── Markdown renderer (lightweight, no dependencies) ──
+  formatMarkdown(text) {
+    // Escape HTML
+    let html = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    // Process line by line for block elements
+    const lines = html.split('\n');
+    const out = [];
+    let inList = false;
+
+    for (let i = 0; i < lines.length; i++) {
+      let line = lines[i];
+
+      // Horizontal rule
+      if (/^---+$/.test(line.trim())) {
+        if (inList) { out.push('</ul>'); inList = false; }
+        out.push('<hr>');
+        continue;
+      }
+
+      // Headings (###, ##)
+      const h3 = line.match(/^###\s+(.+)/);
+      if (h3) {
+        if (inList) { out.push('</ul>'); inList = false; }
+        out.push(`<h4 class="chat-heading">${h3[1]}</h4>`);
+        continue;
+      }
+      const h2 = line.match(/^##\s+(.+)/);
+      if (h2) {
+        if (inList) { out.push('</ul>'); inList = false; }
+        out.push(`<h3 class="chat-heading">${h2[1]}</h3>`);
+        continue;
+      }
+
+      // Unordered list items (- or *)
+      const li = line.match(/^[\-\*]\s+(.+)/);
+      if (li) {
+        if (!inList) { out.push('<ul>'); inList = true; }
+        out.push(`<li>${li[1]}</li>`);
+        continue;
+      }
+
+      // Numbered list items
+      const oli = line.match(/^\d+\.\s+(.+)/);
+      if (oli) {
+        if (inList) { out.push('</ul>'); inList = false; }
+        // Simple: render as bullet (avoids tracking <ol> state)
+        if (!lines[i - 1]?.match(/^\d+\.\s+/)) out.push('<ol>');
+        out.push(`<li>${oli[1]}</li>`);
+        if (!lines[i + 1]?.match(/^\d+\.\s+/)) out.push('</ol>');
+        continue;
+      }
+
+      // Close list if we hit a non-list line
+      if (inList) { out.push('</ul>'); inList = false; }
+
+      // Empty line = paragraph break
+      if (line.trim() === '') {
+        out.push('<br>');
+        continue;
+      }
+
+      out.push(line + '<br>');
+    }
+    if (inList) out.push('</ul>');
+
+    html = out.join('\n');
+
+    // Inline formatting
+    // Links: [text](url)
+    html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener">$1 ↗</a>');
+
+    // Bare URLs (not already inside an href)
+    html = html.replace(/(?<!="|'>)(https?:\/\/[^\s<,)]+)/g,
+      '<a href="$1" target="_blank" rel="noopener">$1 ↗</a>');
+
+    // Bold
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    // Italic
+    html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    // Inline code
+    html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+    return html;
+  },
+
   appendMessage(role, text) {
     const container = this.root.querySelector('#chat-messages');
     if (!container) return;
 
     const div = document.createElement('div');
     div.className = `chat-msg chat-msg-${role}`;
-
-    // Convert newlines to <br> and basic formatting
-    div.innerHTML = text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/\n/g, '<br>')
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>');
+    div.innerHTML = this.formatMarkdown(text);
 
     container.appendChild(div);
 
@@ -873,13 +976,7 @@ Reglas:
 
     const div = document.createElement('div');
     div.className = `chat-msg chat-msg-${role}`;
-    div.innerHTML = text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/\n/g, '<br>')
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>');
+    div.innerHTML = this.formatMarkdown(text);
 
     container.appendChild(div);
 
