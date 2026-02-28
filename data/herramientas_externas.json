@@ -1,0 +1,262 @@
+{
+  "version": "1.0",
+  "ultima_revision": "2025-06",
+  "nota_mantenimiento": "Revisar este archivo cada trimestre. Verificar URLs, planes gratuitos y nuevas herramientas.",
+  "categorias": [
+    {
+      "id": "presentaciones",
+      "nombre": "Presentaciones con IA",
+      "icono": "📊",
+      "herramientas": [
+        {
+          "nombre": "Gamma",
+          "url": "https://gamma.app",
+          "que_hace": "Crea presentaciones, documentos y webs visuales con IA. Describes el tema y genera todo el diseño automáticamente.",
+          "plan_gratis": "400 créditos IA (~10 presentaciones). Exporta a PPTX, PDF, Google Slides. Sin tarjeta.",
+          "etapas": ["primaria", "eso"],
+          "destacado": true
+        },
+        {
+          "nombre": "Slidesgo AI",
+          "url": "https://slidesgo.com/ai/presentation-maker",
+          "que_hace": "Generador de presentaciones del ecosistema Freepik. También crea quizzes, planes de clase y actividades para romper el hielo.",
+          "plan_gratis": "3 presentaciones IA/mes + miles de plantillas educativas gratuitas. Compatible con Google Slides y PowerPoint.",
+          "etapas": ["infantil", "primaria", "eso"],
+          "destacado": false
+        },
+        {
+          "nombre": "Curipod",
+          "url": "https://curipod.com",
+          "que_hace": "Presentaciones interactivas con IA: genera lecciones con encuestas, nubes de palabras, preguntas abiertas y dibujos. Los alumnos participan desde su dispositivo.",
+          "plan_gratis": "5 presentaciones privadas, participantes ilimitados, informes con feedback IA. Google SSO.",
+          "etapas": ["primaria", "eso"],
+          "destacado": true
+        }
+      ]
+    },
+    {
+      "id": "fichas-interactivas",
+      "nombre": "Fichas y ejercicios interactivos",
+      "icono": "📝",
+      "herramientas": [
+        {
+          "nombre": "Wordwall",
+          "url": "https://wordwall.net",
+          "que_hace": "Crea actividades interactivas (quizzes, sopas de letras, crucigramas, emparejar, ruleta...) con IA que genera el contenido automáticamente.",
+          "plan_gratis": "5 actividades, 12 plantillas interactivas, generador IA incluido. Alumnos sin cuenta.",
+          "etapas": ["infantil", "primaria", "eso"],
+          "destacado": true
+        },
+        {
+          "nombre": "Educaplay",
+          "url": "https://www.educaplay.com",
+          "que_hace": "Plataforma española para crear juegos educativos (crucigramas, dictados, memory, quiz...). Su asistente IA 'Ray' genera actividades desde un tema.",
+          "plan_gratis": "Cuenta gratuita con 15+ tipos de actividad. Integración con Google Classroom y Moodle.",
+          "etapas": ["infantil", "primaria", "eso"],
+          "destacado": true
+        },
+        {
+          "nombre": "Diffit",
+          "url": "https://web.diffit.me",
+          "que_hace": "Toma cualquier texto, URL, PDF o vídeo de YouTube y lo reescribe al nivel de lectura que elijas. Genera vocabulario, preguntas y actividades adaptadas.",
+          "plan_gratis": "Herramientas de diferenciación gratuitas. Exporta a Google Docs/Slides/Forms y PDF. 70+ idiomas.",
+          "etapas": ["primaria", "eso"],
+          "destacado": true
+        }
+      ]
+    },
+    {
+      "id": "imagenes",
+      "nombre": "Generación de imágenes con IA",
+      "icono": "🎨",
+      "herramientas": [
+        {
+          "nombre": "Ideogram",
+          "url": "https://ideogram.ai",
+          "que_hace": "Generador de imágenes IA especializado en texto legible dentro de las imágenes. Ideal para pósters, infografías y materiales visuales educativos.",
+          "plan_gratis": "~10 generaciones/semana (se renuevan los sábados). Sin marca de agua. Sin tarjeta.",
+          "etapas": ["primaria", "eso"],
+          "destacado": true
+        },
+        {
+          "nombre": "Leonardo AI",
+          "url": "https://leonardo.ai",
+          "que_hace": "Plataforma de generación de imágenes con múltiples modelos IA y estilos artísticos. Útil para ilustraciones educativas y material visual.",
+          "plan_gratis": "150 tokens diarios (~10-12 imágenes/día, se renuevan cada 24h). Sin tarjeta.",
+          "etapas": ["primaria", "eso"],
+          "destacado": false
+        }
+      ]
+    },
+    {
+      "id": "gamificacion",
+      "nombre": "Gamificación con IA",
+      "icono": "🎮",
+      "herramientas": [
+        {
+          "nombre": "Kahoot!",
+          "url": "https://kahoot.com",
+          "que_hace": "Plataforma de quizzes gamificados en tiempo real. La IA genera preguntas automáticamente desde un tema, PDF, URL o notas escritas a mano.",
+          "plan_gratis": "Plan gratuito para profesores K-12. Hasta 50 jugadores, generación IA de quizzes. Alumnos sin cuenta.",
+          "etapas": ["infantil", "primaria", "eso"],
+          "destacado": true
+        },
+        {
+          "nombre": "Quizizz",
+          "url": "https://quizizz.com",
+          "que_hace": "Quizzes gamificados con IA que crea preguntas desde documentos, simplifica textos y convierte contenido en escenarios reales. Los alumnos entran con código.",
+          "plan_gratis": "Plan gratuito con funciones IA, 20 actividades, lecciones interactivas y tareas asíncronas.",
+          "etapas": ["infantil", "primaria", "eso"],
+          "destacado": true
+        },
+        {
+          "nombre": "Quizalize",
+          "url": "https://www.quizalize.com",
+          "que_hace": "Quizzes gamificados con 10+ temas visuales (baloncesto, espacio, aventura...). La IA genera quizzes por tema y nivel. Seguimiento de dominio por alumno.",
+          "plan_gratis": "1 clase (50 alumnos), 3 quizzes IA/mes, creación ilimitada manual. Sin tarjeta.",
+          "etapas": ["primaria", "eso"],
+          "destacado": false
+        }
+      ]
+    },
+    {
+      "id": "videos",
+      "nombre": "Vídeos educativos con IA",
+      "icono": "🎬",
+      "herramientas": [
+        {
+          "nombre": "Synthesia",
+          "url": "https://www.synthesia.io",
+          "que_hace": "Crea vídeos con avatares IA realistas que hablan tu guion. Sin cámara ni micrófono. 140+ idiomas y acentos.",
+          "plan_gratis": "3 minutos de vídeo/mes, 9 avatares, plantillas incluidas. Con marca de agua. Sin tarjeta.",
+          "etapas": ["eso"],
+          "destacado": true
+        }
+      ]
+    },
+    {
+      "id": "evaluacion",
+      "nombre": "Evaluación y feedback con IA",
+      "icono": "✅",
+      "herramientas": [
+        {
+          "nombre": "Brisk Teaching",
+          "url": "https://www.briskteaching.com",
+          "que_hace": "Extensión de Chrome con 30+ herramientas IA que funciona dentro de Google Docs, Classroom y Slides. Da feedback personalizado, genera rúbricas, adapta niveles de lectura.",
+          "plan_gratis": "Gratuita para profesores. Se instala como extensión de Chrome. 30+ idiomas.",
+          "etapas": ["primaria", "eso"],
+          "destacado": true
+        },
+        {
+          "nombre": "Snorkl",
+          "url": "https://snorkl.app",
+          "que_hace": "Los alumnos graban explicaciones verbales sobre una pizarra virtual. La IA analiza tanto la respuesta como el razonamiento y da feedback personalizado.",
+          "plan_gratis": "Hasta 20 actividades (archivar libera espacio). Google/Microsoft SSO. 40+ idiomas incluido español.",
+          "etapas": ["infantil", "primaria", "eso"],
+          "destacado": true
+        },
+        {
+          "nombre": "Formative",
+          "url": "https://www.formative.com",
+          "que_hace": "Plataforma de evaluación en tiempo real con IA 'Luna' para crear lecciones y exámenes. Ves las respuestas de los alumnos mientras las escriben.",
+          "plan_gratis": "Cuenta gratuita con herramientas principales, monitoreo en tiempo real e IA. Integración con Google Classroom.",
+          "etapas": ["primaria", "eso"],
+          "destacado": false
+        }
+      ]
+    },
+    {
+      "id": "audio-voz",
+      "nombre": "Audio y voz con IA",
+      "icono": "🎙️",
+      "herramientas": [
+        {
+          "nombre": "ElevenLabs",
+          "url": "https://elevenlabs.io",
+          "que_hace": "Convierte texto en voz humana ultrarrealista con emociones naturales. 70+ idiomas. Ideal para audiocuentos, materiales de accesibilidad y contenido oral.",
+          "plan_gratis": "10.000 caracteres/mes gratis. Voces en español con varios acentos. Sin tarjeta.",
+          "etapas": ["primaria", "eso"],
+          "destacado": true
+        },
+        {
+          "nombre": "NaturalReader",
+          "url": "https://www.naturalreaders.com",
+          "que_hace": "Convierte PDFs, documentos y webs en audio con lectura acompañada palabra a palabra. Soporte para dislexia. Extensión de Chrome.",
+          "plan_gratis": "Voces básicas ilimitadas, lectura acompañada gratuita. Extensión Chrome gratis. Voces IA solo en plan de pago.",
+          "etapas": ["infantil", "primaria", "eso"],
+          "destacado": false
+        }
+      ]
+    },
+    {
+      "id": "tutores-ia",
+      "nombre": "Tutores IA para alumnos",
+      "icono": "🤖",
+      "herramientas": [
+        {
+          "nombre": "Khanmigo",
+          "url": "https://www.khanmigo.ai",
+          "que_hace": "Tutor IA de Khan Academy que guía con preguntas socráticas (nunca da la respuesta directa). Cubre mates, ciencias, humanidades y programación.",
+          "plan_gratis": "Gratis para profesores. Para alumnos: 4$/mes o gratis mediante acuerdos con centros educativos.",
+          "etapas": ["primaria", "eso"],
+          "destacado": true
+        },
+        {
+          "nombre": "SchoolAI",
+          "url": "https://schoolai.com",
+          "que_hace": "Crea 'Espacios' de aprendizaje donde cada alumno tiene un tutor IA personalizado. El profesor monitorea todas las conversaciones en tiempo real.",
+          "plan_gratis": "Siempre gratis para profesores. 75 alumnos/día por Espacio. Google SSO. Cumple FERPA/COPPA.",
+          "etapas": ["primaria", "eso"],
+          "destacado": true
+        },
+        {
+          "nombre": "Goblin Tools",
+          "url": "https://goblin.tools",
+          "que_hace": "Colección de herramientas IA simples diseñadas para neurodivergencia: descompone tareas en pasos, organiza notas, reformula textos y analiza el tono de mensajes.",
+          "plan_gratis": "100% gratis, sin anuncios, sin cuenta necesaria. El creador se ha comprometido a mantenerlo gratuito siempre.",
+          "etapas": ["primaria", "eso"],
+          "destacado": true
+        }
+      ]
+    },
+    {
+      "id": "contenido-educativo",
+      "nombre": "Generación de contenido para profesores",
+      "icono": "📚",
+      "herramientas": [
+        {
+          "nombre": "MagicSchool AI",
+          "url": "https://www.magicschool.ai",
+          "que_hace": "80+ herramientas IA para profesores: programaciones, fichas, exámenes, rúbricas, IEPs, presentaciones y más. También tiene herramientas para alumnos (tutoría, feedback).",
+          "plan_gratis": "Generaciones IA ilimitadas para profesores individuales. 80+ herramientas. Google SSO. Interfaz en español (España y Latinoamérica).",
+          "etapas": ["infantil", "primaria", "eso"],
+          "destacado": true
+        },
+        {
+          "nombre": "Eduaide.AI",
+          "url": "https://www.eduaide.ai",
+          "que_hace": "Genera programaciones, evaluaciones, fichas, rúbricas, organizadores gráficos y juegos educativos. 110+ tipos de recurso. Incluye bot de feedback.",
+          "plan_gratis": "15 generaciones/mes. Bot de feedback básico. 16+ idiomas incluido español. Sin tarjeta.",
+          "etapas": ["primaria", "eso"],
+          "destacado": false
+        },
+        {
+          "nombre": "Twee",
+          "url": "https://twee.com",
+          "que_hace": "Herramienta IA específica para profesores de inglés: genera comprensiones lectoras, ejercicios de vocabulario y gramática, diálogos y exámenes adaptados a niveles CEFR (A1-C2).",
+          "plan_gratis": "20 generaciones de texto/mes, 10 de medios/mes. Exporta a PDF/DOC. Sin tarjeta.",
+          "etapas": ["primaria", "eso"],
+          "destacado": false
+        },
+        {
+          "nombre": "Mizou",
+          "url": "https://mizou.com",
+          "que_hace": "Constructor de chatbots pedagógicos sin programar. Los profes crean bots para role-play (personajes históricos, debates), práctica de idiomas y tutoría personalizada.",
+          "plan_gratis": "Plan gratuito para profesores individuales. Integración con Google Classroom. Chatbots configurables en español.",
+          "etapas": ["primaria", "eso"],
+          "destacado": false
+        }
+      ]
+    }
+  ]
+}

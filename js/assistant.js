@@ -151,6 +151,32 @@ Reglas:
     this.attachEvents();
     this.renderActiveTab();
     this.updateBadge();
+    this.loadExternalCatalog();
+  },
+
+  async loadExternalCatalog() {
+    try {
+      const resp = await fetch('data/herramientas_externas.json');
+      if (!resp.ok) return;
+      const data = await resp.json();
+
+      let text = `\n\nCATALOGO DE HERRAMIENTAS EXTERNAS VERIFICADAS (revision ${data.ultima_revision || '?'}):\n`;
+      text += 'Usa este catalogo como referencia PRIORITARIA al recomendar. Son herramientas verificadas por el equipo del colegio.\n';
+
+      for (const cat of (data.categorias || [])) {
+        text += `\n${cat.icono} ${cat.nombre.toUpperCase()}:\n`;
+        for (const h of (cat.herramientas || [])) {
+          const star = h.destacado ? ' ⭐' : '';
+          const etapas = (h.etapas || []).join(', ');
+          text += `- ${h.nombre}${star} (${h.url}) — ${h.que_hace} Plan gratis: ${h.plan_gratis} Etapas: ${etapas}\n`;
+        }
+      }
+
+      this.SYSTEM_PROMPTS.explore += text;
+      console.log(`[BupIA] Catalogo externo cargado (${data.categorias.reduce((n, c) => n + c.herramientas.length, 0)} herramientas)`);
+    } catch (e) {
+      // Catalog not available — explorer uses model knowledge only
+    }
   },
 
   // ═══════════════════════════════════════
@@ -1035,7 +1061,7 @@ Reglas:
 
     const systemPrompt = this.SYSTEM_PROMPTS[feature] || this.SYSTEM_PROMPTS.chat;
     const apiMessages = messages.filter(m => m.role === 'user' || m.role === 'assistant');
-    const maxTokens = feature === 'explore' ? 1024 : 500;
+    const maxTokens = feature === 'explore' ? 1500 : 500;
 
     const resp = await fetch(this.ANTHROPIC_URL, {
       method: 'POST',

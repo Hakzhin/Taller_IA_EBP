@@ -141,6 +141,25 @@ Reglas:
 - Los enlaces deben ser URLs reales y clicables con formato markdown: [texto](url)""",
 }
 
+# ── Cargar catálogo externo de herramientas verificadas ──
+_catalog_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "herramientas_externas.json")
+if os.path.exists(_catalog_path):
+    with open(_catalog_path, "r", encoding="utf-8") as f:
+        _catalog_data = json.load(f)
+    _catalog_lines = [f"\n\nCATALOGO DE HERRAMIENTAS EXTERNAS VERIFICADAS (revision {_catalog_data.get('ultima_revision', '?')}):",
+                      "Usa este catalogo como referencia PRIORITARIA al recomendar. Son herramientas verificadas por el equipo del colegio.\n"]
+    for cat in _catalog_data.get("categorias", []):
+        _catalog_lines.append(f"\n{cat['icono']} {cat['nombre'].upper()}:")
+        for h in cat.get("herramientas", []):
+            star = " ⭐" if h.get("destacado") else ""
+            etapas = ", ".join(h.get("etapas", []))
+            _catalog_lines.append(f"- {h['nombre']}{star} ({h['url']}) — {h['que_hace']} Plan gratis: {h['plan_gratis']} Etapas: {etapas}")
+    _catalog_text = "\n".join(_catalog_lines)
+    FEATURE_PROMPTS["explore"] += _catalog_text
+    print(f"[OK] Catalogo externo cargado ({sum(len(c.get('herramientas',[])) for c in _catalog_data['categorias'])} herramientas)")
+else:
+    print(f"[!] No se encontro {_catalog_path}. El explorador usara solo conocimiento del modelo.")
+
 
 class TallerHandler(http.server.SimpleHTTPRequestHandler):
     """Sirve archivos estaticos + proxea /api/chat a Anthropic (Claude)."""
@@ -179,7 +198,7 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
 
         # Filtrar mensajes: solo user/assistant (Anthropic no acepta role "system" en messages)
         api_messages = [m for m in messages if m.get("role") in ("user", "assistant")]
-        max_tokens = 1024 if feature == "explore" else 500
+        max_tokens = 1500 if feature == "explore" else 500
 
         payload = json.dumps({
             "model": MODEL,
