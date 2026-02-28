@@ -420,117 +420,62 @@ Reglas:
     const container = this.root.querySelector('#assistant-tablon');
     if (!container || container.dataset.rendered === 'true') return;
 
-    let html = '';
+    let html = '<div class="ranking-header">🏆 Top 10 Herramientas IA para Docentes</div>';
 
-    // AI tip placeholder (loaded async)
-    html += '<div id="ai-tip-slot"></div>';
-
-    // Static bulletin cards
-    if (typeof BULLETIN_DATA !== 'undefined') {
-      for (const item of BULLETIN_DATA) {
-        html += this.renderBulletinCard(item);
+    if (typeof RANKING_DATA !== 'undefined') {
+      for (const item of RANKING_DATA) {
+        html += this.renderRankingCard(item);
       }
     }
 
     container.innerHTML = html;
     container.dataset.rendered = 'true';
-
-    // Load AI tip (async, cached)
-    this.loadAITip();
   },
 
-  renderBulletinCard(item) {
-    const badgeClass = {
-      tip: 'bulletin-badge-tip',
-      news: 'bulletin-badge-news',
-      seasonal: 'bulletin-badge-seasonal',
-      ai: 'bulletin-badge-ai',
-    }[item.category] || 'bulletin-badge-tip';
+  renderRankingCard(item) {
+    const medals = { 1: '🥇', 2: '🥈', 3: '🥉' };
+    const medal = medals[item.position] || '';
+    const posClass = item.position <= 3 ? ' ranking-top3' : '';
 
-    const badgeLabel = {
-      tip: 'Consejo',
-      news: 'Novedad',
-      seasonal: 'Estacional',
-      ai: '✨ IA',
-    }[item.category] || '';
+    const precioBadge = {
+      gratis: 'ranking-precio-gratis',
+      freemium: 'ranking-precio-freemium',
+      pago: 'ranking-precio-pago',
+    }[item.tipo_precio] || 'ranking-precio-freemium';
 
-    const toolLink = item.toolId
-      ? `<a class="bulletin-card-link" data-bulletin-tool="${item.toolId}">Ver herramienta →</a>`
-      : '';
+    const precioLabel = {
+      gratis: 'Gratis',
+      freemium: 'Freemium',
+      pago: 'De pago',
+    }[item.tipo_precio] || '';
+
+    const etapasHtml = (item.etapas || []).map(e => {
+      const labels = { infantil: 'Infantil', primaria: 'Primaria', eso: 'ESO' };
+      return `<span class="ranking-etapa">${labels[e] || e}</span>`;
+    }).join('');
 
     return `
-      <div class="bulletin-card">
-        <div class="bulletin-card-header">
-          <span class="bulletin-card-icon">${item.icon}</span>
-          <span class="bulletin-card-title">${item.title}</span>
-          <span class="bulletin-card-badge ${badgeClass}">${badgeLabel}</span>
+      <div class="ranking-card${posClass}">
+        <div class="ranking-card-left">
+          <span class="ranking-position">${medal || '#' + item.position}</span>
         </div>
-        <div class="bulletin-card-body">${item.body}</div>
-        ${toolLink}
+        <div class="ranking-card-right">
+          <div class="ranking-card-header">
+            <span class="ranking-card-icon">${item.icono}</span>
+            <span class="ranking-card-nombre">${item.nombre}</span>
+            <span class="ranking-card-empresa">${item.empresa}</span>
+            <span class="ranking-precio-badge ${precioBadge}">${precioLabel}</span>
+          </div>
+          <div class="ranking-card-body">${item.que_hace}</div>
+          <div class="ranking-card-destaca"><strong>Destaca por:</strong> ${item.por_que_top}</div>
+          <div class="ranking-card-footer">
+            <div class="ranking-etapas">${etapasHtml}</div>
+            <span class="ranking-card-precio">${item.precio}</span>
+          </div>
+          <a class="ranking-card-link" href="${item.url}" target="_blank" rel="noopener">Visitar ${item.nombre} ↗</a>
+        </div>
       </div>
     `;
-  },
-
-  async loadAITip() {
-    const slot = this.root.querySelector('#ai-tip-slot');
-    if (!slot) return;
-
-    // Check cache (24h)
-    const cached = sessionStorage.getItem('ai_tip_cache');
-    if (cached) {
-      try {
-        const data = JSON.parse(cached);
-        if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
-          slot.innerHTML = this.renderBulletinCard({
-            id: 'ai-tip',
-            icon: '🤖',
-            title: data.title,
-            body: data.body,
-            toolId: data.toolId || null,
-            category: 'ai',
-          });
-          return;
-        }
-      } catch (e) { /* ignore bad cache */ }
-    }
-
-    // Fetch from API
-    try {
-      const result = await this.apiCall('bulletin', [
-        { role: 'user', content: 'Genera el consejo del día.' }
-      ]);
-
-      if (result && result.content) {
-        let tipData;
-        try {
-          // Try to parse as JSON
-          const jsonMatch = result.content.match(/\{[\s\S]*\}/);
-          tipData = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
-        } catch (e) {
-          // Fallback: use raw text
-          tipData = { title: 'Consejo IA del día', body: result.content, toolId: null };
-        }
-
-        if (tipData) {
-          sessionStorage.setItem('ai_tip_cache', JSON.stringify({
-            ...tipData,
-            timestamp: Date.now(),
-          }));
-
-          slot.innerHTML = this.renderBulletinCard({
-            id: 'ai-tip',
-            icon: '🤖',
-            title: tipData.title || 'Consejo IA',
-            body: tipData.body || '',
-            toolId: tipData.toolId || null,
-            category: 'ai',
-          });
-        }
-      }
-    } catch (e) {
-      // Silent fail — static content is enough
-      console.log('BupIA: no se pudo cargar consejo IA', e.message);
-    }
   },
 
   // ═══════════════════════════════════════
@@ -1175,7 +1120,7 @@ Reglas:
     if (!this.badge) return;
 
     const lastSeen = parseInt(sessionStorage.getItem('bulletin_last_seen') || '0', 10);
-    const total = (typeof BULLETIN_DATA !== 'undefined') ? BULLETIN_DATA.length : 0;
+    const total = (typeof RANKING_DATA !== 'undefined') ? RANKING_DATA.length : 0;
     const unread = Math.max(0, total - lastSeen);
 
     if (unread > 0) {
