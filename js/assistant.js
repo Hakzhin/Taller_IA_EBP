@@ -1035,6 +1035,7 @@ Reglas:
 
     const systemPrompt = this.SYSTEM_PROMPTS[feature] || this.SYSTEM_PROMPTS.chat;
     const apiMessages = messages.filter(m => m.role === 'user' || m.role === 'assistant');
+    const maxTokens = feature === 'explore' ? 1024 : 500;
 
     const resp = await fetch(this.ANTHROPIC_URL, {
       method: 'POST',
@@ -1048,7 +1049,7 @@ Reglas:
         model: this.ANTHROPIC_MODEL,
         system: systemPrompt,
         messages: apiMessages,
-        max_tokens: 500,
+        max_tokens: maxTokens,
         temperature: 0.7,
       }),
     });

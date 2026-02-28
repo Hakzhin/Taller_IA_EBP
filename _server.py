@@ -179,12 +179,13 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
 
         # Filtrar mensajes: solo user/assistant (Anthropic no acepta role "system" en messages)
         api_messages = [m for m in messages if m.get("role") in ("user", "assistant")]
+        max_tokens = 1024 if feature == "explore" else 500
 
         payload = json.dumps({
             "model": MODEL,
             "system": system_prompt,
             "messages": api_messages,
-            "max_tokens": 500,
+            "max_tokens": max_tokens,
             "temperature": 0.7,
         }).encode("utf-8")
 
