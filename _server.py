@@ -14,11 +14,13 @@ import urllib.error
 
 PORT = 8085
 API_KEY_FILE = "api_key.txt"
+TAVILY_KEY_FILE = "tavily_key.txt"
 ANTHROPIC_URL = "https://api.anthropic.com/v1/messages"
 ANTHROPIC_VERSION = "2023-06-01"
 MODEL = "claude-haiku-4-5-20251001"
+TAVILY_URL = "https://api.tavily.com/search"
 
-# ── Cargar API key ──
+# ── Cargar API key (Anthropic) ──
 api_key = None
 key_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), API_KEY_FILE)
 if os.path.exists(key_path):
@@ -33,6 +35,56 @@ if os.path.exists(key_path):
 else:
     print(f"[!] No se encontro {API_KEY_FILE}. El chat IA no funcionara.")
     print(f"    Crea el archivo con tu API key de Anthropic para activar el asistente.")
+
+# ── Cargar API key (Tavily — búsqueda web) ──
+tavily_key = None
+tavily_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), TAVILY_KEY_FILE)
+if os.path.exists(tavily_path):
+    with open(tavily_path, "r", encoding="utf-8") as f:
+        tavily_key = f.read().strip()
+    if tavily_key.startswith("PEGA_AQUI") or len(tavily_key) < 10:
+        tavily_key = None
+        print(f"[!] {TAVILY_KEY_FILE} contiene texto placeholder. Busqueda web desactivada.")
+    else:
+        print(f"[OK] Tavily API key cargada. Busqueda web activada para el explorador.")
+else:
+    print(f"[!] No se encontro {TAVILY_KEY_FILE}. Busqueda web desactivada.")
+    print(f"    Registrate en tavily.com (gratis) y pega tu key para activar busqueda en tiempo real.")
+
+
+def search_tavily(query):
+    """Busca en internet via Tavily API. Retorna lista de resultados o [] si falla."""
+    if not tavily_key:
+        return []
+
+    search_query = f"herramientas IA educacion gratuitas {query}"
+    payload = json.dumps({
+        "api_key": tavily_key,
+        "query": search_query,
+        "search_depth": "basic",
+        "max_results": 5,
+    }).encode("utf-8")
+
+    req = urllib.request.Request(
+        TAVILY_URL,
+        data=payload,
+        headers={"Content-Type": "application/json"},
+    )
+
+    try:
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        results = []
+        for r in data.get("results", []):
+            results.append({
+                "title": r.get("title", ""),
+                "url": r.get("url", ""),
+                "content": r.get("content", "")[:200],
+            })
+        return results
+    except Exception as e:
+        print(f"[Tavily] Busqueda fallida: {e}")
+        return []
 
 # ── System prompts ──
 CATALOG = """Catalogo de herramientas disponibles en la plataforma:
@@ -199,6 +251,22 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
         # Filtrar mensajes: solo user/assistant (Anthropic no acepta role "system" en messages)
         api_messages = [m for m in messages if m.get("role") in ("user", "assistant")]
         max_tokens = 1500 if feature == "explore" else 500
+
+        # ── Búsqueda web en tiempo real para el Explorador ──
+        if feature == "explore" and tavily_key and api_messages:
+            last_user_msg = ""
+            for m in reversed(api_messages):
+                if m.get("role") == "user":
+                    last_user_msg = m.get("content", "")
+                    break
+            if last_user_msg:
+                results = search_tavily(last_user_msg)
+                if results:
+                    web_context = "\n\nRESULTADOS DE BUSQUEDA WEB RECIENTES:\n"
+                    for i, r in enumerate(results, 1):
+                        web_context += f"{i}. {r['title']} ({r['url']}) — {r['content']}\n"
+                    web_context += "\nUsa estos resultados como fuente actualizada para complementar el catalogo. Verifica que las URLs sean reales antes de recomendarlas. Si un resultado no es relevante o no es una herramienta IA educativa, ignoralo."
+                    system_prompt = system_prompt + web_context
 
         payload = json.dumps({
             "model": MODEL,
