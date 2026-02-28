@@ -3,6 +3,9 @@
 //  Unified JavaScript (single source of truth)
 // ══════════════════════════════════════════
 
+// ── Initialize: render pathways from data ──
+Renderer.renderAll();
+
 // ── Neural Particle Animation (Landing) ──
 (function () {
   const canvas = document.getElementById('neural-canvas');
@@ -111,8 +114,12 @@ function toggleTool(toolId) {
   if (!panel || !card) return;
   const isOpen = panel.classList.contains('open');
 
-  document.querySelectorAll('.tutorial-panel').forEach(p => p.classList.remove('open'));
-  document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
+  // Close all panels/cards in the same pathway
+  const pathwayEl = panel.closest('.pathway-content');
+  if (pathwayEl) {
+    pathwayEl.querySelectorAll('.tutorial-panel').forEach(p => p.classList.remove('open'));
+    pathwayEl.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
+  }
 
   if (!isOpen) {
     panel.classList.add('open');
@@ -141,45 +148,34 @@ function toggleStepDetail(stepEl) {
   }
 }
 
-// ── Section Navigation (within Infantil) ──
-function showSection(section) {
-  document.querySelectorAll('.tutorial-panel').forEach(p => p.classList.remove('open'));
-  document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
-  document.querySelectorAll('#pathway-infantil .section-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('#pathway-infantil .nav-pill').forEach(p => {
-    p.classList.remove('active-image', 'active-music', 'active-story', 'active-tips');
+// ── Unified Section Navigation ──
+// Works for all pathways (infantil, primaria, eso) using data-active-class
+function showPathwaySection(sectionId, pillEl) {
+  // Find the pathway container from the pill button
+  const pathwayEl = pillEl.closest('.pathway-content');
+  if (!pathwayEl) return;
+
+  // Close tool panels/cards
+  pathwayEl.querySelectorAll('.tutorial-panel').forEach(p => p.classList.remove('open'));
+  pathwayEl.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
+
+  // Deactivate all section panels
+  pathwayEl.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+
+  // Deactivate all nav pills (remove all possible active classes)
+  pathwayEl.querySelectorAll('.nav-pill').forEach(p => {
+    const ac = p.dataset.activeClass;
+    if (ac) p.classList.remove(ac);
   });
 
-  document.getElementById('section-' + section).classList.add('active');
-  document.getElementById('pill-' + section).classList.add('active-' + section);
-  window.scrollTo({ top: 300, behavior: 'smooth' });
-}
+  // Activate the target section
+  const sectionEl = document.getElementById('section-' + sectionId);
+  if (sectionEl) sectionEl.classList.add('active');
 
-// ── Section Navigation (within ESO) ──
-function showEsoSection(section) {
-  document.querySelectorAll('.tutorial-panel').forEach(p => p.classList.remove('open'));
-  document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
-  document.querySelectorAll('#pathway-eso .section-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('#pathway-eso .nav-pill').forEach(p => {
-    p.classList.remove('active-eso-image', 'active-eso-video', 'active-eso-notebook', 'active-eso-materials', 'active-eso-tips');
-  });
+  // Activate the pill using its data-active-class
+  const activeClass = pillEl.dataset.activeClass;
+  if (activeClass) pillEl.classList.add(activeClass);
 
-  document.getElementById('section-' + section).classList.add('active');
-  document.getElementById('pill-' + section).classList.add('active-' + section);
-  window.scrollTo({ top: 300, behavior: 'smooth' });
-}
-
-// ── Section Navigation (within Primaria) ──
-function showPrimariaSection(section) {
-  document.querySelectorAll('.tutorial-panel').forEach(p => p.classList.remove('open'));
-  document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
-  document.querySelectorAll('#pathway-primaria .section-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('#pathway-primaria .nav-pill').forEach(p => {
-    p.classList.remove('active-pri-image', 'active-pri-video', 'active-pri-music', 'active-pri-notebook', 'active-pri-materials', 'active-pri-tips');
-  });
-
-  document.getElementById('section-' + section).classList.add('active');
-  document.getElementById('pill-' + section).classList.add('active-' + section);
   window.scrollTo({ top: 300, behavior: 'smooth' });
 }
 
@@ -188,13 +184,13 @@ function showTrucosTab(tabId, level) {
   const prefix = level ? level + '-' : '';
   const targetPanel = document.getElementById('tt-' + prefix + tabId);
   const targetBtn = document.getElementById('ttb-' + prefix + tabId);
-  
+
   if (!targetPanel || !targetBtn) return;
-  
+
   // Find the containing section-panel
   const container = targetPanel.closest('.section-panel');
   if (!container) return;
-  
+
   // Deactivate all within this container
   container.querySelectorAll('.trucos-tab-btn').forEach(b => b.classList.remove('tt-active'));
   container.querySelectorAll('.trucos-panel').forEach(p => p.classList.remove('tt-visible'));
@@ -202,45 +198,6 @@ function showTrucosTab(tabId, level) {
   // Activate target
   targetPanel.classList.add('tt-visible');
   targetBtn.classList.add('tt-active');
-}
-
-// ── Step Detail Toggle ──
-function toggleDetail(stepEl) {
-  const detail = stepEl.querySelector('.step-detail');
-  const hint = stepEl.querySelector('.step-toggle-hint');
-  if (detail) {
-    detail.classList.toggle('open');
-    if (detail.classList.contains('open')) {
-      hint.textContent = 'Toca aquí para ocultar ▲';
-    } else {
-      hint.textContent = 'Toca aquí para ver más detalles ▼';
-    }
-  }
-}
-
-// ── Checklist & Progress ──
-function toggleCheck(item, section) {
-  item.classList.toggle('done');
-  const box = item.querySelector('.check-box');
-  box.textContent = item.classList.contains('done') ? '✓' : '';
-  updateProgress(section);
-}
-
-function updateProgress(section) {
-  const panel = document.getElementById('section-' + section);
-  if (!panel) return;
-  const total = panel.querySelectorAll('.checklist-item').length;
-  const done = panel.querySelectorAll('.checklist-item.done').length;
-  const pct = Math.round((done / total) * 100);
-
-  const fill = document.getElementById('fill-' + section);
-  const label = document.getElementById('label-' + section);
-  if (fill) fill.style.width = pct + '%';
-  if (label) {
-    label.textContent = done === total
-      ? '🎉 ¡Todos los pasos completados!'
-      : done + ' de ' + total + ' pasos completados';
-  }
 }
 
 // ── Event Delegation (replaces inline onclick handlers) ──
@@ -261,14 +218,10 @@ document.addEventListener('click', function (e) {
     return;
   }
 
-  // data-section + data-nav → section navigation
+  // data-section + data-nav → unified section navigation
   const navEl = target.closest('[data-section][data-nav]');
   if (navEl) {
-    const section = navEl.dataset.section;
-    const nav = navEl.dataset.nav;
-    if (nav === 'infantil') showSection(section);
-    else if (nav === 'primaria') showPrimariaSection(section);
-    else if (nav === 'eso') showEsoSection(section);
+    showPathwaySection(navEl.dataset.section, navEl);
     return;
   }
 
