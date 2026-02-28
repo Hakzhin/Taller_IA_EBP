@@ -18,6 +18,53 @@ const Assistant = {
   panel: null,
   badge: null,
 
+  // ── Anthropic Direct API (for GitHub Pages) ──
+  ANTHROPIC_URL: 'https://api.anthropic.com/v1/messages',
+  ANTHROPIC_MODEL: 'claude-haiku-4-5-20251001',
+  ANTHROPIC_VERSION: '2023-06-01',
+
+  SYSTEM_PROMPTS: (() => {
+    const CATALOG = `Catalogo de herramientas disponibles en la plataforma:
+
+INFANTIL (3-6 anos):
+- Imagenes: Gemini (Google), Grok Aurora (xAI, gratuito), Copilot/DALL-E (Microsoft)
+- Musica: Suno (canciones con letra y voz), Gemini (piezas instrumentales)
+- Cuentos: Storybook con Gemini (cuentos ilustrados automaticos)
+
+PRIMARIA (6-12 anos):
+- Imagenes: Gemini, Grok, Copilot
+- Videos: Flow/Runway (clips cortos), Grok Video, Luma Dream Machine
+- Musica: Suno, Gemini
+- Cuadernos: NotebookLM (resumenes en audio, podcasts de temas)
+- Materiales: Gemini, ChatGPT, Claude (programaciones, fichas, examenes, rubricas)
+
+ESO (12-16 anos):
+- Imagenes: Gemini, Grok, Copilot
+- Videos: Flow, Grok Video, Luma
+- Cuadernos: NotebookLM
+- Materiales: Gemini, ChatGPT, Claude`;
+
+    const BASE = `Eres "BupIA", el asistente de la plataforma "Taller IA" del Colegio El Buen Pastor (Madrid).
+Ayudas a profesores a descubrir y usar herramientas de IA para educacion.
+
+${CATALOG}
+
+Reglas:
+- Responde SIEMPRE en espanol.
+- Se conciso y practico (los profesores tienen poco tiempo).
+- Al recomendar, usa nombres exactos del catalogo. Indica que herramienta y por que.
+- Si preguntan por herramientas fuera del catalogo, di que solo conoces las de la plataforma pero que pueden existir otras.
+- Para consejos de prompts, referencia la "formula de 4 ingredientes": QUE quiero + COMO + PARA QUIEN + DETALLES.
+- No inventes URLs ni funcionalidades que no existan.
+- Usa un tono cercano y motivador.`;
+
+    return {
+      chat: BASE,
+      recommend: BASE + `\n\nContexto adicional: El usuario esta en el recomendador de herramientas.\nResponde con 2-3 frases practicas explicando por que esas herramientas son utiles para su caso.\nNo repitas la lista de herramientas (ya se muestra en la interfaz).\nSugiere un prompt de ejemplo que podrian probar.`,
+      bulletin: BASE + `\n\nContexto adicional: Genera un consejo breve y practico del dia para profesores que usan IA en el aula.\nMenciona una herramienta concreta del catalogo.\nFormato: un titulo llamativo (max 8 palabras) y 2-3 frases de contenido.\nResponde SOLO con JSON valido: {"title": "...", "body": "...", "toolId": "..."}\nEl toolId debe ser un ID del catalogo como "pri-gemini", "eso-chatgpt", "inf-suno", etc.`,
+    };
+  })(),
+
   // ── Level metadata ──
   LEVELS: {
     infantil: { icon: '🎒', name: 'Infantil', ages: '3-6 años' },
@@ -685,27 +732,89 @@ const Assistant = {
   // ═══════════════════════════════════════
 
   async apiCall(feature, messages) {
-    const resp = await fetch('/api/chat', {
+    const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+
+    // ── Localhost: use Python proxy ──
+    if (isLocal) {
+      const resp = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ feature, messages }),
+      });
+      const data = await resp.json();
+      if (!resp.ok) {
+        throw new Error(data.error || data.detail || `Error HTTP ${resp.status}`);
+      }
+      if (data.choices && data.choices[0] && data.choices[0].message) {
+        return { content: data.choices[0].message.content };
+      }
+      if (data.error) {
+        throw new Error(typeof data.error === 'string' ? data.error : data.error.message || 'Error desconocido');
+      }
+      return null;
+    }
+
+    // ── GitHub Pages: call Anthropic directly ──
+    const apiKey = this.getApiKey();
+    if (!apiKey) {
+      throw new Error('Se necesita una API key para usar el chat. Recarga la página para configurarla.');
+    }
+
+    const systemPrompt = this.SYSTEM_PROMPTS[feature] || this.SYSTEM_PROMPTS.chat;
+    const apiMessages = messages.filter(m => m.role === 'user' || m.role === 'assistant');
+
+    const resp = await fetch(this.ANTHROPIC_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ feature, messages }),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': this.ANTHROPIC_VERSION,
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: this.ANTHROPIC_MODEL,
+        system: systemPrompt,
+        messages: apiMessages,
+        max_tokens: 500,
+        temperature: 0.7,
+      }),
     });
 
     const data = await resp.json();
 
     if (!resp.ok) {
-      const errMsg = data.error || data.detail || `Error HTTP ${resp.status}`;
-      throw new Error(errMsg);
+      const errMsg = data.error?.message || data.error || `Error HTTP ${resp.status}`;
+      if (resp.status === 401) {
+        localStorage.removeItem('bupia_api_key');
+        throw new Error('API key inválida. Recarga la página para introducir una nueva.');
+      }
+      throw new Error(typeof errMsg === 'string' ? errMsg : JSON.stringify(errMsg));
     }
 
-    // Extract content from OpenAI response
-    if (data.choices && data.choices[0] && data.choices[0].message) {
-      return { content: data.choices[0].message.content };
+    // Parse Anthropic response format
+    let text = '';
+    if (data.content) {
+      for (const block of data.content) {
+        if (block.type === 'text') text += block.text || '';
+      }
     }
 
-    // Direct error from proxy
-    if (data.error) {
-      throw new Error(typeof data.error === 'string' ? data.error : data.error.message || 'Error desconocido');
+    return text ? { content: text } : null;
+  },
+
+  getApiKey() {
+    let key = localStorage.getItem('bupia_api_key');
+    if (key && key.length > 10) return key;
+
+    key = prompt(
+      'BupIA necesita una API key de Anthropic para funcionar.\n\n' +
+      'Pégala aquí (se guardará en tu navegador):'
+    );
+
+    if (key && key.trim().length > 10) {
+      key = key.trim();
+      localStorage.setItem('bupia_api_key', key);
+      return key;
     }
 
     return null;
