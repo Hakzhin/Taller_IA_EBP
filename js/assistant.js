@@ -757,7 +757,11 @@ Reglas:
     // ── GitHub Pages: call Anthropic directly ──
     const apiKey = this.getApiKey();
     if (!apiKey) {
-      throw new Error('Se necesita una API key para usar el chat. Recarga la página para configurarla.');
+      throw new Error('El asistente no está disponible en este dominio.');
+    }
+
+    if (!this.checkRateLimit()) {
+      throw new Error('Has alcanzado el límite diario de consultas. Vuelve mañana 😊');
     }
 
     const systemPrompt = this.SYSTEM_PROMPTS[feature] || this.SYSTEM_PROMPTS.chat;
@@ -802,8 +806,29 @@ Reglas:
     return text ? { content: text } : null;
   },
 
+  // ── API key protection ──
+  _ALLOWED_HOSTS: ['hakzhin.github.io', 'localhost', '127.0.0.1'],
+  _DAILY_LIMIT: 50,
+
   getApiKey() {
-    return [115,107,45,97,110,116,45,97,112,105,48,51,45,48,122,122,87,119,69,45,86,121,50,111,115,53,88,116,53,72,111,122,74,52,104,87,118,48,49,101,122,82,89,99,53,77,67,114,81,115,66,70,73,51,119,101,79,121,115,95,66,45,122,119,68,87,75,81,45,87,70,80,101,57,79,112,109,50,85,102,71,67,79,107,77,120,117,108,67,81,120,76,101,81,101,84,118,54,81,45,68,70,112,120,113,103,65,65].map(c => String.fromCharCode(c)).join('');
+    // Domain restriction
+    if (!this._ALLOWED_HOSTS.includes(window.location.hostname)) return null;
+    // XOR-obfuscated key (not plain text)
+    const d = [89,65,7,75,68,94,7,75,90,67,26,25,7,26,80,80,125,93,111,7,124,83,24,69,89,31,114,94,31,98,69,80,96,30,66,125,92,26,27,79,80,120,115,73,31,103,105,88,123,89,104,108,99,25,93,79,101,83,89,117,104,7,80,93,110,125,97,123,7,125,108,122,79,19,101,90,71,24,127,76,109,105,101,65,103,82,95,70,105,123,82,102,79,123,79,126,92,28,123,7,110,108,90,82,91,77,107,107];
+    return d.map(c => String.fromCharCode(c ^ 42)).join('');
+  },
+
+  checkRateLimit() {
+    const today = new Date().toISOString().slice(0, 10);
+    const stored = JSON.parse(localStorage.getItem('bupia_usage') || '{}');
+    if (stored.date !== today) {
+      stored.date = today;
+      stored.count = 0;
+    }
+    if (stored.count >= this._DAILY_LIMIT) return false;
+    stored.count++;
+    localStorage.setItem('bupia_usage', JSON.stringify(stored));
+    return true;
   },
 
   // ═══════════════════════════════════════
