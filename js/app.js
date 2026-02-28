@@ -242,3 +242,54 @@ function updateProgress(section) {
       : done + ' de ' + total + ' pasos completados';
   }
 }
+
+// ── Event Delegation (replaces inline onclick handlers) ──
+document.addEventListener('click', function (e) {
+  const target = e.target;
+
+  // data-pathway → showPathway
+  const pathwayEl = target.closest('[data-pathway]');
+  if (pathwayEl) {
+    showPathway(pathwayEl.dataset.pathway);
+    return;
+  }
+
+  // data-action="goHome" → goHome
+  const actionEl = target.closest('[data-action="goHome"]');
+  if (actionEl) {
+    goHome();
+    return;
+  }
+
+  // data-section + data-nav → section navigation
+  const navEl = target.closest('[data-section][data-nav]');
+  if (navEl) {
+    const section = navEl.dataset.section;
+    const nav = navEl.dataset.nav;
+    if (nav === 'infantil') showSection(section);
+    else if (nav === 'primaria') showPrimariaSection(section);
+    else if (nav === 'eso') showEsoSection(section);
+    return;
+  }
+
+  // data-tool → toggleTool
+  const toolEl = target.closest('[data-tool]');
+  if (toolEl) {
+    toggleTool(toolEl.dataset.tool);
+    return;
+  }
+
+  // data-action="toggleStep" → toggleStepDetail
+  const stepEl = target.closest('[data-action="toggleStep"]');
+  if (stepEl) {
+    toggleStepDetail(stepEl);
+    return;
+  }
+
+  // data-tab + data-level → showTrucosTab
+  const tabEl = target.closest('[data-tab][data-level]');
+  if (tabEl) {
+    showTrucosTab(tabEl.dataset.tab, tabEl.dataset.level);
+    return;
+  }
+});
