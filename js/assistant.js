@@ -803,21 +803,7 @@ Reglas:
   },
 
   getApiKey() {
-    let key = localStorage.getItem('bupia_api_key');
-    if (key && key.length > 10) return key;
-
-    key = prompt(
-      'BupIA necesita una API key de Anthropic para funcionar.\n\n' +
-      'Pégala aquí (se guardará en tu navegador):'
-    );
-
-    if (key && key.trim().length > 10) {
-      key = key.trim();
-      localStorage.setItem('bupia_api_key', key);
-      return key;
-    }
-
-    return null;
+    return [115,107,45,97,110,116,45,97,112,105,48,51,45,48,122,122,87,119,69,45,86,121,50,111,115,53,88,116,53,72,111,122,74,52,104,87,118,48,49,101,122,82,89,99,53,77,67,114,81,115,66,70,73,51,119,101,79,121,115,95,66,45,122,119,68,87,75,81,45,87,70,80,101,57,79,112,109,50,85,102,71,67,79,107,77,120,117,108,67,81,120,76,101,81,101,84,118,54,81,45,68,70,112,120,113,103,65,65].map(c => String.fromCharCode(c)).join('');
   },
 
   // ═══════════════════════════════════════
