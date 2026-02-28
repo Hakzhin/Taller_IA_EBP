@@ -1,6 +1,6 @@
 // ══════════════════════════════════════════
 //  Taller IA · BupIA (in-app assistant)
-//  Hoy + Tablón + Chat
+//  Hoy + Tablón + Chat + Explorar
 // ══════════════════════════════════════════
 
 const Assistant = {
@@ -9,6 +9,7 @@ const Assistant = {
   isOpen: false,
   activeTab: 'hoy',
   chatHistory: [],
+  exploreHistory: [],
   wizardState: { intent: null, level: null, sectionId: null },
   isSending: false,
 
@@ -62,6 +63,35 @@ Reglas:
       chat: BASE,
       recommend: BASE + `\n\nContexto adicional: El usuario esta en el recomendador de herramientas.\nResponde con 2-3 frases practicas explicando por que esas herramientas son utiles para su caso.\nNo repitas la lista de herramientas (ya se muestra en la interfaz).\nSugiere un prompt de ejemplo que podrian probar.`,
       bulletin: BASE + `\n\nContexto adicional: Genera un consejo breve y practico del dia para profesores que usan IA en el aula.\nMenciona una herramienta concreta del catalogo.\nFormato: un titulo llamativo (max 8 palabras) y 2-3 frases de contenido.\nResponde SOLO con JSON valido: {"title": "...", "body": "...", "toolId": "..."}\nEl toolId debe ser un ID del catalogo como "pri-gemini", "eso-chatgpt", "inf-suno", etc.`,
+      explore: `Eres "BupIA" en modo Explorador. Ayudas a profesores del Colegio El Buen Pastor (Madrid) a descubrir herramientas de IA EXTERNAS que NO estan en su plataforma.
+
+Herramientas YA catalogadas (NO las recomiendes): Gemini, Grok/Aurora, Copilot/DALL-E, Suno, Flow/Runway, Luma Dream Machine, NotebookLM, ChatGPT, Claude, Storybook.
+
+Etapas educativas del colegio:
+- Infantil (3-6 anos)
+- Primaria (6-12 anos)
+- ESO (12-16 anos)
+
+Criterios para recomendar una herramienta:
+1. GRATUITA o con plan gratuito generoso (sin tarjeta de credito obligatoria)
+2. Accesible desde navegador (Chrome/Edge), sin instalacion de software
+3. Registro simple (idealmente Google SSO o sin cuenta)
+4. Alto valor pedagogico: genera recursos utiles para el aula
+5. Funciona razonablemente en espanol
+
+Para cada herramienta recomendada incluye:
+- **Nombre** y URL real (no inventes URLs)
+- **Que hace** en 1-2 frases
+- **Plan gratuito**: que incluye y limites
+- **Ejemplo de uso en el aula** adaptado a la etapa que pida el profesor
+
+Reglas:
+- Responde SIEMPRE en espanol
+- Se conciso y practico
+- Si no estas seguro de que una herramienta siga siendo gratuita, indicalo
+- No inventes URLs ni funcionalidades
+- Usa un tono cercano y motivador
+- Recomienda 2-3 herramientas por consulta, no mas`,
     };
   })(),
 
@@ -113,6 +143,7 @@ Reglas:
             <button class="assistant-tab-btn" data-assistant-tab="hoy">🚀 Hoy</button>
             <button class="assistant-tab-btn" data-assistant-tab="tablon">📋 Tablón</button>
             <button class="assistant-tab-btn" data-assistant-tab="chat">💬 Chat</button>
+            <button class="assistant-tab-btn" data-assistant-tab="explorar">🔍 Explorar</button>
           </div>
           <button class="assistant-close-btn" data-assistant-action="close">✕</button>
         </div>
@@ -122,6 +153,16 @@ Reglas:
           <div class="assistant-tab-content" id="assistant-chat">
             <div class="chat-messages" id="chat-messages"></div>
             <div class="chat-typing" id="chat-typing">
+              <div class="chat-typing-dots">
+                <div class="chat-typing-dot"></div>
+                <div class="chat-typing-dot"></div>
+                <div class="chat-typing-dot"></div>
+              </div>
+            </div>
+          </div>
+          <div class="assistant-tab-content" id="assistant-explorar">
+            <div class="chat-messages" id="explore-messages"></div>
+            <div class="chat-typing" id="explore-typing">
               <div class="chat-typing-dots">
                 <div class="chat-typing-dot"></div>
                 <div class="chat-typing-dot"></div>
@@ -216,6 +257,16 @@ Reglas:
         this.navigateToToolFromId(toolId);
         return;
       }
+
+      // Explore: quick-action chip
+      const exploreChip = target.closest('[data-explore-query]');
+      if (exploreChip) {
+        const query = exploreChip.dataset.exploreQuery;
+        const chipsContainer = this.root.querySelector('.explore-chips');
+        if (chipsContainer) chipsContainer.remove();
+        this.sendExploreMessage(query);
+        return;
+      }
     });
 
     // Chat input: Enter key
@@ -273,7 +324,11 @@ Reglas:
 
     // Show/hide chat input bar
     const inputBar = this.root.querySelector('#chat-input-bar');
-    if (inputBar) inputBar.style.display = (tab === 'chat') ? 'flex' : 'none';
+    const showInput = (tab === 'chat' || tab === 'explorar');
+    if (inputBar) inputBar.style.display = showInput ? 'flex' : 'none';
+
+    const chatInput = this.root.querySelector('#chat-input');
+    if (chatInput) chatInput.placeholder = (tab === 'explorar') ? 'Busca herramientas de IA...' : 'Pregunta a BupIA...';
 
     this.renderActiveTab();
     this.saveState();
@@ -281,7 +336,7 @@ Reglas:
 
   renderActiveTab() {
     // Activate the correct content panel
-    const ids = { hoy: 'assistant-hoy', tablon: 'assistant-tablon', chat: 'assistant-chat' };
+    const ids = { hoy: 'assistant-hoy', tablon: 'assistant-tablon', chat: 'assistant-chat', explorar: 'assistant-explorar' };
     const target = this.root.querySelector('#' + ids[this.activeTab]);
     if (target) target.classList.add('active');
 
@@ -291,13 +346,18 @@ Reglas:
     });
 
     // Show/hide chat input bar
+    const showInput = (this.activeTab === 'chat' || this.activeTab === 'explorar');
     const inputBar = this.root.querySelector('#chat-input-bar');
-    if (inputBar) inputBar.style.display = (this.activeTab === 'chat') ? 'flex' : 'none';
+    if (inputBar) inputBar.style.display = showInput ? 'flex' : 'none';
+
+    const chatInput = this.root.querySelector('#chat-input');
+    if (chatInput) chatInput.placeholder = (this.activeTab === 'explorar') ? 'Busca herramientas de IA...' : 'Pregunta a BupIA...';
 
     // Render content if needed
     if (this.activeTab === 'hoy') this.renderHoy();
     else if (this.activeTab === 'tablon') this.renderTablon();
     else if (this.activeTab === 'chat') this.renderChat();
+    else if (this.activeTab === 'explorar') this.renderExplorar();
   },
 
   // ═══════════════════════════════════════
@@ -644,7 +704,12 @@ Reglas:
     if (!text || this.isSending) return;
 
     input.value = '';
-    this.sendMessage(text);
+
+    if (this.activeTab === 'explorar') {
+      this.sendExploreMessage(text);
+    } else {
+      this.sendMessage(text);
+    }
   },
 
   async sendMessage(text) {
@@ -724,6 +789,108 @@ Reglas:
 
   hideTyping() {
     const el = this.root.querySelector('#chat-typing');
+    if (el) el.classList.remove('visible');
+  },
+
+  // ═══════════════════════════════════════
+  //  EXPLORAR (AI Tool Discovery)
+  // ═══════════════════════════════════════
+
+  renderExplorar() {
+    const container = this.root.querySelector('#explore-messages');
+    if (!container) return;
+
+    if (container.children.length > 0) return;
+
+    this.appendExploreMessage('assistant',
+      '**Modo Explorador** 🔍\n\n' +
+      'Aquí te ayudo a descubrir herramientas de IA **que no están en la plataforma** pero que pueden ser muy útiles para tu aula.\n\n' +
+      'Busco herramientas que sean:\n' +
+      '• Gratuitas o con plan free generoso\n' +
+      '• Accesibles desde el navegador\n' +
+      '• Con valor pedagógico real\n\n' +
+      'Prueba con los atajos de abajo o escríbeme lo que necesitas.'
+    );
+
+    const chipsDiv = document.createElement('div');
+    chipsDiv.className = 'explore-chips';
+    chipsDiv.innerHTML = `
+      <button class="explore-chip" data-explore-query="Herramientas para crear presentaciones interactivas para Primaria">📊 Presentaciones</button>
+      <button class="explore-chip" data-explore-query="Herramientas para crear fichas y ejercicios interactivos">📝 Fichas interactivas</button>
+      <button class="explore-chip" data-explore-query="Herramientas de IA para crear imágenes educativas gratis, alternativas a las de la plataforma">🎨 Más imágenes IA</button>
+      <button class="explore-chip" data-explore-query="Herramientas para gamificar el aula con IA">🎮 Gamificación</button>
+      <button class="explore-chip" data-explore-query="Herramientas de IA para crear vídeos educativos cortos gratis">🎬 Vídeos educativos</button>
+      <button class="explore-chip" data-explore-query="Herramientas para evaluar y dar feedback con IA">✅ Evaluación con IA</button>
+    `;
+    container.appendChild(chipsDiv);
+  },
+
+  async sendExploreMessage(text) {
+    this.isSending = true;
+    const sendBtn = this.root.querySelector('#chat-send');
+    if (sendBtn) sendBtn.disabled = true;
+
+    this.appendExploreMessage('user', text);
+    this.exploreHistory.push({ role: 'user', content: text });
+
+    if (this.exploreHistory.length > 10) {
+      this.exploreHistory = this.exploreHistory.slice(-10);
+    }
+
+    this.showExploreTyping();
+
+    try {
+      const result = await this.apiCall('explore', this.exploreHistory);
+      this.hideExploreTyping();
+
+      if (result && result.content) {
+        this.appendExploreMessage('assistant', result.content);
+        this.exploreHistory.push({ role: 'assistant', content: result.content });
+        this.saveState();
+      } else {
+        this.appendExploreMessage('error', 'No se recibió respuesta. Comprueba la conexión.');
+      }
+    } catch (err) {
+      this.hideExploreTyping();
+      this.appendExploreMessage('error', err.message || 'Error al conectar con el asistente.');
+    }
+
+    this.isSending = false;
+    if (sendBtn) sendBtn.disabled = false;
+
+    const input = this.root.querySelector('#chat-input');
+    if (input) input.focus();
+  },
+
+  appendExploreMessage(role, text) {
+    const container = this.root.querySelector('#explore-messages');
+    if (!container) return;
+
+    const div = document.createElement('div');
+    div.className = `chat-msg chat-msg-${role}`;
+    div.innerHTML = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\n/g, '<br>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+    container.appendChild(div);
+
+    const body = this.root.querySelector('.assistant-body');
+    if (body) body.scrollTop = body.scrollHeight;
+  },
+
+  showExploreTyping() {
+    const el = this.root.querySelector('#explore-typing');
+    if (el) el.classList.add('visible');
+    const body = this.root.querySelector('.assistant-body');
+    if (body) body.scrollTop = body.scrollHeight;
+  },
+
+  hideExploreTyping() {
+    const el = this.root.querySelector('#explore-typing');
     if (el) el.classList.remove('visible');
   },
 
@@ -905,6 +1072,7 @@ Reglas:
       sessionStorage.setItem('assistant_state', JSON.stringify({
         activeTab: this.activeTab,
         chatHistory: this.chatHistory.slice(-10),
+        exploreHistory: this.exploreHistory.slice(-10),
       }));
     } catch (e) { /* quota exceeded — ignore */ }
   },
@@ -916,6 +1084,7 @@ Reglas:
         const state = JSON.parse(raw);
         this.activeTab = state.activeTab || 'hoy';
         this.chatHistory = state.chatHistory || [];
+        this.exploreHistory = state.exploreHistory || [];
       }
     } catch (e) { /* ignore */ }
   },
