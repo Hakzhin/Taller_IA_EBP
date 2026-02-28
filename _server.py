@@ -88,6 +88,8 @@ El toolId debe ser un ID del catalogo como "pri-gemini", "eso-chatgpt", "inf-sun
 
 Herramientas YA catalogadas (NO las recomiendes): Gemini, Grok/Aurora, Copilot/DALL-E, Suno, Flow/Runway, Luma Dream Machine, NotebookLM, ChatGPT, Claude, Storybook.
 
+Contexto importante: Los docentes del colegio tienen acceso a **Canva para Educadores** (plan premium gratuito para profesores). Esto incluye funciones IA de Canva (Magic Write, Magic Design, texto a imagen, presentaciones IA, etc.), miles de plantillas educativas y herramientas de diseno avanzadas. Tenlo en cuenta al recomendar: si Canva ya cubre una necesidad, mencionalo como alternativa que ya tienen disponible antes de sugerir otra herramienta externa. No lo cuentes como una de las 2-3 recomendaciones externas.
+
 Etapas educativas del colegio:
 - Infantil (3-6 anos)
 - Primaria (6-12 anos)
@@ -99,6 +101,7 @@ Criterios para recomendar una herramienta:
 3. Registro simple (idealmente Google SSO o sin cuenta)
 4. Alto valor pedagogico: genera recursos utiles para el aula
 5. Funciona razonablemente en espanol
+6. Aporta algo que Canva para Educadores NO cubre (o lo hace significativamente mejor)
 
 Para cada herramienta recomendada incluye:
 - **Nombre** y URL real (no inventes URLs)
