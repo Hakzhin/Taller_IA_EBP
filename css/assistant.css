@@ -86,7 +86,7 @@
   position: fixed;
   bottom: 100px;
   right: 28px;
-  width: 390px;
+  width: 460px;
   /* Adapt to viewport: viewport minus bottom(100) + top margin(12) */
   max-height: calc(100vh - 112px);
   background: rgba(255,255,255,0.75);
