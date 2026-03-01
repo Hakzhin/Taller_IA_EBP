@@ -258,9 +258,9 @@ Reglas:
           <div class="assistant-tabs">
             <button class="assistant-tab-btn" data-assistant-tab="hoy"><span class="tab-icon">🚀</span><span class="tab-label"> Hoy</span></button>
             <button class="assistant-tab-btn" data-assistant-tab="tablon"><span class="tab-icon">📋</span><span class="tab-label"> Tablón</span></button>
-            <button class="assistant-tab-btn" data-assistant-tab="chat"><span class="tab-icon">💬</span><span class="tab-label"> Chat</span></button>
             <button class="assistant-tab-btn" data-assistant-tab="prompteca"><span class="tab-icon">📖</span><span class="tab-label"> Prompts</span></button>
             <button class="assistant-tab-btn" data-assistant-tab="explorar"><span class="tab-icon">🔍</span><span class="tab-label"> Explorar</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="chat"><span class="tab-icon">💬</span><span class="tab-label"> Chat</span></button>
           </div>
           <button class="assistant-close-btn" data-assistant-action="close">✕</button>
         </div>
