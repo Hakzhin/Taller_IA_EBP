@@ -153,6 +153,79 @@ const SITE_DATA = {
       linkLabel: 'Abrir Gemini ↗',
     },
 
+    'inf-flow': {
+      id: 'inf-flow',
+      name: 'Google Flow (Veo 3.1)',
+      cardClass: 'tool-card-flow',
+      logo: 'img/flow.png',
+      logoAlt: '🎬',
+      tagline: 'Clips de vídeo con sonido para proyectar en la asamblea o en el rincón audiovisual',
+      chipNew: false,
+      tutClass: 'tut-flow',
+      info: [
+        '<strong>¿Qué es?</strong> Google Flow genera clips de vídeo cortos (hasta 8 segundos) con audio sincronizado a partir de una descripción en texto. Puedes crear escenas de animales, estaciones del año, paisajes o situaciones cotidianas para proyectar en el aula de Infantil. Los niños y niñas se quedan hipnotizados.',
+        '<strong>💰 Acceso:</strong> Si tu colegio usa Google Workspace for Education, tienes 100 créditos mensuales gratis. También puedes acceder con Google AI Pro (19,99 $/mes, 1.000 créditos). Cada vídeo consume entre 10 y 50 créditos.',
+      ],
+      steps: [
+        { title: 'Abre Google Flow', desc: 'Accede con tu cuenta de Google', detail: 'Abre Chrome y ve a <code>labs.google/fx/tools/flow</code>. Inicia sesión con tu cuenta de Google (la del colegio). Verás un espacio donde crear proyectos de vídeo.' },
+        { title: 'Describe una escena para tu aula', desc: 'Piensa en algo visual y llamativo para los peques', detail: 'Escribe tu descripción con detalle. Por ejemplo: <code>Una mariposa monarca de colores brillantes volando entre flores silvestres en un prado soleado, pétalos flotando en el aire, estilo animación infantil suave y colorida, formato 16:9</code>. Piensa en escenas de la naturaleza, animales o estaciones del año.' },
+        { title: 'Genera el clip y revísalo', desc: 'Flow creará un vídeo de hasta 8 segundos con sonido', detail: 'Pulsa generar y espera entre 30 segundos y 2 minutos. Flow genera un clip en 1080p con sonido ambiente (pájaros, agua, viento…). Revisa que sea adecuado para tu aula. Puedes encadenar varios clips para crear una secuencia más larga.' },
+        { title: 'Descarga y proyecta', desc: 'Úsalo en la asamblea, en un rincón o en una actividad', detail: 'Descarga el vídeo y proyéctalo en la pizarra digital durante la asamblea, como introducción a un proyecto o en el rincón audiovisual. Los vídeos generados llevan marca de agua digital (SynthID) de Google, pero no afecta al uso en el aula.' },
+      ],
+      mission: 'Crea un clip de vídeo corto que puedas proyectar en la asamblea para introducir un tema o una estación del año. Piensa en algo que capte la atención de los niños y niñas.',
+      example: '<strong>💡 Ejemplo:</strong> «Un erizo pequeño caminando entre hojas secas de otoño en un bosque, setas y castañas en el suelo, luz dorada de atardecer, estilo animación infantil suave, sonido de hojas crujiendo. Formato 16:9»',
+      link: 'https://labs.google/fx/tools/flow',
+      linkLabel: 'Abrir Google Flow ↗',
+    },
+
+    'inf-grok-vid': {
+      id: 'inf-grok-vid',
+      name: 'Grok Imagine',
+      cardClass: 'tool-card-grok',
+      logo: 'img/grok.png',
+      logoAlt: '𝕏',
+      tagline: 'Clips de 6-15 segundos con audio desde texto o imagen',
+      chipNew: true,
+      tutClass: 'tut-grok',
+      info: [
+        '<strong>¿Qué es?</strong> Grok Imagine convierte texto o imágenes estáticas en clips de vídeo cortos (6-15 segundos) con audio sincronizado. Puedes animar un dibujo que hayas generado antes o describir una escena nueva. Acceso gratuito desde <code>grok.com</code>.',
+      ],
+      steps: [
+        { title: 'Entra en Grok', desc: 'Abre grok.com con tu cuenta', detail: 'Ve a <code>grok.com</code> e inicia sesión. Si ya tienes cuenta de la sección de imágenes, no necesitas crear otra. En el menú lateral busca <code>Imagine</code> o escribe tu petición de vídeo en el chat.' },
+        { title: 'Describe la escena o sube una imagen', desc: 'Texto a vídeo o animar un dibujo que ya tengas', detail: '<strong>Texto a vídeo:</strong> describe la escena, p. ej. <code>Un gatito jugando con un ovillo de lana en una habitación luminosa, estilo dibujo animado suave</code>. <strong>Imagen a vídeo:</strong> sube una imagen que hayas generado (por ejemplo, una ilustración de Grok) y Grok la animará.' },
+        { title: 'Elige el modo y genera', desc: 'Usa el modo Normal para resultados más adecuados', detail: 'Selecciona el modo <code>Normal</code> (más realista y tranquilo). Elige relación de aspecto <code>16:9</code> para proyectar en la pizarra digital. Pulsa generar y espera 30-60 segundos.' },
+        { title: 'Descarga y úsalo en clase', desc: 'El clip incluye sonido automáticamente', detail: 'El vídeo generado incluye sonido ambiente sincronizado. Descárgalo y proyéctalo en la asamblea, en el rincón de las emociones o como introducción a una actividad. Puedes combinarlo con una canción de Suno para crear una experiencia más completa.' },
+      ],
+      mission: 'Genera un clip de vídeo con Grok Imagine para una actividad de Infantil. Prueba a animar una imagen que hayas creado antes con el generador de imágenes.',
+      example: '<strong>💡 Ejemplo:</strong> «Un arcoíris formándose lentamente sobre un campo verde después de la lluvia, gotas brillantes en las hojas, una mariquita posada en una flor, estilo ilustración infantil suave y colorida. Modo Normal, formato 16:9»',
+      link: 'https://grok.com',
+      linkLabel: 'Abrir Grok ↗',
+    },
+
+    'inf-luma': {
+      id: 'inf-luma',
+      name: 'Luma Dream Machine',
+      cardClass: 'tool-card-luma',
+      logo: 'img/luma.png',
+      logoAlt: '🌙',
+      tagline: 'Vídeos con movimiento de cámara fluido y calidad cinematográfica',
+      chipNew: true,
+      tutClass: 'tut-luma',
+      info: [
+        '<strong>¿Qué es?</strong> Luma Dream Machine genera vídeos con IA de calidad cinematográfica. El plan gratuito permite crear hasta 8 vídeos al mes. Es especialmente bueno con movimientos de cámara fluidos y escenas con profundidad visual. Ideal para crear clips mágicos que capten la atención de los peques.',
+      ],
+      steps: [
+        { title: 'Abre Luma Dream Machine', desc: 'Crea tu cuenta gratuita', detail: 'Ve a <code>lumalabs.ai/dream-machine</code> en Chrome. Crea una cuenta con tu email o con Google. La versión gratuita te da 8 generaciones al mes con marca de agua sutil.' },
+        { title: 'Describe una escena mágica', desc: 'Piensa en algo que maraville a los niños', detail: 'Escribe una descripción detallada. Los mejores resultados para Infantil son escenas de la naturaleza, animales, o ambientes fantásticos. Por ejemplo: <code>Un bosque encantado de noche con luciérnagas brillando entre los árboles, un búho en una rama, luna llena al fondo, movimiento de cámara lento</code>.' },
+        { title: 'Genera y previsualiza', desc: 'Los clips duran unos 5 segundos', detail: 'Pulsa generar y espera hasta 2 minutos. Luma genera clips con movimiento de cámara muy fluido, ideales para proyectar en la asamblea o para introducir un cuento.' },
+        { title: 'Descarga y comparte', desc: 'Guárdalo para usarlo en tu aula', detail: 'Descarga el vídeo y úsalo en presentaciones, en la pizarra digital o como parte de un proyecto. Puedes encadenar varios clips de Luma con una canción de Suno para crear un mini vídeo temático.' },
+      ],
+      mission: 'Crea un clip con Luma Dream Machine para una actividad de tu aula. Prueba a describir una escena que conecte con un proyecto o una estación del año.',
+      example: '<strong>💡 Ejemplo:</strong> «Primer plano de un pollito amarillo saliendo del cascarón de un huevo blanco, con plumas suaves y húmedas, fondo desenfocado de un nido con paja, luz cálida de mañana, movimiento de cámara lento y suave»',
+      link: 'https://lumalabs.ai/dream-machine',
+      linkLabel: 'Abrir Luma ↗',
+    },
+
     // ── Primaria ──
     'pri-gemini-img': {
       id: 'pri-gemini-img',
@@ -716,6 +789,14 @@ const SITE_DATA = {
         isDefault: true,
         pillActiveClass: 'active-image',
         tools: ['inf-gemini-img', 'inf-grok', 'inf-copilot'],
+      },
+      {
+        id: 'inf-video',
+        label: 'Vídeos',
+        icon: '🎬',
+        isDefault: false,
+        pillActiveClass: '',
+        tools: ['inf-flow', 'inf-grok-vid', 'inf-luma'],
       },
       {
         id: 'music',
