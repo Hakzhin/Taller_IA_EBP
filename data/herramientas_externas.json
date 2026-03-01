@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "ultima_revision": "2025-06",
+  "ultima_revision": "2026-03",
   "nota_mantenimiento": "Revisar este archivo cada trimestre. Verificar URLs, planes gratuitos y nuevas herramientas.",
   "categorias": [
     {
@@ -43,7 +43,7 @@
           "nombre": "Wordwall",
           "url": "https://wordwall.net",
           "que_hace": "Crea actividades interactivas (quizzes, sopas de letras, crucigramas, emparejar, ruleta...) con IA que genera el contenido automáticamente.",
-          "plan_gratis": "5 actividades, 12 plantillas interactivas, generador IA incluido. Alumnos sin cuenta.",
+          "plan_gratis": "3 actividades, 18 plantillas interactivas, generador IA incluido. Alumnos sin cuenta.",
           "etapas": ["infantil", "primaria", "eso"],
           "destacado": true
         },
@@ -228,7 +228,7 @@
           "nombre": "MagicSchool AI",
           "url": "https://www.magicschool.ai",
           "que_hace": "80+ herramientas IA para profesores: programaciones, fichas, exámenes, rúbricas, IEPs, presentaciones y más. También tiene herramientas para alumnos (tutoría, feedback).",
-          "plan_gratis": "Generaciones IA ilimitadas para profesores individuales. 80+ herramientas. Google SSO. Interfaz en español (España y Latinoamérica).",
+          "plan_gratis": "80+ herramientas gratuitas para profesores (con límites de uso dinámicos). Google SSO. Interfaz en español (España y Latinoamérica).",
           "etapas": ["infantil", "primaria", "eso"],
           "destacado": true
         },

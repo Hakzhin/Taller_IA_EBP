@@ -240,14 +240,14 @@ const SITE_DATA = {
         '<strong>💰 Acceso:</strong> Si tu colegio usa Google Workspace for Education, tienes 100 créditos mensuales gratis en Flow. También puedes acceder con Google AI Pro (19,99 $/mes, 1.000 créditos). Cada vídeo consume entre 10 y 50 créditos según el modelo y la duración.',
       ],
       steps: [
-        { title: 'Abre Google Flow', desc: 'Accede a la plataforma de creación de vídeo', detail: 'Abre Chrome y ve a <code>labs.google/flow</code>. Inicia sesión con tu cuenta de Google. Verás la interfaz de Flow con un espacio para crear proyectos. Si es tu primera vez, explora los vídeos de ejemplo en «Flow TV» para hacerte una idea de lo que se puede lograr.' },
+        { title: 'Abre Google Flow', desc: 'Accede a la plataforma de creación de vídeo', detail: 'Abre Chrome y ve a <code>labs.google/fx/tools/flow</code>. Inicia sesión con tu cuenta de Google. Verás la interfaz de Flow con un espacio para crear proyectos. Si es tu primera vez, explora los vídeos de ejemplo en «Flow TV» para hacerte una idea de lo que se puede lograr.' },
         { title: 'Describe la escena que quieres', desc: 'Escribe con detalle qué debe mostrar el vídeo', detail: 'Crea un nuevo proyecto y escribe tu descripción. Sé concreto con el encuadre, la ambientación y la acción. Por ejemplo: <code>Una animación educativa que muestra el ciclo del agua: gotas de lluvia cayendo sobre montañas, agua fluyendo por un río hasta el mar, evaporación con el sol, formación de nubes y nueva lluvia. Estilo realista, colores vivos, movimiento suave.</code> Elige formato horizontal (16:9) para presentaciones o vertical (9:16) para móvil.' },
         { title: 'Genera y revisa el clip', desc: 'Flow creará un vídeo de hasta 8 segundos con audio', detail: 'Pulsa generar y espera entre 30 segundos y 2 minutos. Flow generará un clip de hasta 8 segundos en 1080p con sonido ambiente sincronizado. Revisa el resultado: si necesitas ajustes, puedes usar las herramientas de edición para insertar o eliminar objetos, o extender la duración del clip. Puedes encadenar varios clips para crear un vídeo más largo.' },
         { title: 'Descarga o comparte', desc: 'Guarda el vídeo para usarlo en clase', detail: 'Cuando el vídeo te convenza, expórtalo o descárgalo. Podrás insertarlo en tus presentaciones de Google Slides, compartirlo en Google Classroom o proyectarlo directamente en clase. Recuerda que los vídeos generados con IA incluyen una marca de agua digital (SynthID) de Google. Puedes combinarlo con imágenes generadas en Gemini como «ingredientes» para lograr mayor consistencia visual.' },
       ],
       mission: 'Crea un clip de vídeo corto que puedas proyectar al iniciar un tema en clase. Puede ser una recreación histórica, un fenómeno geográfico, una metáfora visual para Lengua o una escena filosófica.',
       example: '<strong>💡 Ejemplo:</strong> «Un plano cinematográfico de un mercado medieval bullicioso en la Europa del siglo XIII: puestos de tela y especias, campesinos y mercaderes negociando, una catedral gótica al fondo, luz de atardecer dorada. Audio ambiente con voces y sonidos de mercado. Estilo realista, formato 16:9»',
-      link: 'https://labs.google/flow',
+      link: 'https://labs.google/fx/tools/flow',
       linkLabel: 'Abrir Google Flow ↗',
     },
 
@@ -536,14 +536,14 @@ const SITE_DATA = {
         '<strong>💰 Acceso:</strong> Si tu colegio usa Google Workspace for Education, tienes 100 créditos mensuales gratis en Flow. También puedes acceder con Google AI Pro (19,99 $/mes, 1.000 créditos). Cada vídeo consume entre 10 y 50 créditos según el modelo y la duración.',
       ],
       steps: [
-        { title: 'Abre Google Flow', desc: 'Accede a la plataforma de creación de vídeo', detail: 'Abre Chrome y ve a <code>labs.google/flow</code>. Inicia sesión con tu cuenta de Google. Verás la interfaz de Flow con un espacio para crear proyectos. Si es tu primera vez, explora los vídeos de ejemplo en «Flow TV» para hacerte una idea de lo que se puede lograr.' },
+        { title: 'Abre Google Flow', desc: 'Accede a la plataforma de creación de vídeo', detail: 'Abre Chrome y ve a <code>labs.google/fx/tools/flow</code>. Inicia sesión con tu cuenta de Google. Verás la interfaz de Flow con un espacio para crear proyectos. Si es tu primera vez, explora los vídeos de ejemplo en «Flow TV» para hacerte una idea de lo que se puede lograr.' },
         { title: 'Describe la escena que quieres', desc: 'Escribe con detalle qué debe mostrar el vídeo', detail: 'Crea un nuevo proyecto y escribe tu descripción. Sé concreto con el encuadre, la ambientación y la acción. Por ejemplo: <code>Una animación educativa que muestra el ciclo del agua: gotas de lluvia cayendo sobre montañas, agua fluyendo por un río hasta el mar, evaporación con el sol, formación de nubes y nueva lluvia. Estilo realista, colores vivos, movimiento suave.</code> Elige formato horizontal (16:9) para presentaciones o vertical (9:16) para móvil.' },
         { title: 'Genera y revisa el clip', desc: 'Flow creará un vídeo de hasta 8 segundos con audio', detail: 'Pulsa generar y espera entre 30 segundos y 2 minutos. Flow generará un clip de hasta 8 segundos en 1080p con sonido ambiente sincronizado. Revisa el resultado: si necesitas ajustes, puedes usar las herramientas de edición para insertar o eliminar objetos, o extender la duración del clip. Puedes encadenar varios clips para crear un vídeo más largo.' },
         { title: 'Descarga o comparte', desc: 'Guarda el vídeo para usarlo en clase', detail: 'Cuando el vídeo te convenza, expórtalo o descárgalo. Podrás insertarlo en tus presentaciones de Google Slides, compartirlo en Google Classroom o proyectarlo directamente en clase. Recuerda que los vídeos generados con IA incluyen una marca de agua digital (SynthID) de Google. Puedes combinarlo con imágenes generadas en Gemini como «ingredientes» para lograr mayor consistencia visual.' },
       ],
       mission: 'Crea un clip de vídeo corto que puedas proyectar al iniciar un tema en clase. Puede ser una recreación histórica, un fenómeno geográfico, una metáfora visual para Lengua o una escena filosófica.',
       example: '<strong>💡 Ejemplo:</strong> «Un plano cinematográfico de un mercado medieval bullicioso en la Europa del siglo XIII: puestos de tela y especias, campesinos y mercaderes negociando, una catedral gótica al fondo, luz de atardecer dorada. Audio ambiente con voces y sonidos de mercado. Estilo realista, formato 16:9»',
-      link: 'https://labs.google/flow',
+      link: 'https://labs.google/fx/tools/flow',
       linkLabel: 'Abrir Google Flow ↗',
     },
 

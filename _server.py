@@ -277,7 +277,7 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
 
         # Filtrar mensajes: solo user/assistant (Anthropic no acepta role "system" en messages)
         api_messages = [m for m in messages if m.get("role") in ("user", "assistant")]
-        max_tokens = 2000 if feature == "ruta" else 1500 if feature == "explore" else 500
+        max_tokens = 2000 if feature == "ruta" else 1500 if feature == "explore" else 1000
 
         # ── Búsqueda web en tiempo real para el Explorador ──
         if feature == "explore" and tavily_key and api_messages:

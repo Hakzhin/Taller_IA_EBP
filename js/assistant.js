@@ -465,6 +465,11 @@ Reglas:
         } else if (action === 'back-hoy') {
           this.rutaWizardState = { step: 0, etapa: null, asignatura: null, nivel: null };
           this.renderHoy();
+        } else if (action === 'back-step2') {
+          this.rutaWizardState.step = 2;
+          this.rutaWizardState.asignatura = null;
+          this.rutaWizardState.nivel = null;
+          this.renderHoy();
         }
         return;
       }
@@ -1434,7 +1439,7 @@ Reglas:
     } else if (step === 3) {
       // Step 3: Nivel tecnológico
       container.innerHTML = `
-        <button class="wizard-back-btn" data-ruta-action="start">← Cambiar asignatura</button>
+        <button class="wizard-back-btn" data-ruta-action="back-step2">← Cambiar asignatura</button>
         <div class="wizard-title">🗺️ Genera tu ruta personalizada</div>
         <div class="wizard-subtitle">Paso 3 de 3 — ¿Tu nivel con la tecnología?</div>
         <div class="wizard-levels">
@@ -1626,7 +1631,7 @@ ${promptecaCatalog || '(ninguno disponible)'}`;
 
     const systemPrompt = this.SYSTEM_PROMPTS[feature] || this.SYSTEM_PROMPTS.chat;
     const apiMessages = messages.filter(m => m.role === 'user' || m.role === 'assistant');
-    const maxTokens = feature === 'ruta' ? 2000 : feature === 'explore' ? 1500 : 500;
+    const maxTokens = feature === 'ruta' ? 2000 : feature === 'explore' ? 1500 : 1000;
 
     const resp = await fetch(this.ANTHROPIC_URL, {
       method: 'POST',
