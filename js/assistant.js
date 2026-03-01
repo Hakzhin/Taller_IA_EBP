@@ -402,6 +402,13 @@ Reglas:
         return;
       }
 
+      // Explore: reset / new search
+      const exploreReset = target.closest('[data-explore-reset]');
+      if (exploreReset) {
+        this.resetExplorar();
+        return;
+      }
+
       // Prompteca: filter by etapa
       const etapaFilter = target.closest('[data-prompteca-etapa]');
       if (etapaFilter) {
@@ -1139,7 +1146,7 @@ Reglas:
     const chipsDiv = document.createElement('div');
     chipsDiv.className = 'explore-chips';
     chipsDiv.innerHTML = `
-      <button class="explore-chip" data-explore-query="Herramientas para crear presentaciones interactivas para Primaria">📊 Presentaciones</button>
+      <button class="explore-chip" data-explore-query="Herramientas para crear presentaciones interactivas en el aula">📊 Presentaciones</button>
       <button class="explore-chip" data-explore-query="Herramientas para crear fichas y ejercicios interactivos">📝 Fichas interactivas</button>
       <button class="explore-chip" data-explore-query="Herramientas de IA para crear imágenes educativas gratis, alternativas a las de la plataforma">🎨 Más imágenes IA</button>
       <button class="explore-chip" data-explore-query="Herramientas para gamificar el aula con IA">🎮 Gamificación</button>
@@ -1147,6 +1154,29 @@ Reglas:
       <button class="explore-chip" data-explore-query="Herramientas para evaluar y dar feedback con IA">✅ Evaluación con IA</button>
     `;
     container.appendChild(chipsDiv);
+  },
+
+  resetExplorar() {
+    const container = this.root.querySelector('#explore-messages');
+    if (container) container.innerHTML = '';
+    this.exploreHistory = [];
+    this.renderExplorar();
+    this.saveState();
+  },
+
+  showExploreResetBtn() {
+    const container = this.root.querySelector('#explore-messages');
+    if (!container) return;
+    // Remove any existing reset button first
+    const existing = container.querySelector('.explore-reset-btn');
+    if (existing) existing.remove();
+    const btn = document.createElement('button');
+    btn.className = 'explore-reset-btn';
+    btn.setAttribute('data-explore-reset', 'true');
+    btn.innerHTML = '🔄 Nueva búsqueda';
+    container.appendChild(btn);
+    const body = this.root.querySelector('.assistant-body');
+    if (body) body.scrollTop = body.scrollHeight;
   },
 
   async sendExploreMessage(text) {
@@ -1171,6 +1201,7 @@ Reglas:
         this.appendExploreMessage('assistant', result.content);
         this.exploreHistory.push({ role: 'assistant', content: result.content });
         this.saveState();
+        this.showExploreResetBtn();
       } else {
         this.appendExploreMessage('error', 'No se recibió respuesta. Comprueba la conexión.');
       }
