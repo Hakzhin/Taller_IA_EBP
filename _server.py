@@ -191,6 +191,33 @@ Reglas:
 - Si no estas seguro de que una herramienta siga siendo gratuita, dilo con naturalidad
 - No inventes URLs ni funcionalidades
 - Los enlaces deben ser URLs reales y clicables con formato markdown: [texto](url)""",
+    "ruta": BASE_PROMPT + """
+
+Contexto adicional: El profesor quiere una RUTA DE APRENDIZAJE personalizada de 4 semanas para aprender a usar IA en el aula.
+
+Genera una ruta de 4 semanas con EXACTAMENTE este formato JSON (sin texto antes ni despues, SOLO el JSON):
+{
+  "titulo": "Tu ruta de IA para [asignatura] en [etapa]",
+  "resumen": "Frase motivadora de 1-2 lineas",
+  "semanas": [
+    {
+      "numero": 1,
+      "titulo": "Titulo de la semana",
+      "objetivo": "Que lograras esta semana",
+      "herramientas": ["nombre1"],
+      "actividad": "Descripcion concreta de lo que hacer (2-3 frases)",
+      "prompt_recomendado_id": null,
+      "consejo": "Tip practico breve"
+    }
+  ]
+}
+
+Reglas:
+- Semana 1: empieza con la herramienta mas facil para ese nivel. Principiante: Gemini. Intermedio: ChatGPT. Avanzado: combinar varias.
+- Cada semana introduce algo nuevo de forma gradual.
+- Actividades CONCRETAS relacionadas con la asignatura real del profesor.
+- Cuando sea posible, referencia prompts de la Prompteca usando su "id" en prompt_recomendado_id.
+- Responde SOLO con el JSON valido. Sin texto adicional.""",
 }
 
 # ── Cargar catálogo externo de herramientas verificadas ──
@@ -250,7 +277,7 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
 
         # Filtrar mensajes: solo user/assistant (Anthropic no acepta role "system" en messages)
         api_messages = [m for m in messages if m.get("role") in ("user", "assistant")]
-        max_tokens = 1500 if feature == "explore" else 500
+        max_tokens = 2000 if feature == "ruta" else 1500 if feature == "explore" else 500
 
         # ── Búsqueda web en tiempo real para el Explorador ──
         if feature == "explore" and tavily_key and api_messages:

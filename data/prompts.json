@@ -1,0 +1,313 @@
+{
+  "version": "1.0",
+  "ultima_revision": "2026-02",
+  "categorias_meta": {
+    "programaciones": { "icono": "📋", "label": "Programaciones" },
+    "examenes": { "icono": "📝", "label": "Exámenes" },
+    "rubricas": { "icono": "✅", "label": "Rúbricas" },
+    "materiales": { "icono": "📦", "label": "Materiales" },
+    "actividades": { "icono": "🎯", "label": "Actividades" },
+    "adaptaciones": { "icono": "♿", "label": "Adaptaciones" },
+    "comunicacion": { "icono": "💌", "label": "Familias" },
+    "creativos": { "icono": "🎨", "label": "Creativos" }
+  },
+  "prompts": [
+    {
+      "id": "prog-ud-01",
+      "titulo": "Unidad didáctica completa",
+      "descripcion": "Genera una UD con objetivos, contenidos, actividades y evaluación",
+      "categoria": "programaciones",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Claude / Gemini",
+      "prompt": "Actúa como un experto en didáctica de [ASIGNATURA] para [ETAPA]. Crea una unidad didáctica completa sobre [TEMA] que incluya:\n\n1. Título y justificación\n2. Objetivos de aprendizaje (3-5)\n3. Contenidos clave\n4. Metodología\n5. Secuencia de actividades (6-8 sesiones)\n6. Criterios de evaluación\n7. Recursos necesarios\n\nAdapta el nivel de dificultad a alumnos de [CURSO]. Usa un tono profesional pero accesible."
+    },
+    {
+      "id": "prog-sesion-01",
+      "titulo": "Plan de sesión detallado",
+      "descripcion": "Planifica una clase de 50 minutos con tiempos y actividades",
+      "categoria": "programaciones",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Claude / Gemini",
+      "prompt": "Planifica una sesión de clase de 50 minutos de [ASIGNATURA] para [CURSO] sobre [TEMA]. Incluye:\n\n- Inicio (5-10 min): actividad de enganche o repaso\n- Desarrollo (25-30 min): explicación + actividad principal\n- Cierre (10 min): resumen, reflexión o evaluación rápida\n\nPara cada momento indica: qué hace el profesor, qué hacen los alumnos, materiales necesarios y tiempo exacto."
+    },
+    {
+      "id": "prog-anual-01",
+      "titulo": "Programación anual resumida",
+      "descripcion": "Esquema de programación anual con temporalización por trimestres",
+      "categoria": "programaciones",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Claude",
+      "prompt": "Crea un esquema de programación anual de [ASIGNATURA] para [CURSO] distribuido en 3 trimestres. Para cada trimestre incluye:\n\n- Unidades didácticas (título y duración aproximada en semanas)\n- Contenidos principales\n- Criterios de evaluación clave\n- Una actividad destacada\n\nSigue el currículo LOMLOE vigente para la Comunidad de Madrid."
+    },
+    {
+      "id": "prog-infantil-01",
+      "titulo": "Proyecto de aula (Infantil)",
+      "descripcion": "Diseña un proyecto por rincones o centros de interés",
+      "categoria": "programaciones",
+      "etapas": ["infantil"],
+      "herramienta": "ChatGPT / Gemini",
+      "prompt": "Diseña un proyecto de aula para Educación Infantil ([3/4/5] años) sobre [TEMA]. Incluye:\n\n1. Nombre atractivo del proyecto\n2. Justificación y conexión con el currículo\n3. Objetivos de aprendizaje adaptados a la edad\n4. Rincones o centros de interés (al menos 4)\n5. Actividades para cada rincón (manipulativas, sensoriales, artísticas)\n6. Canción o rima relacionada con el tema\n7. Evaluación mediante observación (indicadores concretos)\n\nRecuerda que los niños de esta edad aprenden jugando."
+    },
+    {
+      "id": "exam-test-01",
+      "titulo": "Examen tipo test",
+      "descripcion": "Genera un examen de opción múltiple con clave de respuestas",
+      "categoria": "examenes",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Claude / Gemini",
+      "prompt": "Crea un examen tipo test de [ASIGNATURA] para [CURSO] sobre [TEMA]. El examen debe tener:\n\n- [10/15/20] preguntas de opción múltiple (4 opciones cada una)\n- Nivel de dificultad: [fácil/medio/difícil]\n- Mezcla preguntas de comprensión, aplicación y análisis\n- Incluye al final la clave de respuestas correctas\n- Añade una pregunta extra de bonificación\n\nFormato limpio y listo para imprimir."
+    },
+    {
+      "id": "exam-desarrollo-01",
+      "titulo": "Examen de desarrollo",
+      "descripcion": "Preguntas abiertas con criterios de corrección",
+      "categoria": "examenes",
+      "etapas": ["eso"],
+      "herramienta": "ChatGPT / Claude",
+      "prompt": "Crea un examen de desarrollo de [ASIGNATURA] para [CURSO] sobre [TEMA] con:\n\n- 5 preguntas de desarrollo (respuesta abierta)\n- Cada pregunta con su puntuación (total: 10 puntos)\n- Criterios de corrección detallados para cada pregunta\n- Niveles de logro: excelente, bien, suficiente, insuficiente\n\nLas preguntas deben evaluar comprensión profunda, no solo memorización."
+    },
+    {
+      "id": "exam-kahoot-01",
+      "titulo": "Preguntas para Kahoot",
+      "descripcion": "20 preguntas rápidas para jugar en clase",
+      "categoria": "examenes",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Gemini",
+      "prompt": "Genera 20 preguntas tipo quiz para Kahoot sobre [TEMA] de [ASIGNATURA] para [CURSO]. Cada pregunta debe tener:\n\n- Pregunta corta (máximo 95 caracteres)\n- 4 opciones de respuesta (máximo 75 caracteres cada una)\n- Respuesta correcta marcada\n- Tiempo sugerido: 20s para fáciles, 30s para medias, 45s para difíciles\n\nMezcla niveles de dificultad. Incluye alguna pregunta divertida o curiosa para mantener el interés."
+    },
+    {
+      "id": "exam-oral-01",
+      "titulo": "Guía de examen oral",
+      "descripcion": "Preguntas y rúbrica para evaluación oral",
+      "categoria": "examenes",
+      "etapas": ["eso"],
+      "herramienta": "ChatGPT / Claude",
+      "prompt": "Diseña una guía para un examen oral de [ASIGNATURA] para [CURSO] sobre [TEMA]. Incluye:\n\n- 10 preguntas principales (de menor a mayor dificultad)\n- 5 preguntas de seguimiento para profundizar\n- Rúbrica de evaluación con criterios: contenido, expresión oral, vocabulario técnico, capacidad de argumentación\n- Tiempo estimado por alumno: [5/10] minutos\n- Consejos para el profesor durante la evaluación"
+    },
+    {
+      "id": "rubr-general-01",
+      "titulo": "Rúbrica de evaluación general",
+      "descripcion": "Rúbrica con 4 niveles para cualquier tarea",
+      "categoria": "rubricas",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Claude / Gemini",
+      "prompt": "Crea una rúbrica de evaluación para [TIPO DE TAREA] de [ASIGNATURA] en [CURSO]. La rúbrica debe tener:\n\n- 4-6 criterios de evaluación relevantes\n- 4 niveles de logro: Excelente (4), Bien (3), Suficiente (2), Insuficiente (1)\n- Descriptores claros y específicos para cada celda\n- Formato tabla\n- Puntuación máxima y escala de calificación\n\nLos descriptores deben ser observables y medibles, no vagos."
+    },
+    {
+      "id": "rubr-presentacion-01",
+      "titulo": "Rúbrica para presentaciones orales",
+      "descripcion": "Evalúa contenido, expresión y recursos visuales",
+      "categoria": "rubricas",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Claude",
+      "prompt": "Crea una rúbrica detallada para evaluar presentaciones orales de alumnos de [CURSO] en [ASIGNATURA]. Criterios a evaluar:\n\n1. Contenido y dominio del tema\n2. Estructura y organización\n3. Expresión oral y lenguaje corporal\n4. Uso de recursos visuales (slides, pósters)\n5. Gestión del tiempo\n6. Respuesta a preguntas del público\n\nCada criterio con 4 niveles (Excelente a Insuficiente) y descriptores específicos. Formato tabla."
+    },
+    {
+      "id": "rubr-trabajo-01",
+      "titulo": "Rúbrica para trabajo en grupo",
+      "descripcion": "Evalúa colaboración, reparto de tareas y resultado",
+      "categoria": "rubricas",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Claude",
+      "prompt": "Crea una rúbrica para evaluar un trabajo en grupo de [ASIGNATURA] en [CURSO] sobre [TEMA]. Incluye:\n\nCriterios individuales (evalúa a cada alumno):\n- Participación y colaboración\n- Cumplimiento de su rol/tarea asignada\n\nCriterios grupales (evalúa al equipo):\n- Calidad del contenido\n- Presentación y formato\n- Creatividad y originalidad\n- Bibliografía y fuentes\n\n4 niveles de logro por criterio. Incluye espacio para autoevaluación del grupo."
+    },
+    {
+      "id": "rubr-portfolio-01",
+      "titulo": "Rúbrica para portfolio digital",
+      "descripcion": "Evalúa un portfolio o cuaderno digital del alumno",
+      "categoria": "rubricas",
+      "etapas": ["eso"],
+      "herramienta": "ChatGPT / Claude",
+      "prompt": "Diseña una rúbrica para evaluar el portfolio digital de un alumno de [CURSO] en [ASIGNATURA]. Criterios:\n\n1. Organización y estructura\n2. Calidad de las reflexiones personales\n3. Evidencias de aprendizaje incluidas\n4. Presentación visual y uso de multimedia\n5. Evolución y mejora a lo largo del trimestre\n6. Originalidad y aportación personal\n\n4 niveles de logro. Formato tabla. El portfolio se entrega en [Google Sites / Canva / otro]."
+    },
+    {
+      "id": "mat-ficha-01",
+      "titulo": "Ficha de ejercicios",
+      "descripcion": "Genera una ficha imprimible con ejercicios variados",
+      "categoria": "materiales",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Claude / Gemini",
+      "prompt": "Crea una ficha de ejercicios de [ASIGNATURA] para [CURSO] sobre [TEMA]. La ficha debe incluir:\n\n- Título y nombre/fecha del alumno\n- 8-10 ejercicios de dificultad progresiva\n- Mezcla tipos: completar huecos, verdadero/falso, relacionar, respuesta corta, un ejercicio de desarrollo\n- Ejercicio extra de ampliación para los que terminen antes\n- Formato limpio, listo para imprimir en A4\n\nIncluye las soluciones al final en una sección aparte."
+    },
+    {
+      "id": "mat-resumen-01",
+      "titulo": "Resumen visual de tema",
+      "descripcion": "Esquema-resumen con ideas clave para estudiar",
+      "categoria": "materiales",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Claude / Gemini",
+      "prompt": "Crea un resumen visual del tema [TEMA] de [ASIGNATURA] para [CURSO]. El resumen debe:\n\n- Ocupar idealmente 1-2 páginas\n- Usar estructura jerárquica clara (título → subtemas → ideas clave)\n- Incluir definiciones de los conceptos principales en recuadros\n- Añadir datos, fechas o fórmulas importantes destacados\n- Incluir un esquema o mapa conceptual en formato texto\n- Terminar con 3-5 preguntas de autoevaluación\n\nUsa un estilo claro y visual con emojis para categorizar."
+    },
+    {
+      "id": "mat-lectura-01",
+      "titulo": "Comprensión lectora",
+      "descripcion": "Texto adaptado con preguntas de comprensión",
+      "categoria": "materiales",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Claude",
+      "prompt": "Crea una actividad de comprensión lectora para [CURSO] sobre [TEMA]. Incluye:\n\n1. Un texto original de [200/400/600] palabras, adaptado al nivel lector del curso\n2. Vocabulario clave: 5-8 palabras con definiciones simples\n3. Preguntas de comprensión:\n   - 3 preguntas literales (la respuesta está en el texto)\n   - 2 preguntas inferenciales (hay que deducir)\n   - 1 pregunta de opinión personal\n4. Actividad de extensión: escribir un párrafo relacionado\n\nEl texto debe ser interesante y motivador para la edad."
+    },
+    {
+      "id": "mat-vocab-01",
+      "titulo": "Glosario de vocabulario",
+      "descripcion": "Lista de términos con definiciones adaptadas al nivel",
+      "categoria": "materiales",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Gemini",
+      "prompt": "Crea un glosario de vocabulario de [ASIGNATURA] para [CURSO] sobre la unidad de [TEMA]. Incluye:\n\n- 15-20 términos clave ordenados alfabéticamente\n- Definición clara y sencilla adaptada al nivel del alumno\n- Un ejemplo o frase de uso para cada término\n- Marca con ⭐ los 5 términos más importantes\n\nFormato limpio para que los alumnos lo peguen en su cuaderno."
+    },
+    {
+      "id": "act-debate-01",
+      "titulo": "Debate estructurado",
+      "descripcion": "Organiza un debate en clase con roles y argumentos",
+      "categoria": "actividades",
+      "etapas": ["eso"],
+      "herramienta": "ChatGPT / Claude",
+      "prompt": "Diseña un debate estructurado para [CURSO] en [ASIGNATURA] sobre el tema: \"[PREGUNTA DE DEBATE]\". Incluye:\n\n1. Contextualización del tema (breve texto introductorio)\n2. Postura A (a favor) y Postura B (en contra)\n3. 4-5 argumentos para cada postura con datos o ejemplos\n4. Roles: moderador, portavoz A, portavoz B, secretario, público\n5. Reglas del debate (tiempos, turnos, respeto)\n6. Ficha para el alumno-público: evalúa los argumentos\n7. Rúbrica simplificada para el profesor\n\nDuración total: 40 minutos."
+    },
+    {
+      "id": "act-escape-01",
+      "titulo": "Escape room educativo",
+      "descripcion": "Diseña un escape room con enigmas curriculares",
+      "categoria": "actividades",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Gemini",
+      "prompt": "Diseña un escape room educativo de [ASIGNATURA] para [CURSO] sobre [TEMA]. Incluye:\n\n1. Historia/ambientación motivadora (2-3 frases)\n2. 5 pruebas/enigmas que requieran conocimientos del tema:\n   - Cada prueba con su enunciado, pista y solución\n   - Mezcla tipos: lógica, vocabulario, cálculo, observación, trabajo en equipo\n3. Pista extra por si se atascan\n4. Orden de las pruebas y cómo encadenarlas (código → siguiente sobre...)\n5. Material necesario (imprimibles)\n6. Duración: 45 minutos\n\nQue sea divertido y que los alumnos no puedan resolverlo sin dominar el contenido."
+    },
+    {
+      "id": "act-abp-01",
+      "titulo": "Proyecto ABP (Aprendizaje Basado en Proyectos)",
+      "descripcion": "Diseña un proyecto con pregunta motriz y producto final",
+      "categoria": "actividades",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Claude",
+      "prompt": "Diseña un proyecto ABP (Aprendizaje Basado en Proyectos) de [ASIGNATURA] para [CURSO] sobre [TEMA]. Estructura:\n\n1. Pregunta motriz: una pregunta retadora que guíe todo el proyecto\n2. Producto final: qué crearán los alumnos (póster, vídeo, maqueta, web...)\n3. Fases del proyecto (4-6 sesiones):\n   - Fase 1: Lanzamiento y pregunta motriz\n   - Fase 2: Investigación\n   - Fase 3: Creación del producto\n   - Fase 4: Presentación y reflexión\n4. Competencias que se trabajan\n5. Criterios de evaluación\n6. Recursos necesarios\n\nEl proyecto debe conectar con problemas reales o del entorno del alumno."
+    },
+    {
+      "id": "act-gamif-01",
+      "titulo": "Actividad gamificada",
+      "descripcion": "Convierte un contenido en un juego con puntos y niveles",
+      "categoria": "actividades",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Gemini",
+      "prompt": "Transforma el tema [TEMA] de [ASIGNATURA] para [CURSO] en una actividad gamificada. Incluye:\n\n1. Narrativa: una historia o ambientación que enganche (misión espacial, detectives, exploradores...)\n2. Sistema de puntos/niveles (al menos 3 niveles)\n3. 5-6 retos o misiones, cada uno con:\n   - Descripción en clave de juego\n   - Contenido curricular que trabaja\n   - Puntos que otorga\n4. Recompensas (badges, privilegios de clase)\n5. Tabla de clasificación\n6. Material imprimible: tarjetas de misión y tabla de puntos\n\nQue se pueda hacer en 2-3 sesiones de clase."
+    },
+    {
+      "id": "adapt-nivel-01",
+      "titulo": "Adaptación de nivel de lectura",
+      "descripcion": "Reescribe un texto a nivel más fácil o más difícil",
+      "categoria": "adaptaciones",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Claude / Gemini",
+      "prompt": "Reescribe el siguiente texto adaptándolo al nivel de lectura de [CURSO]. El texto original es:\n\n\"[PEGAR TEXTO AQUÍ]\"\n\nReglas de adaptación:\n- Vocabulario adecuado a la edad\n- Frases más cortas y estructura más simple si es para niveles bajos\n- Mantén todas las ideas clave del original\n- Si hay términos técnicos necesarios, añade una explicación entre paréntesis\n- Mantén el mismo número aproximado de párrafos\n\nDevuelve el texto adaptado y una lista de los cambios principales que has hecho."
+    },
+    {
+      "id": "adapt-nee-01",
+      "titulo": "Adaptación para NEE",
+      "descripcion": "Adapta material para alumnos con necesidades educativas especiales",
+      "categoria": "adaptaciones",
+      "etapas": ["infantil", "primaria", "eso"],
+      "herramienta": "ChatGPT / Claude",
+      "prompt": "Adapta la siguiente actividad/material para un alumno con [TIPO DE NEE: TDAH / dislexia / TEA / discapacidad intelectual leve / altas capacidades] de [CURSO]:\n\n\"[DESCRIBIR LA ACTIVIDAD ORIGINAL]\"\n\nLa adaptación debe incluir:\n1. Modificaciones en la presentación del material (visual, formato)\n2. Ajustes en el contenido (simplificar, ampliar, reorganizar)\n3. Cambios en la metodología (más tiempo, apoyo visual, pasos más pequeños)\n4. Adaptación en la evaluación (criterios ajustados)\n5. Recursos de apoyo adicionales\n\nMantén los mismos objetivos de aprendizaje siempre que sea posible."
+    },
+    {
+      "id": "adapt-bilingue-01",
+      "titulo": "Material bilingüe",
+      "descripcion": "Crea versión español/inglés de un material",
+      "categoria": "adaptaciones",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Claude / Gemini",
+      "prompt": "Crea una versión bilingüe (español/inglés) del siguiente material de [ASIGNATURA] para [CURSO]:\n\n\"[DESCRIBIR O PEGAR EL MATERIAL]\"\n\nFormato:\n- Columna izquierda: español\n- Columna derecha: inglés\n- Vocabulario clave: tabla con término en español, traducción, definición simple en inglés\n- Instrucciones de las actividades en ambos idiomas\n\nEl nivel de inglés debe ser [A1/A2/B1] según el curso. Usa frases claras y vocabulario frecuente."
+    },
+    {
+      "id": "adapt-ampliacion-01",
+      "titulo": "Actividad de ampliación",
+      "descripcion": "Reto extra para alumnos que terminan antes o necesitan más",
+      "categoria": "adaptaciones",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "ChatGPT / Gemini",
+      "prompt": "Crea una actividad de ampliación sobre [TEMA] de [ASIGNATURA] para [CURSO]. Esta actividad es para alumnos que han terminado la tarea principal y necesitan un reto extra.\n\nLa actividad debe:\n- Profundizar en el tema (no simplemente más de lo mismo)\n- Incluir pensamiento crítico o creatividad\n- Ser autónoma (el alumno puede hacerla sin ayuda del profesor)\n- Durar 15-20 minutos\n- Ser motivadora e interesante\n\nSugerencias: investigación, problema real, creación, conexión con otra asignatura."
+    },
+    {
+      "id": "com-informe-01",
+      "titulo": "Informe para familias",
+      "descripcion": "Redacta un informe de progreso personalizado",
+      "categoria": "comunicacion",
+      "etapas": ["infantil", "primaria", "eso"],
+      "herramienta": "ChatGPT / Claude",
+      "prompt": "Redacta un informe de evaluación [trimestral] para las familias de un alumno de [CURSO] con las siguientes características:\n\n- Rendimiento académico: [bueno / regular / necesita mejorar]\n- Puntos fuertes: [describir 2-3]\n- Áreas de mejora: [describir 1-2]\n- Comportamiento y actitud: [participativo / distraído / colaborador / etc.]\n\nEl informe debe:\n- Usar un tono positivo y constructivo (nunca destructivo)\n- Ser específico con ejemplos cuando sea posible\n- Incluir recomendaciones concretas para la familia\n- Extensión: 150-200 palabras\n- Empezar destacando lo positivo\n\nEvita jerga pedagógica: escribe como le hablarías a los padres en una tutoría."
+    },
+    {
+      "id": "com-circular-01",
+      "titulo": "Circular informativa",
+      "descripcion": "Redacta una circular para comunicar algo a las familias",
+      "categoria": "comunicacion",
+      "etapas": ["infantil", "primaria", "eso"],
+      "herramienta": "ChatGPT / Gemini",
+      "prompt": "Redacta una circular informativa para las familias de [CURSO] sobre [TEMA DE LA CIRCULAR: excursión / evento / cambio de horario / proyecto / etc.].\n\nIncluye:\n- Encabezado con logo/nombre del colegio (indicar dónde)\n- Saludo cordial\n- Información clara: qué, cuándo, dónde, cómo\n- Si es una excursión/salida: fecha, hora salida y regreso, qué llevar, precio\n- Autorización recortable si es necesario\n- Datos de contacto para dudas\n- Despedida formal pero cercana\n\nTono: profesional, claro, sin tecnicismos. Extensión: máximo 1 página A4."
+    },
+    {
+      "id": "com-email-01",
+      "titulo": "Email a familias (situación delicada)",
+      "descripcion": "Redacta un email profesional sobre un tema sensible",
+      "categoria": "comunicacion",
+      "etapas": ["infantil", "primaria", "eso"],
+      "herramienta": "ChatGPT / Claude",
+      "prompt": "Ayúdame a redactar un email a la familia de un alumno de [CURSO] sobre la siguiente situación:\n\n[DESCRIBIR LA SITUACIÓN: conflicto, bajo rendimiento, comportamiento, etc.]\n\nEl email debe:\n- Ser respetuoso y empático\n- No culpabilizar al alumno ni a la familia\n- Describir hechos objetivos, no juicios\n- Proponer una reunión o llamada para hablar con calma\n- Ofrecer soluciones o pasos siguientes concretos\n- Transmitir que el objetivo es ayudar al alumno\n\nTono: profesional, cercano, constructivo. Extensión: 100-150 palabras."
+    },
+    {
+      "id": "com-tutoria-01",
+      "titulo": "Guion para tutoría con familias",
+      "descripcion": "Estructura una reunión de tutoría individual",
+      "categoria": "comunicacion",
+      "etapas": ["infantil", "primaria", "eso"],
+      "herramienta": "ChatGPT / Claude",
+      "prompt": "Prepara un guion para una tutoría individual con la familia de un alumno de [CURSO]. Duración: 15-20 minutos.\n\nContexto del alumno: [DESCRIBIR BREVEMENTE]\n\nEstructura de la tutoría:\n1. Bienvenida y romper el hielo (2 min)\n2. Aspectos positivos del alumno (3 min)\n3. Áreas de mejora — con ejemplos concretos (5 min)\n4. Preguntas para la familia: cómo lo ven en casa (3 min)\n5. Plan de acción conjunto: compromisos escuela + casa (5 min)\n6. Cierre positivo y próximos pasos (2 min)\n\nIncluye frases clave para cada punto que pueda usar como apoyo."
+    },
+    {
+      "id": "crea-cuento-01",
+      "titulo": "Cuento educativo ilustrado",
+      "descripcion": "Genera un cuento corto con indicaciones para ilustrar",
+      "categoria": "creativos",
+      "etapas": ["infantil", "primaria"],
+      "herramienta": "ChatGPT / Gemini",
+      "prompt": "Escribe un cuento corto para niños de [3-5 / 6-8 / 9-11] años sobre [TEMA O VALOR: amistad, medio ambiente, diversidad, etc.]. El cuento debe:\n\n- Tener 5-7 párrafos cortos (uno por página del cuento)\n- Personajes con nombres y personalidad definida\n- Un conflicto o reto que resolver\n- Un final positivo con moraleja implícita (no explícita)\n- Vocabulario adecuado a la edad\n- Para cada párrafo, describe entre corchetes [qué imagen generaría con IA para ilustrarlo]\n\nTítulo atractivo y nombre del autor: \"Creado por la clase de [X]\"."
+    },
+    {
+      "id": "crea-cancion-01",
+      "titulo": "Letra de canción educativa",
+      "descripcion": "Genera una letra para cantar en clase y memorizar contenidos",
+      "categoria": "creativos",
+      "etapas": ["infantil", "primaria"],
+      "herramienta": "Suno / ChatGPT",
+      "prompt": "Escribe la letra de una canción educativa para niños de [EDAD] años que ayude a memorizar [TEMA: tablas de multiplicar, partes del cuerpo, planetas, etc.].\n\nRequisitos:\n- Letra pegadiza con rima\n- Estribillo repetitivo y fácil de recordar\n- 2-3 estrofas + estribillo\n- Todo el contenido curricular integrado de forma natural\n- Indicación del estilo musical sugerido para Suno: [pop infantil / reggaetón suave / cumbia educativa]\n\nIncluye al final el prompt exacto para Suno:\n\"Canción [estilo], voz [infantil/femenina/masculina], ritmo [alegre/tranquilo], en español\""
+    },
+    {
+      "id": "crea-podcast-01",
+      "titulo": "Guion para podcast educativo",
+      "descripcion": "Crea un guion listo para grabar con NotebookLM o similar",
+      "categoria": "creativos",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "NotebookLM / ElevenLabs",
+      "prompt": "Crea un guion para un podcast educativo de 5-7 minutos sobre [TEMA] de [ASIGNATURA] para [CURSO]. Formato: conversación entre dos locutores.\n\nEstructura:\n- Intro: saludo y presentación del tema (30s)\n- Bloque 1: concepto principal explicado de forma sencilla\n- Bloque 2: ejemplo práctico o anécdota interesante\n- Bloque 3: dato curioso o conexión con la vida real\n- Cierre: resumen y pregunta para reflexionar\n\nIndicaciones:\n- Locutor 1: hace preguntas, muestra curiosidad\n- Locutor 2: explica con claridad y ejemplos\n- Tono conversacional, como si hablaran dos amigos\n- Marca pausas con [PAUSA] y énfasis con [ÉNFASIS]"
+    },
+    {
+      "id": "crea-video-01",
+      "titulo": "Guion para vídeo educativo corto",
+      "descripcion": "Guion de 1-2 minutos para crear con IA de vídeo",
+      "categoria": "creativos",
+      "etapas": ["primaria", "eso"],
+      "herramienta": "Flow / Luma / Synthesia",
+      "prompt": "Crea un guion para un vídeo educativo corto (60-90 segundos) sobre [TEMA] de [ASIGNATURA] para [CURSO]. El vídeo se creará con herramientas de IA.\n\nFormato escena por escena:\n\n| Escena | Duración | Texto en pantalla / narración | Descripción visual (prompt para IA de vídeo) |\n|--------|----------|-------------------------------|----------------------------------------------|\n| 1      | 10s      | [Título atractivo]            | [Describir imagen/animación]                 |\n| 2      | 15s      | [Concepto 1]                  | [Describir visual]                           |\n| ...    | ...      | ...                           | ...                                          |\n\nCierra con una pregunta para reflexionar o un call to action.\nEl tono debe ser dinámico y visual, pensado para mantener la atención."
+    },
+    {
+      "id": "crea-imagen-01",
+      "titulo": "Prompts para generar imágenes educativas",
+      "descripcion": "5 prompts listos para Gemini, Grok o Copilot",
+      "categoria": "creativos",
+      "etapas": ["infantil", "primaria", "eso"],
+      "herramienta": "Gemini / Grok Aurora / Copilot",
+      "prompt": "Genera 5 prompts optimizados para crear imágenes educativas con IA sobre [TEMA] de [ASIGNATURA] para [ETAPA]. Cada prompt debe:\n\n1. Ser específico y descriptivo (50-100 palabras)\n2. Indicar estilo visual: [ilustración infantil / diagrama / fotografía realista / infografía / cómic]\n3. Incluir detalles de composición, colores y elementos\n4. Ser apropiado para el aula (sin violencia, inclusivo)\n\nFormato:\n- Imagen 1: [Descripción de uso en clase]\n  Prompt: \"...\"\n- Imagen 2: ...\n\nIncluye un prompt extra para crear una portada o cartel del tema."
+    }
+  ]
+}

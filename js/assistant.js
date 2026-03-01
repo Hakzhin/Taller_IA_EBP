@@ -1,6 +1,6 @@
 // ══════════════════════════════════════════
 //  Taller IA · BupIA (in-app assistant)
-//  Hoy + Tablón + Chat + Explorar
+//  Hoy + Tablón + Chat + Prompteca + Explorar
 // ══════════════════════════════════════════
 
 const Assistant = {
@@ -12,6 +12,9 @@ const Assistant = {
   exploreHistory: [],
   wizardState: { intent: null, level: null, sectionId: null },
   isSending: false,
+  promptecaData: null,
+  promptecaFilters: { etapa: null, categoria: null },
+  rutaWizardState: { step: 0, etapa: null, asignatura: null, nivel: null },
 
   // ── DOM refs (set in buildDOM) ──
   root: null,
@@ -118,6 +121,31 @@ Reglas:
 - Si no estas seguro de que una herramienta siga siendo gratuita, dilo con naturalidad
 - No inventes URLs ni funcionalidades
 - Los enlaces deben ser URLs reales y clicables con formato markdown: [texto](url)`,
+      ruta: BASE + `\n\nContexto adicional: El profesor quiere una RUTA DE APRENDIZAJE personalizada de 4 semanas para aprender a usar IA en el aula.
+
+Genera una ruta de 4 semanas con EXACTAMENTE este formato JSON (sin texto antes ni despues, SOLO el JSON):
+{
+  "titulo": "Tu ruta de IA para [asignatura] en [etapa]",
+  "resumen": "Frase motivadora de 1-2 lineas",
+  "semanas": [
+    {
+      "numero": 1,
+      "titulo": "Titulo de la semana",
+      "objetivo": "Que lograras esta semana",
+      "herramientas": ["nombre1"],
+      "actividad": "Descripcion concreta de lo que hacer (2-3 frases)",
+      "prompt_recomendado_id": null,
+      "consejo": "Tip practico breve"
+    }
+  ]
+}
+
+Reglas:
+- Semana 1: empieza con la herramienta mas facil para ese nivel. Principiante: Gemini. Intermedio: ChatGPT. Avanzado: combinar varias.
+- Cada semana introduce algo nuevo de forma gradual.
+- Actividades CONCRETAS relacionadas con la asignatura real del profesor.
+- Cuando sea posible, referencia prompts de la Prompteca usando su "id" en prompt_recomendado_id.
+- Responde SOLO con el JSON valido. Sin texto adicional.`,
     };
   })(),
 
@@ -138,6 +166,19 @@ Reglas:
     { id: 'story',     icon: '📖', label: 'Crear cuentos',      desc: 'Cuentos ilustrados para los más pequeños',     categories: ['story'] },
   ],
 
+  // ── Asignaturas (for Mi Ruta wizard) ──
+  ASIGNATURAS: [
+    { id: 'mates',    icon: '📐', label: 'Matemáticas' },
+    { id: 'lengua',   icon: '📝', label: 'Lengua' },
+    { id: 'ciencias', icon: '🔬', label: 'Ciencias' },
+    { id: 'ingles',   icon: '🇬🇧', label: 'Inglés' },
+    { id: 'musica',   icon: '🎵', label: 'Música' },
+    { id: 'ef',       icon: '⚽', label: 'Ed. Física' },
+    { id: 'religion', icon: '✝️', label: 'Religión' },
+    { id: 'plastica', icon: '🎨', label: 'Plástica' },
+    { id: 'general',  icon: '📚', label: 'General / Tutorías' },
+  ],
+
   // ═══════════════════════════════════════
   //  Initialization
   // ═══════════════════════════════════════
@@ -152,6 +193,7 @@ Reglas:
     this.renderActiveTab();
     this.updateBadge();
     this.loadExternalCatalog();
+    this.loadPrompteca();
   },
 
   async loadExternalCatalog() {
@@ -179,6 +221,17 @@ Reglas:
     }
   },
 
+  async loadPrompteca() {
+    try {
+      const resp = await fetch('data/prompts.json');
+      if (!resp.ok) return;
+      this.promptecaData = await resp.json();
+      console.log(`[BupIA] Prompteca cargada (${this.promptecaData.prompts.length} prompts)`);
+    } catch (e) {
+      this.promptecaData = null;
+    }
+  },
+
   // ═══════════════════════════════════════
   //  DOM Construction
   // ═══════════════════════════════════════
@@ -192,16 +245,18 @@ Reglas:
       <div class="assistant-panel">
         <div class="assistant-header">
           <div class="assistant-tabs">
-            <button class="assistant-tab-btn" data-assistant-tab="hoy">🚀 Hoy</button>
-            <button class="assistant-tab-btn" data-assistant-tab="tablon">📋 Tablón</button>
-            <button class="assistant-tab-btn" data-assistant-tab="chat">💬 Chat</button>
-            <button class="assistant-tab-btn" data-assistant-tab="explorar">🔍 Explorar</button>
+            <button class="assistant-tab-btn" data-assistant-tab="hoy"><span class="tab-icon">🚀</span><span class="tab-label"> Hoy</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="tablon"><span class="tab-icon">📋</span><span class="tab-label"> Tablón</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="chat"><span class="tab-icon">💬</span><span class="tab-label"> Chat</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="prompteca"><span class="tab-icon">📖</span><span class="tab-label"> Prompts</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="explorar"><span class="tab-icon">🔍</span><span class="tab-label"> Explorar</span></button>
           </div>
           <button class="assistant-close-btn" data-assistant-action="close">✕</button>
         </div>
         <div class="assistant-body">
           <div class="assistant-tab-content" id="assistant-hoy"></div>
           <div class="assistant-tab-content" id="assistant-tablon"></div>
+          <div class="assistant-tab-content" id="assistant-prompteca"></div>
           <div class="assistant-tab-content" id="assistant-chat">
             <div class="chat-messages" id="chat-messages"></div>
             <div class="chat-typing" id="chat-typing">
@@ -319,6 +374,99 @@ Reglas:
         this.sendExploreMessage(query);
         return;
       }
+
+      // Prompteca: filter by etapa
+      const etapaFilter = target.closest('[data-prompteca-etapa]');
+      if (etapaFilter) {
+        const val = etapaFilter.dataset.promptecaEtapa;
+        this.promptecaFilters.etapa = val === 'todas' ? null : val;
+        this.renderPrompteca();
+        return;
+      }
+
+      // Prompteca: filter by category
+      const catFilter = target.closest('[data-prompteca-cat]');
+      if (catFilter) {
+        const val = catFilter.dataset.promptecaCat;
+        this.promptecaFilters.categoria = (this.promptecaFilters.categoria === val) ? null : val;
+        this.renderPrompteca();
+        return;
+      }
+
+      // Prompteca: toggle expand
+      const toggleBtn = target.closest('[data-prompteca-toggle]');
+      if (toggleBtn) {
+        const id = toggleBtn.dataset.promptecaToggle;
+        const body = this.root.querySelector(`#prompt-body-${id}`);
+        if (body) {
+          const isOpen = body.style.display !== 'none';
+          body.style.display = isOpen ? 'none' : 'block';
+          toggleBtn.textContent = isOpen ? '▼' : '▲';
+        }
+        return;
+      }
+
+      // Prompteca: copy
+      const copyBtn = target.closest('[data-prompteca-copy]');
+      if (copyBtn) {
+        const id = copyBtn.dataset.promptecaCopy;
+        this.copyPromptToClipboard(id, copyBtn);
+        return;
+      }
+
+      // Prompteca: personalize
+      const persBtn = target.closest('[data-prompteca-personalize]');
+      if (persBtn) {
+        this.personalizePrompt(persBtn.dataset.promptecaPersonalize);
+        return;
+      }
+
+      // Mi Ruta: actions (start, regenerate)
+      const rutaAction = target.closest('[data-ruta-action]');
+      if (rutaAction) {
+        const action = rutaAction.dataset.rutaAction;
+        if (action === 'start' || action === 'regenerate') {
+          this.rutaWizardState = { step: 1, etapa: null, asignatura: null, nivel: null };
+          this.renderHoy();
+        } else if (action === 'back-hoy') {
+          this.rutaWizardState = { step: 0, etapa: null, asignatura: null, nivel: null };
+          this.renderHoy();
+        }
+        return;
+      }
+
+      // Mi Ruta: wizard steps
+      const rutaEtapa = target.closest('[data-ruta-etapa]');
+      if (rutaEtapa) {
+        this.rutaWizardState.etapa = rutaEtapa.dataset.rutaEtapa;
+        this.rutaWizardState.step = 2;
+        this.renderHoy();
+        return;
+      }
+
+      const rutaAsig = target.closest('[data-ruta-asig]');
+      if (rutaAsig) {
+        this.rutaWizardState.asignatura = rutaAsig.dataset.rutaAsig;
+        this.rutaWizardState.step = 3;
+        this.renderHoy();
+        return;
+      }
+
+      const rutaNivel = target.closest('[data-ruta-nivel]');
+      if (rutaNivel) {
+        this.rutaWizardState.nivel = rutaNivel.dataset.rutaNivel;
+        this.rutaWizardState.step = 4;
+        this.renderHoy();
+        this.generateRuta();
+        return;
+      }
+
+      // Mi Ruta: prompt link → navigate to prompteca
+      const rutaPrompt = target.closest('[data-ruta-prompt]');
+      if (rutaPrompt) {
+        this.navigateToPromptecaPrompt(rutaPrompt.dataset.rutaPrompt);
+        return;
+      }
     });
 
     // Chat input: Enter key
@@ -388,7 +536,7 @@ Reglas:
 
   renderActiveTab() {
     // Activate the correct content panel
-    const ids = { hoy: 'assistant-hoy', tablon: 'assistant-tablon', chat: 'assistant-chat', explorar: 'assistant-explorar' };
+    const ids = { hoy: 'assistant-hoy', tablon: 'assistant-tablon', chat: 'assistant-chat', prompteca: 'assistant-prompteca', explorar: 'assistant-explorar' };
     const target = this.root.querySelector('#' + ids[this.activeTab]);
     if (target) target.classList.add('active');
 
@@ -409,6 +557,7 @@ Reglas:
     if (this.activeTab === 'hoy') this.renderHoy();
     else if (this.activeTab === 'tablon') this.renderTablon();
     else if (this.activeTab === 'chat') this.renderChat();
+    else if (this.activeTab === 'prompteca') this.renderPrompteca();
     else if (this.activeTab === 'explorar') this.renderExplorar();
   },
 
@@ -487,6 +636,12 @@ Reglas:
     const container = this.root.querySelector('#assistant-hoy');
     if (!container) return;
 
+    // Mi Ruta wizard active?
+    if (this.rutaWizardState.step > 0) {
+      this.renderRutaWizard(container);
+      return;
+    }
+
     const { intent, level, sectionId } = this.wizardState;
 
     if (!intent) {
@@ -511,6 +666,19 @@ Reglas:
       });
     });
 
+    // Check for saved ruta
+    const savedRuta = this.loadSavedRuta();
+    const savedRutaHtml = savedRuta ? `
+      <div class="ruta-saved" data-ruta-action="start">
+        <div class="ruta-saved-icon">🗺️</div>
+        <div class="ruta-saved-text">
+          <div class="ruta-saved-title">${savedRuta.ruta.titulo || 'Tu Ruta de Aprendizaje'}</div>
+          <div class="ruta-saved-desc">Toca para ver tu plan de 4 semanas</div>
+        </div>
+        <span class="wizard-intent-arrow">›</span>
+      </div>
+    ` : '';
+
     container.innerHTML = `
       <div class="wizard-hero">
         <img class="wizard-hero-avatar" src="img/bupia.png" alt="BupIA">
@@ -519,6 +687,7 @@ Reglas:
           <div class="wizard-greeting-sub">Soy <strong>BupIA</strong>, tu asistente</div>
         </div>
       </div>
+      ${savedRutaHtml}
       <div class="wizard-title">¿Qué quieres hacer hoy?</div>
       <div class="wizard-intents">
         ${available.map(i => `
@@ -531,6 +700,17 @@ Reglas:
             <span class="wizard-intent-arrow">›</span>
           </button>
         `).join('')}
+      </div>
+      <div class="ruta-cta">
+        <div class="ruta-cta-divider"><span>o</span></div>
+        <button class="ruta-cta-btn" data-ruta-action="start">
+          <span class="ruta-cta-icon">🗺️</span>
+          <div class="ruta-cta-text">
+            <div class="ruta-cta-title">¿No sabes por dónde empezar?</div>
+            <div class="ruta-cta-desc">Genera tu ruta personalizada de 4 semanas</div>
+          </div>
+          <span class="wizard-intent-arrow">›</span>
+        </button>
       </div>
     `;
   },
@@ -968,6 +1148,350 @@ Reglas:
   },
 
   // ═══════════════════════════════════════
+  //  PROMPTECA (Prompt Library)
+  // ═══════════════════════════════════════
+
+  renderPrompteca() {
+    const container = this.root.querySelector('#assistant-prompteca');
+    if (!container) return;
+
+    if (!this.promptecaData) {
+      container.innerHTML = '<div class="wizard-title">Cargando Prompteca...</div>';
+      return;
+    }
+
+    const { etapa, categoria } = this.promptecaFilters;
+    const meta = this.promptecaData.categorias_meta;
+
+    // Filter prompts
+    let prompts = this.promptecaData.prompts;
+    if (etapa) prompts = prompts.filter(p => p.etapas.includes(etapa));
+    if (categoria) prompts = prompts.filter(p => p.categoria === categoria);
+
+    // Etapa pills
+    const etapas = [
+      { id: 'todas', label: 'Todas' },
+      { id: 'infantil', label: '🎒 Infantil' },
+      { id: 'primaria', label: '📚 Primaria' },
+      { id: 'eso', label: '🎓 ESO' },
+    ];
+
+    const etapaPills = etapas.map(e => {
+      const active = (e.id === 'todas' && !etapa) || e.id === etapa;
+      return `<button class="wizard-cat-pill${active ? ' selected' : ''}" data-prompteca-etapa="${e.id}">${e.label}</button>`;
+    }).join('');
+
+    // Category pills
+    const catPills = Object.entries(meta).map(([id, m]) => {
+      const active = categoria === id;
+      return `<button class="wizard-cat-pill${active ? ' selected' : ''}" data-prompteca-cat="${id}">${m.icono} ${m.label}</button>`;
+    }).join('');
+
+    // Prompt cards
+    const cards = prompts.map(p => {
+      const catMeta = meta[p.categoria] || {};
+      const etapasHtml = (p.etapas || []).map(e => {
+        const labels = { infantil: 'Infantil', primaria: 'Primaria', eso: 'ESO' };
+        return `<span class="ranking-etapa">${labels[e] || e}</span>`;
+      }).join('');
+
+      return `
+        <div class="prompteca-card" id="prompteca-card-${p.id}">
+          <div class="prompteca-card-header" data-prompteca-toggle="${p.id}">
+            <span class="prompteca-card-icon">${catMeta.icono || '📄'}</span>
+            <div class="prompteca-card-title">${p.titulo}</div>
+            <button class="prompteca-toggle-btn" data-prompteca-toggle="${p.id}">▼</button>
+          </div>
+          <div class="prompteca-card-desc">${p.descripcion}</div>
+          <div class="prompteca-card-meta">
+            ${etapasHtml}
+            <span class="prompteca-tool-badge">${p.herramienta}</span>
+          </div>
+          <div class="prompteca-card-prompt" id="prompt-body-${p.id}" style="display:none">
+            <pre class="prompteca-prompt-text">${p.prompt}</pre>
+            <div class="prompteca-card-actions">
+              <button class="prompteca-copy-btn" data-prompteca-copy="${p.id}">📋 Copiar</button>
+              <button class="prompteca-personalize-btn" data-prompteca-personalize="${p.id}">✨ Personalizar</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    container.innerHTML = `
+      <div class="ranking-header">📖 Prompteca — Prompts listos para usar</div>
+      <div class="prompteca-filters">
+        <div class="prompteca-filter-row">${etapaPills}</div>
+        <div class="prompteca-filter-row">${catPills}</div>
+      </div>
+      <div class="prompteca-count">${prompts.length} prompts</div>
+      <div class="prompteca-list">${cards}</div>
+    `;
+  },
+
+  copyPromptToClipboard(promptId, btnEl) {
+    if (!this.promptecaData) return;
+    const prompt = this.promptecaData.prompts.find(p => p.id === promptId);
+    if (!prompt) return;
+
+    const text = prompt.prompt;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        this.showCopyFeedback(btnEl);
+      }).catch(() => {
+        this.fallbackCopy(text, btnEl);
+      });
+    } else {
+      this.fallbackCopy(text, btnEl);
+    }
+  },
+
+  fallbackCopy(text, btnEl) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;left:-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    this.showCopyFeedback(btnEl);
+  },
+
+  showCopyFeedback(btnEl) {
+    if (!btnEl) return;
+    const orig = btnEl.textContent;
+    btnEl.textContent = '✅ ¡Copiado!';
+    btnEl.classList.add('copied');
+    setTimeout(() => {
+      btnEl.textContent = orig;
+      btnEl.classList.remove('copied');
+    }, 2000);
+  },
+
+  personalizePrompt(promptId) {
+    if (!this.promptecaData) return;
+    const prompt = this.promptecaData.prompts.find(p => p.id === promptId);
+    if (!prompt) return;
+
+    // Switch to chat tab with prompt pre-loaded
+    const msg = `Quiero adaptar este prompt de la Prompteca para mi clase:\n\n"${prompt.titulo}"\n\n${prompt.prompt}\n\nAyúdame a personalizarlo para mi contexto.`;
+
+    this.switchTab('chat');
+
+    // Send the message
+    setTimeout(() => {
+      this.sendMessage(msg);
+    }, 200);
+  },
+
+  navigateToPromptecaPrompt(promptId) {
+    this.switchTab('prompteca');
+    setTimeout(() => {
+      const card = this.root.querySelector(`#prompteca-card-${promptId}`);
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.classList.add('prompteca-highlight');
+        setTimeout(() => card.classList.remove('prompteca-highlight'), 2000);
+        // Auto-expand
+        const body = this.root.querySelector(`#prompt-body-${promptId}`);
+        if (body) body.style.display = 'block';
+      }
+    }, 100);
+  },
+
+  // ═══════════════════════════════════════
+  //  MI RUTA (Personalized Learning Path)
+  // ═══════════════════════════════════════
+
+  renderRutaWizard(container) {
+    const { step, etapa, asignatura, nivel } = this.rutaWizardState;
+
+    if (step === 1) {
+      // Step 1: Etapa
+      container.innerHTML = `
+        <button class="wizard-back-btn" data-ruta-action="back-hoy">← Volver</button>
+        <div class="wizard-title">🗺️ Genera tu ruta personalizada</div>
+        <div class="wizard-subtitle">Paso 1 de 3 — ¿En qué etapa enseñas?</div>
+        <div class="wizard-levels">
+          ${Object.entries(this.LEVELS).map(([key, lv]) => `
+            <button class="wizard-level-btn" data-ruta-etapa="${key}">
+              <span class="wizard-level-icon">${lv.icon}</span>
+              <div class="wizard-level-name">${lv.name}</div>
+              <div class="wizard-level-ages">${lv.ages}</div>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    } else if (step === 2) {
+      // Step 2: Asignatura
+      container.innerHTML = `
+        <button class="wizard-back-btn" data-ruta-action="start">← Cambiar etapa</button>
+        <div class="wizard-title">🗺️ Genera tu ruta personalizada</div>
+        <div class="wizard-subtitle">Paso 2 de 3 — ¿Qué asignatura principal?</div>
+        <div class="wizard-categories">
+          ${this.ASIGNATURAS.map(a => `
+            <button class="wizard-cat-pill" data-ruta-asig="${a.id}">${a.icon} ${a.label}</button>
+          `).join('')}
+        </div>
+      `;
+    } else if (step === 3) {
+      // Step 3: Nivel tecnológico
+      container.innerHTML = `
+        <button class="wizard-back-btn" data-ruta-action="start">← Cambiar asignatura</button>
+        <div class="wizard-title">🗺️ Genera tu ruta personalizada</div>
+        <div class="wizard-subtitle">Paso 3 de 3 — ¿Tu nivel con la tecnología?</div>
+        <div class="wizard-levels">
+          <button class="wizard-level-btn" data-ruta-nivel="principiante">
+            <span class="wizard-level-icon">🌱</span>
+            <div class="wizard-level-name">Principiante</div>
+            <div class="wizard-level-ages">Nunca he usado IA</div>
+          </button>
+          <button class="wizard-level-btn" data-ruta-nivel="intermedio">
+            <span class="wizard-level-icon">🌿</span>
+            <div class="wizard-level-name">Intermedio</div>
+            <div class="wizard-level-ages">He probado alguna vez</div>
+          </button>
+          <button class="wizard-level-btn" data-ruta-nivel="avanzado">
+            <span class="wizard-level-icon">🌳</span>
+            <div class="wizard-level-name">Avanzado</div>
+            <div class="wizard-level-ages">Uso IA regularmente</div>
+          </button>
+        </div>
+      `;
+    } else if (step === 4) {
+      // Loading / result
+      const savedRuta = this.loadSavedRuta();
+      if (savedRuta && savedRuta.inputs &&
+          savedRuta.inputs.etapa === etapa &&
+          savedRuta.inputs.asignatura === asignatura &&
+          savedRuta.inputs.nivel === nivel) {
+        this.renderRutaResult(container, savedRuta.ruta);
+      } else {
+        container.innerHTML = `
+          <div class="ruta-loading">
+            <div class="wizard-title">🗺️ Generando tu ruta...</div>
+            <div class="wizard-subtitle">Esto puede tardar unos segundos</div>
+            <div class="chat-typing visible" style="justify-content:center; background:none; border:none;">
+              <div class="chat-typing-dots">
+                <div class="chat-typing-dot"></div>
+                <div class="chat-typing-dot"></div>
+                <div class="chat-typing-dot"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
+  },
+
+  async generateRuta() {
+    const { etapa, asignatura, nivel } = this.rutaWizardState;
+
+    const etapaLabel = this.LEVELS[etapa]?.name || etapa;
+    const asigLabel = this.ASIGNATURAS.find(a => a.id === asignatura)?.label || asignatura;
+
+    // Build prompt catalog for the ruta AI
+    let promptecaCatalog = '';
+    if (this.promptecaData) {
+      const filtered = this.promptecaData.prompts.filter(p => p.etapas.includes(etapa));
+      promptecaCatalog = filtered.map(p => `- ${p.id}: "${p.titulo}" (${p.categoria})`).join('\n');
+    }
+
+    const userMsg = `Genera una ruta de aprendizaje de IA para:
+- Etapa: ${etapaLabel}
+- Asignatura: ${asigLabel}
+- Nivel tecnológico: ${nivel}
+
+Prompts disponibles en la Prompteca para esta etapa:
+${promptecaCatalog || '(ninguno disponible)'}`;
+
+    try {
+      const result = await this.apiCall('ruta', [{ role: 'user', content: userMsg }]);
+
+      if (result && result.content) {
+        let rutaData;
+        try {
+          // Try to extract JSON from the response
+          const jsonMatch = result.content.match(/\{[\s\S]*\}/);
+          rutaData = JSON.parse(jsonMatch ? jsonMatch[0] : result.content);
+        } catch (parseErr) {
+          throw new Error('La IA no devolvió un formato válido. Intenta de nuevo.');
+        }
+
+        // Save
+        this.saveRuta(rutaData, { etapa, asignatura, nivel });
+
+        // Render
+        const container = this.root.querySelector('#assistant-hoy');
+        if (container) this.renderRutaResult(container, rutaData);
+      } else {
+        throw new Error('No se recibió respuesta.');
+      }
+    } catch (err) {
+      const container = this.root.querySelector('#assistant-hoy');
+      if (container) {
+        container.innerHTML = `
+          <button class="wizard-back-btn" data-ruta-action="back-hoy">← Volver</button>
+          <div class="wizard-title">😕 No se pudo generar la ruta</div>
+          <div class="wizard-subtitle">${err.message || 'Error desconocido'}</div>
+          <button class="ruta-regenerate-btn" data-ruta-action="regenerate">🔄 Intentar de nuevo</button>
+        `;
+      }
+    }
+  },
+
+  renderRutaResult(container, rutaData) {
+    const weeks = (rutaData.semanas || []).map(w => {
+      const promptLink = w.prompt_recomendado_id ?
+        `<div class="ruta-week-prompt" data-ruta-prompt="${w.prompt_recomendado_id}">📖 Ver prompt recomendado →</div>` : '';
+
+      return `
+        <div class="ruta-week">
+          <div class="ruta-week-header">
+            <span class="ruta-week-number">Semana ${w.numero}</span>
+            <span class="ruta-week-title">${w.titulo}</span>
+          </div>
+          <div class="ruta-week-body">
+            <div class="ruta-week-row">🎯 <strong>Objetivo:</strong> ${w.objetivo}</div>
+            <div class="ruta-week-row">🔧 <strong>Herramientas:</strong> ${(w.herramientas || []).join(', ')}</div>
+            <div class="ruta-week-row">📝 ${w.actividad}</div>
+            ${promptLink}
+            <div class="ruta-week-tip">💡 ${w.consejo}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    container.innerHTML = `
+      <button class="wizard-back-btn" data-ruta-action="back-hoy">← Volver al inicio</button>
+      <div class="ruta-container">
+        <div class="ruta-title">🗺️ ${rutaData.titulo || 'Tu Ruta Personalizada'}</div>
+        <div class="ruta-summary">${rutaData.resumen || ''}</div>
+        <div class="ruta-timeline">${weeks}</div>
+        <button class="ruta-regenerate-btn" data-ruta-action="regenerate">🔄 Regenerar ruta</button>
+      </div>
+    `;
+  },
+
+  saveRuta(rutaData, inputs) {
+    try {
+      localStorage.setItem('bupia_ruta', JSON.stringify({
+        generatedAt: new Date().toISOString(),
+        inputs,
+        ruta: rutaData,
+      }));
+    } catch (e) { /* quota exceeded */ }
+  },
+
+  loadSavedRuta() {
+    try {
+      const raw = localStorage.getItem('bupia_ruta');
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  },
+
+  // ═══════════════════════════════════════
   //  API
   // ═══════════════════════════════════════
 
@@ -1006,7 +1530,7 @@ Reglas:
 
     const systemPrompt = this.SYSTEM_PROMPTS[feature] || this.SYSTEM_PROMPTS.chat;
     const apiMessages = messages.filter(m => m.role === 'user' || m.role === 'assistant');
-    const maxTokens = feature === 'explore' ? 1500 : 500;
+    const maxTokens = feature === 'ruta' ? 2000 : feature === 'explore' ? 1500 : 500;
 
     const resp = await fetch(this.ANTHROPIC_URL, {
       method: 'POST',

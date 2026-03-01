@@ -763,6 +763,309 @@
   text-decoration: none;
 }
 
+/* ── Tab responsive helpers ── */
+.tab-icon { pointer-events: none; }
+.tab-label { pointer-events: none; }
+
+/* ── Prompteca ── */
+.prompteca-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.prompteca-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.prompteca-count {
+  font-size: 11px;
+  color: var(--text-light);
+  margin-bottom: 8px;
+}
+.prompteca-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.prompteca-card {
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 14px;
+  padding: 12px;
+  transition: transform 0.2s, border-color 0.3s;
+}
+.prompteca-card:hover { transform: translateY(-1px); }
+.prompteca-highlight {
+  border-color: var(--accent-purple) !important;
+  box-shadow: 0 0 0 2px rgba(124,92,191,0.2);
+}
+.prompteca-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.prompteca-card-icon { font-size: 18px; flex-shrink: 0; }
+.prompteca-card-title {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+.prompteca-toggle-btn {
+  border: none;
+  background: rgba(0,0,0,0.05);
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  font-size: 10px;
+  cursor: pointer;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.prompteca-card-desc {
+  font-size: 12px;
+  color: var(--text-medium);
+  margin: 4px 0;
+  line-height: 1.4;
+}
+.prompteca-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  margin-top: 6px;
+}
+.prompteca-tool-badge {
+  font-size: 9.5px;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 4px;
+  background: rgba(0,0,0,0.06);
+  color: var(--text-light);
+  margin-left: auto;
+}
+.prompteca-card-prompt {
+  margin-top: 10px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  padding-top: 10px;
+}
+.prompteca-prompt-text {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-medium);
+  background: rgba(0,0,0,0.03);
+  border-radius: 10px;
+  padding: 12px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  max-height: 250px;
+  overflow-y: auto;
+}
+.prompteca-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.prompteca-copy-btn, .prompteca-personalize-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.prompteca-copy-btn {
+  background: rgba(0,0,0,0.06);
+  color: var(--text-medium);
+}
+.prompteca-copy-btn:hover { background: rgba(0,0,0,0.1); }
+.prompteca-copy-btn.copied {
+  background: rgba(46,196,160,0.15);
+  color: #1a9a7a;
+}
+.prompteca-personalize-btn {
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-warm));
+  color: #fff;
+}
+.prompteca-personalize-btn:hover { transform: scale(1.02); box-shadow: 0 2px 10px rgba(124,92,191,0.25); }
+
+/* ── Mi Ruta ── */
+.ruta-cta {
+  margin-top: 16px;
+}
+.ruta-cta-divider {
+  text-align: center;
+  margin-bottom: 10px;
+  position: relative;
+}
+.ruta-cta-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(0,0,0,0.08);
+}
+.ruta-cta-divider span {
+  position: relative;
+  background: rgba(255,255,255,0.75);
+  padding: 0 12px;
+  font-size: 12px;
+  color: var(--text-light);
+}
+.ruta-cta-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 2px dashed rgba(124,92,191,0.25);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(124,92,191,0.04), rgba(255,123,84,0.04));
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.25s;
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+}
+.ruta-cta-btn:hover {
+  border-color: var(--accent-purple);
+  background: rgba(124,92,191,0.06);
+  transform: translateX(3px);
+}
+.ruta-cta-icon { font-size: 24px; flex-shrink: 0; }
+.ruta-cta-text { flex: 1; }
+.ruta-cta-title { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+.ruta-cta-desc { font-size: 11px; color: var(--text-light); }
+
+/* Saved ruta card in Hoy */
+.ruta-saved {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, rgba(124,92,191,0.08), rgba(255,123,84,0.06));
+  border: 1.5px solid rgba(124,92,191,0.2);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.ruta-saved:hover {
+  border-color: var(--accent-purple);
+  transform: translateX(3px);
+}
+.ruta-saved-icon { font-size: 22px; flex-shrink: 0; }
+.ruta-saved-text { flex: 1; }
+.ruta-saved-title { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+.ruta-saved-desc { font-size: 11px; color: var(--text-light); }
+
+/* Ruta result timeline */
+.ruta-container { padding-bottom: 12px; }
+.ruta-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+.ruta-summary {
+  font-size: 13px;
+  color: var(--text-medium);
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.ruta-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.ruta-week {
+  border-left: 3px solid var(--accent-purple);
+  border-radius: 0 14px 14px 0;
+  background: rgba(255,255,255,0.6);
+  padding: 12px 14px;
+  transition: transform 0.2s;
+}
+.ruta-week:hover { transform: translateX(3px); }
+.ruta-week-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.ruta-week-number {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--accent-purple);
+  color: #fff;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+}
+.ruta-week-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+.ruta-week-body {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-medium);
+}
+.ruta-week-row { margin-bottom: 4px; }
+.ruta-week-row strong { color: var(--text-dark); }
+.ruta-week-prompt {
+  color: var(--accent-purple);
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  margin: 6px 0;
+  transition: color 0.2s;
+}
+.ruta-week-prompt:hover { color: #7c3aed; text-decoration: underline; }
+.ruta-week-tip {
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: var(--text-light);
+  font-style: italic;
+}
+.ruta-regenerate-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: 1.5px solid rgba(124,92,191,0.2);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.5);
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-purple);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.ruta-regenerate-btn:hover {
+  background: rgba(124,92,191,0.06);
+  border-color: var(--accent-purple);
+}
+.ruta-loading {
+  text-align: center;
+  padding: 40px 20px;
+}
+
 /* ── Responsive ── */
 @media (max-width: 700px) {
   .assistant-fab {
@@ -785,6 +1088,8 @@
   }
   .assistant-fab .fab-avatar { width: 44px; height: 44px; }
   .assistant-tab-btn { font-size: 10.5px; padding: 6px 1px; }
+  .assistant-tab-btn .tab-label { display: none; }
+  .assistant-tab-btn .tab-icon { font-size: 15px; }
   .wizard-level-btn { padding: 10px 6px; }
   .explore-chip { font-size: 10.5px; padding: 5px 9px; }
   .wizard-hero-avatar { width: 52px; height: 52px; }
