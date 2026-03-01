@@ -242,6 +242,17 @@ Reglas:
         <img class="fab-avatar" src="img/bupia.png" alt="BupIA">
         <span class="fab-badge"></span>
       </button>
+
+      <!-- Intro video modal (first visit) -->
+      <div class="bupia-intro-overlay" id="bupia-intro-overlay">
+        <div class="bupia-intro-modal">
+          <video class="bupia-intro-video" id="bupia-intro-video"
+                 src="media/bupia-intro.mp4"
+                 playsinline preload="metadata"></video>
+          <button class="bupia-intro-skip" id="bupia-intro-skip">Saltar ⏭️</button>
+        </div>
+      </div>
+
       <div class="assistant-panel">
         <div class="assistant-header">
           <div class="assistant-tabs">
@@ -303,6 +314,22 @@ Reglas:
     // Delegated click handler on root
     this.root.addEventListener('click', (e) => {
       const target = e.target;
+
+      // Intro video: skip button
+      if (target.closest('#bupia-intro-skip')) {
+        this.closeIntroVideo(true);
+        return;
+      }
+      // Intro video: click overlay backdrop to skip
+      if (target.id === 'bupia-intro-overlay') {
+        this.closeIntroVideo(true);
+        return;
+      }
+      // Intro video: rewatch button
+      if (target.closest('[data-bupia-rewatch]')) {
+        this.showIntroVideo();
+        return;
+      }
 
       // FAB toggle
       const actionEl = target.closest('[data-assistant-action]');
@@ -491,11 +518,48 @@ Reglas:
   },
 
   open() {
+    // First visit → show intro video instead of panel
+    if (!localStorage.getItem('bupia_intro_seen')) {
+      this.showIntroVideo();
+      return;
+    }
     this.isOpen = true;
     this.panel.classList.add('open');
     this.fab.classList.add('open');
     this.renderActiveTab();
     this.saveState();
+  },
+
+  // ── Intro Video ──
+
+  showIntroVideo() {
+    const overlay = this.root.querySelector('#bupia-intro-overlay');
+    const video = this.root.querySelector('#bupia-intro-video');
+    if (!overlay || !video) return;
+
+    overlay.classList.add('visible');
+    video.currentTime = 0;
+    video.play().catch(() => {});
+
+    // When video ends naturally → close and open BupIA
+    video.onended = () => this.closeIntroVideo(true);
+  },
+
+  closeIntroVideo(openPanel) {
+    const overlay = this.root.querySelector('#bupia-intro-overlay');
+    const video = this.root.querySelector('#bupia-intro-video');
+    if (overlay) overlay.classList.remove('visible');
+    if (video) { video.pause(); video.onended = null; }
+
+    localStorage.setItem('bupia_intro_seen', '1');
+
+    if (openPanel) {
+      this.isOpen = true;
+      this.panel.classList.add('open');
+      this.fab.classList.add('open');
+      this.renderActiveTab();
+      this.saveState();
+    }
   },
 
   close() {
@@ -686,6 +750,7 @@ Reglas:
           <div class="wizard-greeting">¡Hola, profe!</div>
           <div class="wizard-greeting-sub">Soy <strong>BupIA</strong>, tu asistente</div>
         </div>
+        <button class="bupia-rewatch-btn" data-bupia-rewatch title="Ver vídeo de presentación">🎬</button>
       </div>
       ${savedRutaHtml}
       <div class="wizard-title">¿Qué quieres hacer hoy?</div>
