@@ -922,6 +922,7 @@
   .pathway-card:nth-child(1) { animation-delay: 2.0s; }
   .pathway-card:nth-child(2) { animation-delay: 2.2s; }
   .pathway-card:nth-child(3) { animation-delay: 2.4s; }
+  .pathway-card:nth-child(4) { animation-delay: 2.6s; }
   @keyframes cardFadeIn {
     0%   { opacity: 0; transform: translateY(30px) scale(0.95); }
     100% { opacity: 1; transform: translateY(0) scale(1); }
@@ -973,6 +974,16 @@
     box-shadow: 0 16px 48px rgba(124,58,237,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
   }
 
+  .pathway-card-pro {
+    background: linear-gradient(160deg, rgba(245,158,11,0.12) 0%, rgba(255,255,255,0.5) 40%, rgba(234,88,12,0.08) 100%);
+    border: 1.5px solid rgba(245,158,11,0.25);
+    box-shadow: 0 8px 32px rgba(245,158,11,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
+  }
+  .pathway-card-pro:hover {
+    border-color: rgba(245,158,11,0.45);
+    box-shadow: 0 16px 48px rgba(245,158,11,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
+  }
+
   .pathway-icon {
     font-size: 4rem;
     margin-bottom: 16px;
@@ -1009,6 +1020,7 @@
   .pathway-card-infantil .pathway-card-ages { background: rgba(5,150,105,0.12); color: #059669; }
   .pathway-card-primaria .pathway-card-ages { background: rgba(37,99,235,0.12); color: #2563eb; }
   .pathway-card-eso .pathway-card-ages { background: rgba(124,58,237,0.12); color: #7c3aed; }
+  .pathway-card-pro .pathway-card-ages { background: rgba(245,158,11,0.12); color: #d97706; }
 
   .pathway-badge {
     display: inline-block;
@@ -1025,6 +1037,7 @@
   .pathway-card-infantil .pathway-badge { background: linear-gradient(135deg, #059669, #14b8a6); }
   .pathway-card-primaria .pathway-badge { background: linear-gradient(135deg, #2563eb, #38bdf8); }
   .pathway-card-eso .pathway-badge { background: linear-gradient(135deg, #7c3aed, #4f46e5); }
+  .pathway-card-pro .pathway-badge { background: linear-gradient(135deg, #f59e0b, #ea580c); }
 
   /* ── Mothership Card (transversal) ── */
   .mothership-wrapper {

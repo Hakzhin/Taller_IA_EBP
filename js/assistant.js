@@ -154,6 +154,7 @@ Reglas:
     infantil: { icon: '🎒', name: 'Infantil', ages: '3-6 años' },
     primaria: { icon: '📚', name: 'Primaria', ages: '6-12 años' },
     eso:      { icon: '🎓', name: 'ESO', ages: '12-16 años' },
+    pro:      { icon: '🚀', name: 'IA PRO', ages: 'Avanzado' },
   },
 
   // ── Intent options: "What do you want to do today?" ──
