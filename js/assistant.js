@@ -307,7 +307,7 @@ Reglas:
           <button class="chat-send-btn" id="chat-send" data-assistant-action="send">➤</button>
         </div>
         <div class="assistant-footer">
-          BupIA · Powered by Claude
+          BupIA · Potenciado por Claude
         </div>
       </div>
     `;
