@@ -3,6 +3,60 @@
 //  Unified JavaScript (single source of truth)
 // ══════════════════════════════════════════
 
+// ── Welcome Clip (first visit) ──
+(function () {
+  var KEY = 'welcome_clip_seen';
+  var overlay = document.getElementById('welcome-clip');
+  if (!overlay || localStorage.getItem(KEY)) {
+    if (overlay) overlay.remove();
+    return;
+  }
+
+  document.body.classList.add('wc-active');
+  var scenes = overlay.querySelectorAll('.wc-scene');
+  var skip = document.getElementById('wc-skip');
+  var timeouts = [];
+
+  var timeline = [
+    [0,     0],  // Scene 1: Logo
+    [3500,  1],  // Scene 2: Enseñar
+    [8000,  2],  // Scene 3: Aliado
+    [12500, 3],  // Scene 4: BupIA
+    [16000, 4],  // Scene 5: CTA
+  ];
+  var TOTAL = 18500;
+
+  function runTimeline() {
+    timeline.forEach(function (entry) {
+      var ms = entry[0], idx = entry[1];
+      timeouts.push(setTimeout(function () {
+        scenes.forEach(function (s) { s.classList.remove('active'); });
+        scenes[idx].classList.add('active');
+      }, ms));
+    });
+    timeouts.push(setTimeout(finish, TOTAL));
+  }
+
+  function finish() {
+    timeouts.forEach(clearTimeout);
+    localStorage.setItem(KEY, '1');
+    overlay.classList.add('wc-done');
+    document.body.classList.remove('wc-active');
+    // Re-trigger landing animations via reflow
+    document.querySelectorAll('.morph-logo, .morph-title, .landing-header p, .landing-subtitle, .pathway-card, .mothership-card').forEach(function (el) {
+      el.style.animation = 'none';
+      void el.offsetHeight;
+      el.style.animation = '';
+    });
+    // Re-run neural canvas
+    if (typeof window._startNeuralCanvas === 'function') window._startNeuralCanvas();
+    setTimeout(function () { overlay.remove(); }, 1200);
+  }
+
+  skip.addEventListener('click', finish);
+  runTimeline();
+})();
+
 // ── Initialize: render pathways from data ──
 Renderer.renderAll();
 
@@ -83,7 +137,8 @@ Renderer.renderAll();
     requestAnimationFrame(draw);
   }
 
-  animate();
+  window._startNeuralCanvas = animate;
+  if (!document.body.classList.contains('wc-active')) animate();
 })();
 
 // ── Release cardFadeIn so hover transforms work ──
