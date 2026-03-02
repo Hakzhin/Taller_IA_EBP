@@ -1393,11 +1393,167 @@
     <div class="footer-powered">Potenciado por <strong>Claude Opus 4.6</strong> (Anthropic)</div>
     <div class="footer-legal">
       BupIA&reg; es una marca registrada del Colegio El Buen Pastor<br>
-      &copy; 2026 Todos los derechos reservados &middot; <a href="#" onclick="return false;">Aviso Legal</a> &middot; <a href="#" onclick="return false;">Pol&iacute;tica de Privacidad</a>
+      &copy; 2026 Todos los derechos reservados &middot; <a href="#" onclick="openLegalModal('aviso-legal');return false;">Aviso Legal</a> &middot; <a href="#" onclick="openLegalModal('politica-privacidad');return false;">Pol&iacute;tica de Privacidad</a>
     </div>
   </footer>
 
 </div> <!-- /app-wrapper -->
+
+<!-- ── Modal: Aviso Legal ── -->
+<div id="aviso-legal" class="legal-modal-overlay" onclick="if(event.target===this)closeLegalModal(this.id)">
+  <div class="legal-modal">
+    <button class="legal-modal-close" onclick="closeLegalModal('aviso-legal')">&times;</button>
+    <h1>Aviso Legal</h1>
+    <p class="legal-updated">&Uacute;ltima actualizaci&oacute;n: marzo 2026</p>
+
+    <h2>1. Datos identificativos</h2>
+    <p>En cumplimiento del art&iacute;culo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Informaci&oacute;n y de Comercio Electr&oacute;nico (LSSI-CE), se informa al usuario de los siguientes datos:</p>
+    <ul>
+      <li><strong>Titular:</strong> Colegio El Buen Pastor</li>
+      <li><strong>Domicilio:</strong> Madrid, Espa&ntilde;a</li>
+      <li><strong>Contacto:</strong> A trav&eacute;s del centro educativo</li>
+      <li><strong>Actividad:</strong> Centro de ense&ntilde;anza concertado</li>
+    </ul>
+
+    <h2>2. Objeto de la plataforma</h2>
+    <p>La plataforma <strong>Taller de IA</strong> es un recurso educativo interno del Colegio El Buen Pastor que ofrece a su comunidad educativa (docentes, alumnado y familias) acceso guiado a herramientas de inteligencia artificial con fines pedag&oacute;gicos.</p>
+    <p>El asistente <strong>BupIA&reg;</strong> es un sistema de IA basado en tecnolog&iacute;a Claude de Anthropic. No es una persona f&iacute;sica y sus respuestas se generan de forma automatizada mediante modelos de lenguaje.</p>
+
+    <h2>3. Condiciones de uso</h2>
+    <p>El acceso y uso de esta plataforma implica la aceptaci&oacute;n de las presentes condiciones. El usuario se compromete a:</p>
+    <ul>
+      <li>Utilizar la plataforma exclusivamente con fines educativos leg&iacute;timos.</li>
+      <li>No introducir datos personales sensibles (datos de salud, creencias, etc.) en las conversaciones con la IA.</li>
+      <li>No intentar manipular, enga&ntilde;ar o forzar al asistente BupIA a generar contenido inapropiado.</li>
+      <li>No reproducir ni distribuir el contenido de la plataforma sin autorizaci&oacute;n.</li>
+      <li>Supervisar el uso que los menores hagan de la plataforma, en el caso de familias.</li>
+    </ul>
+    <p>Los menores de 14 a&ntilde;os deben contar con el consentimiento de sus padres o tutores legales para utilizar esta plataforma, conforme al art&iacute;culo 7 de la LOPDGDD.</p>
+
+    <h2>4. Propiedad intelectual e industrial</h2>
+    <p>El dise&ntilde;o, c&oacute;digo, logotipos y contenido editorial de la plataforma son propiedad del Colegio El Buen Pastor o se utilizan con licencia. <strong>BupIA&reg;</strong> es una marca registrada del Colegio El Buen Pastor.</p>
+    <p>El contenido generado por la IA (respuestas de BupIA, sugerencias de herramientas) se proporciona &laquo;tal cual&raquo; (&ldquo;as is&rdquo;) y no est&aacute; sujeto a garant&iacute;a de exactitud. Las marcas Claude&reg; y Anthropic&reg; son propiedad de Anthropic, PBC. Las dem&aacute;s marcas referenciadas pertenecen a sus respectivos titulares.</p>
+
+    <h2>5. Exclusi&oacute;n de garant&iacute;as y limitaci&oacute;n de responsabilidad</h2>
+    <p>El Colegio El Buen Pastor:</p>
+    <ul>
+      <li>No garantiza la disponibilidad ininterrumpida ni la ausencia de errores en la plataforma.</li>
+      <li>No se responsabiliza de las decisiones adoptadas a partir de contenido generado por IA. Las respuestas de BupIA pueden contener imprecisiones o informaci&oacute;n desactualizada.</li>
+      <li>No se responsabiliza del contenido ni de las pol&iacute;ticas de privacidad de las herramientas externas enlazadas (ChatGPT, Gemini, Suno, etc.).</li>
+      <li>No sustituye el criterio profesional del docente. El contenido generado por IA es un recurso de apoyo, no un sustituto de la labor educativa.</li>
+    </ul>
+
+    <h2>6. Legislaci&oacute;n aplicable y jurisdicci&oacute;n</h2>
+    <p>Las presentes condiciones se rigen por la legislaci&oacute;n espa&ntilde;ola. Para la resoluci&oacute;n de cualquier controversia derivada del uso de esta plataforma, las partes se someten a los Juzgados y Tribunales de Madrid, con renuncia expresa a cualquier otro fuero que pudiera corresponderles.</p>
+    <p>Normativa aplicable: Ley 34/2002 (LSSI-CE), Reglamento (UE) 2016/679 (RGPD), Ley Org&aacute;nica 3/2018 (LOPDGDD) y Reglamento (UE) 2024/1689 (Reglamento de Inteligencia Artificial).</p>
+
+    <h2>7. Modificaciones</h2>
+    <p>El Colegio El Buen Pastor se reserva el derecho de modificar las presentes condiciones en cualquier momento. Los cambios ser&aacute;n efectivos desde su publicaci&oacute;n en la plataforma. Se recomienda revisar este aviso legal peri&oacute;dicamente.</p>
+  </div>
+</div>
+
+<!-- ── Modal: Pol&iacute;tica de Privacidad ── -->
+<div id="politica-privacidad" class="legal-modal-overlay" onclick="if(event.target===this)closeLegalModal(this.id)">
+  <div class="legal-modal">
+    <button class="legal-modal-close" onclick="closeLegalModal('politica-privacidad')">&times;</button>
+    <h1>Pol&iacute;tica de Privacidad</h1>
+    <p class="legal-updated">&Uacute;ltima actualizaci&oacute;n: marzo 2026</p>
+
+    <h2>1. Responsable del tratamiento</h2>
+    <p>De conformidad con el Reglamento (UE) 2016/679 (RGPD) y la Ley Org&aacute;nica 3/2018 (LOPDGDD):</p>
+    <ul>
+      <li><strong>Responsable:</strong> Colegio El Buen Pastor</li>
+      <li><strong>Domicilio:</strong> Madrid, Espa&ntilde;a</li>
+      <li><strong>Contacto DPD:</strong> A trav&eacute;s de la administraci&oacute;n del centro educativo</li>
+    </ul>
+
+    <h2>2. Datos personales tratados</h2>
+    <p>La plataforma <strong>Taller de IA</strong> puede tratar las siguientes categor&iacute;as de datos:</p>
+    <ul>
+      <li><strong>Datos de navegaci&oacute;n:</strong> direcci&oacute;n IP, tipo de navegador, p&aacute;ginas visitadas y marcas de tiempo de acceso.</li>
+      <li><strong>Datos de uso:</strong> consultas realizadas al asistente BupIA, interacciones con las herramientas de IA y preferencias de itinerario.</li>
+    </ul>
+    <p>La plataforma <strong>no requiere registro ni recoge datos identificativos</strong> (nombre, correo electr&oacute;nico) de forma directa. No obstante, se advierte al usuario que no debe introducir datos personales sensibles (salud, creencias religiosas, orientaci&oacute;n sexual, datos econ&oacute;micos) en las conversaciones con la IA.</p>
+
+    <h2>3. Finalidades y bases jur&iacute;dicas</h2>
+    <table class="legal-table">
+      <thead><tr><th>Finalidad</th><th>Base jur&iacute;dica</th></tr></thead>
+      <tbody>
+        <tr><td>Prestaci&oacute;n del servicio educativo de IA</td><td>Inter&eacute;s leg&iacute;timo y misi&oacute;n de inter&eacute;s p&uacute;blico educativo (Art. 6.1.e-f RGPD)</td></tr>
+        <tr><td>Mejora de la experiencia educativa</td><td>Inter&eacute;s leg&iacute;timo (Art. 6.1.f RGPD)</td></tr>
+        <tr><td>Cumplimiento de obligaciones legales</td><td>Obligaci&oacute;n legal (Art. 6.1.c RGPD)</td></tr>
+      </tbody>
+    </table>
+    <p>Para menores de 14 a&ntilde;os, el tratamiento requiere el consentimiento del titular de la patria potestad o tutor legal, conforme al art&iacute;culo 7 de la LOPDGDD y al art&iacute;culo 8 del RGPD.</p>
+
+    <h2>4. Tratamiento de datos mediante Inteligencia Artificial</h2>
+    <p>El asistente <strong>BupIA</strong> est&aacute; basado en el modelo <strong>Claude</strong> de <strong>Anthropic, PBC</strong> (San Francisco, EE.&nbsp;UU.). Cuando el usuario interact&uacute;a con BupIA:</p>
+    <ul>
+      <li>El texto de la consulta se env&iacute;a a los servidores de Anthropic para generar la respuesta.</li>
+      <li>Anthropic act&uacute;a como <strong>encargado del tratamiento</strong> (Art. 28 RGPD). Conforme a sus pol&iacute;ticas de API, las consultas enviadas a trav&eacute;s de la API <strong>no se utilizan para entrenar sus modelos</strong>.</li>
+      <li>BupIA no almacena historial de conversaciones entre sesiones.</li>
+      <li>Las respuestas se generan de forma automatizada y <strong>pueden contener imprecisiones</strong> (alucinaciones). No se toman decisiones automatizadas con efectos jur&iacute;dicos o significativos sobre los usuarios (Art. 22 RGPD).</li>
+    </ul>
+    <p>La plataforma tambi&eacute;n referencia herramientas de terceros (OpenAI, Google, Microsoft, etc.). Cuando el usuario accede a estas herramientas externas a trav&eacute;s de los enlaces proporcionados, queda sujeto a las pol&iacute;ticas de privacidad de cada proveedor.</p>
+
+    <h2>5. Transferencias internacionales de datos</h2>
+    <p>Las consultas realizadas a BupIA implican transferencia de datos a servidores de Anthropic en Estados Unidos. Estas transferencias se amparan en:</p>
+    <ul>
+      <li>El Marco de Privacidad de Datos UE-EE.&nbsp;UU. (<em>EU-US Data Privacy Framework</em>), en su caso.</li>
+      <li>Cl&aacute;usulas Contractuales Tipo adoptadas por la Comisi&oacute;n Europea (Decisi&oacute;n 2021/914).</li>
+    </ul>
+    <p>El usuario puede solicitar informaci&oacute;n adicional sobre las garant&iacute;as aplicables contactando con el centro educativo.</p>
+
+    <h2>6. Plazo de conservaci&oacute;n</h2>
+    <ul>
+      <li><strong>Datos de navegaci&oacute;n:</strong> se conservan de forma an&oacute;nima y agregada con fines estad&iacute;sticos.</li>
+      <li><strong>Conversaciones con BupIA:</strong> no se almacenan de forma persistente en la plataforma. El procesamiento por Anthropic se rige por su pol&iacute;tica de retenci&oacute;n de datos de API (m&aacute;ximo 30 d&iacute;as para detecci&oacute;n de abusos).</li>
+    </ul>
+
+    <h2>7. Derechos de los interesados</h2>
+    <p>De conformidad con los art&iacute;culos 15 a 22 del RGPD y los art&iacute;culos 12 a 18 de la LOPDGDD, el usuario (o su representante legal en el caso de menores) tiene derecho a:</p>
+    <ul>
+      <li><strong>Acceso:</strong> conocer qu&eacute; datos personales se est&aacute;n tratando.</li>
+      <li><strong>Rectificaci&oacute;n:</strong> corregir datos inexactos.</li>
+      <li><strong>Supresi&oacute;n:</strong> solicitar la eliminaci&oacute;n de sus datos (&ldquo;derecho al olvido&rdquo;).</li>
+      <li><strong>Limitaci&oacute;n:</strong> restringir el tratamiento en determinadas circunstancias.</li>
+      <li><strong>Portabilidad:</strong> recibir sus datos en un formato estructurado y legible por m&aacute;quina.</li>
+      <li><strong>Oposici&oacute;n:</strong> oponerse al tratamiento basado en inter&eacute;s leg&iacute;timo.</li>
+    </ul>
+    <p>Para ejercer estos derechos, el usuario puede dirigirse a la administraci&oacute;n del Colegio El Buen Pastor. El centro responder&aacute; en el plazo m&aacute;ximo de un mes, prorrogable a tres meses en casos de especial complejidad.</p>
+    <p>Si considera que sus derechos no han sido debidamente atendidos, puede presentar una reclamaci&oacute;n ante la <strong>Agencia Espa&ntilde;ola de Protecci&oacute;n de Datos</strong> (AEPD): <em>www.aepd.es</em>.</p>
+
+    <h2>8. Protecci&oacute;n de menores</h2>
+    <p>Dada la naturaleza educativa de la plataforma, se aplican garant&iacute;as reforzadas para la protecci&oacute;n de los datos de menores:</p>
+    <ul>
+      <li>Se aplica el principio de <strong>minimizaci&oacute;n de datos</strong>: solo se tratan los datos estrictamente necesarios.</li>
+      <li>Se desaconseja a los alumnos compartir datos personales propios o de terceros en las conversaciones con BupIA.</li>
+      <li>Los padres o tutores legales pueden ejercer los derechos de protecci&oacute;n de datos en nombre de los menores en cualquier momento.</li>
+      <li>El uso de la plataforma por menores de 14 a&ntilde;os est&aacute; condicionado al consentimiento parental.</li>
+    </ul>
+
+    <h2>9. Cookies</h2>
+    <p>Esta plataforma utiliza &uacute;nicamente <strong>cookies t&eacute;cnicas y de sesi&oacute;n</strong> estrictamente necesarias para su funcionamiento. No se emplean cookies de seguimiento, publicitarias ni anal&iacute;ticas de terceros. Las cookies de sesi&oacute;n se eliminan al cerrar el navegador.</p>
+
+    <h2>10. Seguridad</h2>
+    <p>El Colegio El Buen Pastor adopta las medidas t&eacute;cnicas y organizativas apropiadas para garantizar la seguridad de los datos personales, incluyendo:</p>
+    <ul>
+      <li>Cifrado de las comunicaciones mediante protocolo HTTPS/TLS.</li>
+      <li>Comunicaciones cifradas con las APIs de los proveedores de IA.</li>
+      <li>Revisi&oacute;n peri&oacute;dica de las medidas de seguridad.</li>
+    </ul>
+    <p>En caso de producirese una brecha de seguridad que afecte a datos personales, se notificar&aacute; a la AEPD en un plazo m&aacute;ximo de 72 horas y a los interesados sin dilaci&oacute;n indebida, conforme a los art&iacute;culos 33 y 34 del RGPD.</p>
+
+    <h2>11. Modificaciones</h2>
+    <p>Esta pol&iacute;tica de privacidad puede ser actualizada en cualquier momento. Se recomienda su revisi&oacute;n peri&oacute;dica. La fecha de &uacute;ltima actualizaci&oacute;n se indica al inicio de este documento.</p>
+  </div>
+</div>
+
+<script>
+function openLegalModal(id){document.getElementById(id).classList.add('active');document.body.style.overflow='hidden';}
+function closeLegalModal(id){document.getElementById(id).classList.remove('active');document.body.style.overflow='';}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){document.querySelectorAll('.legal-modal-overlay.active').forEach(function(m){closeLegalModal(m.id);});}});
+</script>
 
 
 <script src="js/data/content.js"></script>
