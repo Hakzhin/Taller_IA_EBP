@@ -46,7 +46,15 @@ ESO (12-16 anos):
 - Imagenes: Gemini, Grok, Copilot
 - Videos: Flow, Grok Video, Luma
 - Cuadernos: NotebookLM
-- Materiales: Gemini, ChatGPT, Claude`;
+- Materiales: Gemini, ChatGPT, Claude
+
+IA PRO (nivel avanzado):
+- Proyectos: ChatGPT Proyectos, Claude Proyectos
+- Agentes: Custom GPTs, Claude como Agente, Gemini Gems
+- Programacion: Google AI Studio, Claude Code, Google Antigravity
+
+APPS PROPIAS DEL COLEGIO:
+- Rubric@sEBP (https://rubric-s-830258786759.us-west1.run.app/): Generador inteligente de rubricas de evaluacion alineadas con LOMLOE. Usa Gemini para generar rubricas completas. El profesor elige etapa (Infantil/Primaria/Secundaria), asignatura, curso, elemento a evaluar, criterios LOMLOE e items con ponderacion. La IA genera descriptores para cada nivel de desempeno (Insuficiente a Sobresaliente). Exporta a Excel y PDF. Incluye chat con Gemini para dudas. Disponible en espanol, ingles y frances.`;
 
     const BASE = `Eres "BupIA", el asistente de la plataforma "Taller IA" del Colegio El Buen Pastor (Madrid).
 Ayudas a profesores a descubrir y usar herramientas de IA para educacion.
@@ -60,7 +68,9 @@ Reglas:
 - Si preguntan por herramientas fuera del catalogo, di que solo conoces las de la plataforma pero que pueden existir otras.
 - Para consejos de prompts, referencia la "formula de 4 ingredientes": QUE quiero + COMO + PARA QUIEN + DETALLES.
 - No inventes URLs ni funcionalidades que no existan.
-- Usa un tono cercano y motivador.`;
+- Usa un tono cercano y motivador.
+- Si preguntan por RUBRICAS o evaluacion, recomienda Rubric@sEBP (app propia del colegio) con el enlace directo. Explica brevemente que pueden elegir etapa, asignatura y criterios LOMLOE, y la IA genera la rubrica completa.
+- Si preguntan por el itinerario IA PRO, explica que es para usuarios avanzados que quieren crear proyectos, agentes o aplicaciones con IA.`;
 
     return {
       chat: BASE,
@@ -778,6 +788,17 @@ Reglas:
             <span class="wizard-intent-arrow">›</span>
           </button>
         `).join('')}
+      </div>
+      <div class="wizard-apps-section">
+        <div class="ruta-cta-divider"><span>Apps del colegio</span></div>
+        <a href="https://rubric-s-830258786759.us-west1.run.app/" target="_blank" rel="noopener" class="wizard-intent-btn wizard-app-link">
+          <span class="wizard-intent-icon"><img src="img/logo-rubricas.png" alt="" style="width:28px;height:28px;object-fit:contain;"></span>
+          <div class="wizard-intent-info">
+            <div class="wizard-intent-label">Rubric@sEBP</div>
+            <div class="wizard-intent-desc">Genera rúbricas LOMLOE con IA</div>
+          </div>
+          <span class="wizard-intent-arrow">↗</span>
+        </a>
       </div>
       <div class="ruta-cta">
         <div class="ruta-cta-divider"><span>o</span></div>
