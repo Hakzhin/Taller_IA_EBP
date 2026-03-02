@@ -821,31 +821,6 @@ const SITE_DATA = {
       linkLabel: 'Abrir Claude ↗',
     },
 
-    'pro-gemini-proj': {
-      id: 'pro-gemini-proj',
-      name: 'Gemini Gems',
-      cardClass: 'tool-card-gemini',
-      logo: 'img/gemini.png',
-      logoAlt: '✦',
-      tagline: 'Gems como workspace de proyecto integrado con Google Workspace',
-      chipNew: true,
-      tutClass: 'tut-gemini',
-      info: [
-        '<strong>¿Qué es?</strong> Las Gems de Gemini son asistentes IA personalizados que puedes configurar con instrucciones específicas y conectar con tu Google Drive. Puedes crear una Gem-proyecto que conozca tus documentos, tu estilo y tu contexto educativo, y usarla como espacio de trabajo recurrente.',
-        '<strong>💡 ¿Por qué usarlo?</strong> Si tu colegio usa Google Workspace (y la mayoría sí), Gemini Gems es la opción más natural. Tu Gem puede acceder a tus Docs, Sheets y Slides, y generar contenido directamente integrado con tu ecosistema de trabajo habitual.',
-      ],
-      steps: [
-        { title: 'Crea una nueva Gem', desc: 'Abre Gemini y busca el Gem Manager', detail: 'Ve a <code>gemini.google.com</code>. En el menú lateral, busca <code>Gem manager</code> o <code>Gems</code>. Haz clic en <code>New Gem</code>. Dale un nombre: <code>Mi Asistente de Ciencias Naturales</code>.' },
-        { title: 'Escribe las instrucciones de tu Gem', desc: 'Define cómo debe comportarse y qué contexto tiene', detail: 'En el campo de instrucciones, sé detallado: <code>Eres un asistente educativo especializado en Ciencias Naturales para Primaria (LOMLOE). Adaptas el lenguaje a niños de 8-12 años. Cuando crees actividades, incluyes siempre los criterios de evaluación correspondientes. Generas materiales en formato fácilmente copiable a Google Docs. Usas emojis para hacer los materiales más atractivos.</code>' },
-        { title: 'Conecta con tus archivos de Drive', desc: 'La Gem puede acceder a documentos de tu Google Drive', detail: 'Si tienes Google AI Pro, tu Gem puede acceder a archivos de Google Drive. Referencia documentos específicos en las instrucciones: <code>Basa tus respuestas en la programación didáctica que está en mi Drive</code>. La Gem usará esos documentos como fuente principal.' },
-        { title: 'Usa tu Gem como workspace recurrente', desc: 'Vuelve a ella siempre que trabajes en este proyecto', detail: 'Tu Gem aparecerá en el menú lateral de Gemini. Cada vez que necesites generar algo para Ciencias Naturales, abre tu Gem en vez del chat general. El contexto ya está configurado. Puedes compartir la Gem con compañeros de departamento para que todos trabajen con el mismo asistente personalizado.' },
-      ],
-      mission: 'Crea una Gem para una asignatura o proyecto. Configura instrucciones detalladas y prueba a generar al menos 2 materiales distintos (ej: actividad + rúbrica) usando la misma Gem.',
-      example: '<strong>💡 Ejemplo:</strong> Gem «Tutor de Mates 5º»: instrucciones para que genere problemas contextualizados con situaciones del día a día, use nivel de vocabulario adecuado y siempre incluya la resolución paso a paso con dibujos descriptivos.',
-      link: 'https://gemini.google.com',
-      linkLabel: 'Abrir Gemini ↗',
-    },
-
     // ── IA PRO: Agentes ──
     'pro-chatgpt-gpt': {
       id: 'pro-chatgpt-gpt',
@@ -926,8 +901,8 @@ const SITE_DATA = {
     'pro-aistudio': {
       id: 'pro-aistudio',
       name: 'Google AI Studio',
-      cardClass: 'tool-card-gemini',
-      logo: 'img/gemini.png',
+      cardClass: 'tool-card-aistudio',
+      logo: 'img/aistudio.png',
       logoAlt: '⚡',
       tagline: 'Prototipa aplicaciones de IA visualmente y prueba modelos de Gemini',
       chipNew: true,
@@ -971,6 +946,31 @@ const SITE_DATA = {
       example: '<strong>💡 Ejemplo:</strong> «Crea un juego web de conjugación de verbos en español para 5º de Primaria. Muestra un verbo y un tiempo verbal, el alumno escribe la conjugación, la app corrige al instante con confeti si acierta. Incluye los 50 verbos más frecuentes, modo entrenamiento y modo examen con puntuación.»',
       link: 'https://claude.ai',
       linkLabel: 'Abrir Claude ↗',
+    },
+
+    'pro-antigravity': {
+      id: 'pro-antigravity',
+      name: 'Google Antigravity',
+      cardClass: 'tool-card-antigravity',
+      logo: 'img/antigravity.png',
+      logoAlt: '🅰️',
+      tagline: 'IDE con agentes IA que construyen aplicaciones completas por ti',
+      chipNew: true,
+      tutClass: 'tut-antigravity',
+      info: [
+        '<strong>¿Qué es?</strong> Google Antigravity es un entorno de desarrollo (IDE) con IA integrada que permite crear aplicaciones completas delegando el trabajo a agentes autónomos. Tú describes lo que quieres en lenguaje natural, y los agentes de Gemini escriben el código, crean las interfaces y configuran el proyecto. Es gratuito para uso individual.',
+        '<strong>💡 ¿Por qué usarlo?</strong> Antigravity va un paso más allá que un chat: tiene una vista de «Manager» donde puedes lanzar múltiples agentes que trabajan en paralelo, cada uno en una tarea distinta. Los agentes generan «Artifacts» (capturas, planes, código) que puedes revisar y aprobar. Además, aprende de tu proyecto: cada decisión se guarda en una base de conocimiento persistente.',
+      ],
+      steps: [
+        { title: 'Descarga e instala Antigravity', desc: 'Disponible para Windows, Mac y Linux — gratuito', detail: 'Ve a <code>antigravity.google</code> y descarga la versión para tu sistema operativo. La instalación es como cualquier programa. Al abrirlo verás un editor de código (basado en VS Code) con dos vistas: <code>Editor View</code> (para escribir código) y <code>Manager Surface</code> (para gestionar agentes IA).' },
+        { title: 'Crea un proyecto nuevo y describe tu idea', desc: 'Abre una carpeta vacía y empieza a hablar con el agente', detail: 'Crea una carpeta nueva en tu ordenador (p. ej. <code>mi-app-educativa</code>), ábrela en Antigravity. En el panel del agente, describe tu proyecto: <code>Quiero crear una aplicación web para que mis alumnos de 4º de Primaria practiquen las tablas de multiplicar. Debe tener un modo entrenamiento y un modo examen con puntuación, diseño colorido y responsive para móvil.</code>' },
+        { title: 'Deja que los agentes trabajen', desc: 'Los agentes escriben código, crean archivos y generan la app', detail: 'Los agentes de Gemini empezarán a trabajar: crearán archivos, escribirán código HTML/CSS/JavaScript, configurarán el proyecto. Verás «Artifacts» con el progreso: capturas de pantalla de la app, planes de implementación, código generado. Revisa los Artifacts y deja feedback si algo no te convence: el agente lo incorporará.' },
+        { title: 'Itera, prueba y comparte', desc: 'Pide cambios en lenguaje natural y comparte el resultado', detail: 'Pide mejoras: <code>Añade sonidos de acierto y error</code>, <code>Incluye un ranking de mejores puntuaciones</code>, <code>Cambia los colores a azul y amarillo</code>. Cuando estés satisfecho, los archivos están en tu carpeta listos para subir a GitHub Pages, Google Sites o cualquier hosting. La app funciona en cualquier navegador.' },
+      ],
+      mission: 'Instala Antigravity y crea una aplicación web educativa. Describe tu idea y deja que los agentes la construyan. Pide al menos 2 iteraciones de mejora.',
+      example: '<strong>💡 Ejemplo:</strong> «Crea una app web de dictados de inglés para 2º ESO. La app muestra una palabra en español, la pronuncia en inglés con audio, y el alumno debe escribirla correctamente. Si falla, muestra la corrección y la repite más tarde. 100 palabras del vocabulario de Oxford A2. Diseño moderno con modo oscuro.»',
+      link: 'https://antigravity.google',
+      linkLabel: 'Abrir Antigravity ↗',
     },
 
   },
@@ -1152,7 +1152,7 @@ const SITE_DATA = {
         icon: '🗂️',
         isDefault: true,
         pillActiveClass: 'active-pro-projects',
-        tools: ['pro-chatgpt-proj', 'pro-claude-proj', 'pro-gemini-proj'],
+        tools: ['pro-chatgpt-proj', 'pro-claude-proj'],
       },
       {
         id: 'pro-agents',
@@ -1168,7 +1168,7 @@ const SITE_DATA = {
         icon: '💻',
         isDefault: false,
         pillActiveClass: '',
-        tools: ['pro-aistudio', 'pro-claude-code'],
+        tools: ['pro-aistudio', 'pro-claude-code', 'pro-antigravity'],
       },
       ],
     },

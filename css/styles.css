@@ -1355,6 +1355,10 @@
   .tool-card-chatgpt::before { background: linear-gradient(90deg, #10a37f, #6ee7b7); }
   .tool-card-claude { --card-accent: #d97706; }
   .tool-card-claude::before { background: linear-gradient(90deg, #d97706, #f59e0b); }
+  .tool-card-aistudio { --card-accent: #1a73e8; }
+  .tool-card-aistudio::before { background: linear-gradient(90deg, #1a73e8, #8ab4f8); }
+  .tool-card-antigravity { --card-accent: #0d652d; }
+  .tool-card-antigravity::before { background: linear-gradient(90deg, #4285f4, #0d652d); }
 
   /* Tool logo area */
   .tool-logo-wrap {
@@ -1372,6 +1376,8 @@
   .tool-card-luma .tool-logo-wrap { background: linear-gradient(135deg, #f5f3ff, #ede9fe); }
   .tool-card-chatgpt .tool-logo-wrap { background: linear-gradient(135deg, #ecfdf5, #d1fae5); }
   .tool-card-claude .tool-logo-wrap { background: linear-gradient(135deg, #fffbeb, #fef3c7); }
+  .tool-card-aistudio .tool-logo-wrap { background: linear-gradient(135deg, #eff6ff, #dbeafe); }
+  .tool-card-antigravity .tool-logo-wrap { background: linear-gradient(135deg, #ecfdf5, #d1fae5); }
 
   .tool-card-name { font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; }
   .tool-card-tagline { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; }
