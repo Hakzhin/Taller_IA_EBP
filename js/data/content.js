@@ -773,7 +773,7 @@ const SITE_DATA = {
     // ── IA PRO: Proyectos ──
     'pro-chatgpt-proj': {
       id: 'pro-chatgpt-proj',
-      name: 'ChatGPT Projects',
+      name: 'ChatGPT Proyectos',
       cardClass: 'tool-card-chatgpt',
       logo: 'img/chatgpt.png',
       logoAlt: '💬',
@@ -798,7 +798,7 @@ const SITE_DATA = {
 
     'pro-claude-proj': {
       id: 'pro-claude-proj',
-      name: 'Claude Projects',
+      name: 'Claude Proyectos',
       cardClass: 'tool-card-claude',
       logo: 'img/claude.png',
       logoAlt: '🧠',
