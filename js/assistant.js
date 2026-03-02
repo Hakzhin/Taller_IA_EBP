@@ -733,8 +733,6 @@ Reglas:
 
     if (!intent) {
       this.renderIntentPicker(container);
-    } else if (!level) {
-      this.renderLevelPicker(container);
     } else {
       this.renderResults(container);
     }
@@ -819,24 +817,11 @@ Reglas:
     if (!intent) return;
 
     this.wizardState.intent = intentId;
-    this.wizardState.level = null;
+    this.wizardState.level = 'all';
     this.wizardState.sectionId = null;
 
-    // Find which levels have this intent
-    const levelsWithIntent = [];
-    for (const [lvlKey, pw] of Object.entries(SITE_DATA.pathways)) {
-      const match = pw.sections.find(s => intent.categories.includes(s.id) && s.tools && s.tools.length > 0);
-      if (match) levelsWithIntent.push(lvlKey);
-    }
-
-    // If only 1 level available, skip level picker
-    if (levelsWithIntent.length === 1) {
-      this.selectLevel(levelsWithIntent[0]);
-      return;
-    }
-
     const container = this.root.querySelector('#assistant-hoy');
-    if (container) this.renderLevelPicker(container);
+    if (container) this.renderResults(container);
   },
 
   // Step 2: "For which level?"
@@ -886,33 +871,36 @@ Reglas:
     if (container) this.renderResults(container);
   },
 
-  // Step 3: Show recommended tools
+  // Step 3: Show recommended tools (aggregated from all levels)
   renderResults(container) {
-    const { intent: intentId, level, sectionId } = this.wizardState;
+    const { intent: intentId, level } = this.wizardState;
     const intent = this.INTENTS.find(i => i.id === intentId);
-    const pathway = SITE_DATA.pathways[level];
-    if (!intent || !pathway) return;
+    if (!intent) return;
 
-    const section = pathway.sections.find(s => s.id === sectionId);
-    if (!section || !section.tools) return;
-
-    const tools = section.tools.map(id => SITE_DATA.tools[id]).filter(Boolean);
-
-    // Check how many levels have this intent — if only 1, back goes to intents
-    let levelsWithIntent = 0;
-    for (const pw of Object.values(SITE_DATA.pathways)) {
-      if (pw.sections.find(s => intent.categories.includes(s.id) && s.tools && s.tools.length > 0)) levelsWithIntent++;
+    // Collect tools from all levels, deduplicating by tool name
+    const seen = new Set();
+    const toolEntries = []; // {tool, sectionId, pathway}
+    for (const [lvlKey, pw] of Object.entries(SITE_DATA.pathways)) {
+      for (const sec of pw.sections) {
+        if (!intent.categories.includes(sec.id) || !sec.tools) continue;
+        for (const tid of sec.tools) {
+          const t = SITE_DATA.tools[tid];
+          if (!t || seen.has(t.name)) continue;
+          seen.add(t.name);
+          toolEntries.push({ tool: t, sectionId: sec.id, pathway: lvlKey });
+        }
+      }
     }
-    const backTarget = levelsWithIntent <= 1 ? 'intents' : 'levels';
-    const backLabel = levelsWithIntent <= 1 ? '← Cambiar actividad' : '← Cambiar nivel';
+
+    if (toolEntries.length === 0) return;
 
     container.innerHTML = `
-      <button class="wizard-back-btn" data-wizard-back="${backTarget}">${backLabel}</button>
+      <button class="wizard-back-btn" data-wizard-back="intents">← Cambiar actividad</button>
       <div class="wizard-title">${intent.icon} ${intent.label}</div>
-      <div class="wizard-subtitle">Herramientas recomendadas para ${this.LEVELS[level].name}</div>
+      <div class="wizard-subtitle">Herramientas recomendadas</div>
       <div class="wizard-results">
-        ${tools.map(t => `
-          <div class="wizard-tool-card" data-wizard-tool="${t.id}" data-wizard-section="${sectionId}" data-wizard-pathway="${level}">
+        ${toolEntries.map(({ tool: t, sectionId, pathway }) => `
+          <div class="wizard-tool-card" data-wizard-tool="${t.id}" data-wizard-section="${sectionId}" data-wizard-pathway="${pathway}">
             <img class="wizard-tool-logo" src="${t.logo}" alt="${t.logoAlt}">
             <div class="wizard-tool-info">
               <div class="wizard-tool-name">${t.name}</div>
@@ -926,7 +914,8 @@ Reglas:
     `;
 
     // Load AI recommendation (async)
-    this.loadAIRecommendation(level, intent.label);
+    const firstLevel = toolEntries[0].pathway;
+    this.loadAIRecommendation(firstLevel, intent.label);
   },
 
   async loadAIRecommendation(level, intentLabel) {
