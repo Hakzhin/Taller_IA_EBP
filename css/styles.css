@@ -455,12 +455,29 @@
   .footer {
     text-align: center;
     margin-top: 48px;
-    padding: 20px;
-    font-size: 0.85rem;
+    padding: 28px 20px;
+    font-size: 0.8rem;
     color: var(--text-light);
+    line-height: 1.6;
+    border-top: 1px solid rgba(0,0,0,0.06);
   }
-
+  .footer-brand {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    margin-bottom: 4px;
+  }
+  .footer-powered {
+    font-size: 0.78rem;
+    margin-bottom: 10px;
+  }
+  .footer-legal {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    line-height: 1.7;
+  }
   .footer a { color: var(--accent-purple); text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
 
   /* ── Animations ── */
   @keyframes fadeInDown {
