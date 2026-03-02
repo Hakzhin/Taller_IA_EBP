@@ -3,58 +3,74 @@
 //  Unified JavaScript (single source of truth)
 // ══════════════════════════════════════════
 
-// ── Welcome Clip (first visit) ──
+// ── Welcome Clip ──
 (function () {
   var KEY = 'welcome_clip_seen';
-  var overlay = document.getElementById('welcome-clip');
-  if (!overlay || localStorage.getItem(KEY)) {
-    if (overlay) overlay.remove();
-    return;
-  }
-
-  document.body.classList.add('wc-active');
-  var scenes = overlay.querySelectorAll('.wc-scene');
-  var skip = document.getElementById('wc-skip');
-  var timeouts = [];
-
-  var timeline = [
-    [0,     0],  // Scene 1: Logo
-    [3500,  1],  // Scene 2: Enseñar
-    [8000,  2],  // Scene 3: Aliado
-    [12500, 3],  // Scene 4: BupIA
-    [16000, 4],  // Scene 5: CTA
-  ];
+  var TIMELINE = [[0,0],[3500,1],[8000,2],[12500,3],[16000,4]];
   var TOTAL = 18500;
+  var clipHTML = '';
 
-  function runTimeline() {
-    timeline.forEach(function (entry) {
-      var ms = entry[0], idx = entry[1];
-      timeouts.push(setTimeout(function () {
-        scenes.forEach(function (s) { s.classList.remove('active'); });
-        scenes[idx].classList.add('active');
-      }, ms));
-    });
-    timeouts.push(setTimeout(finish, TOTAL));
+  // Save template HTML before first removal
+  var initial = document.getElementById('welcome-clip');
+  if (initial) {
+    clipHTML = initial.outerHTML;
+    if (localStorage.getItem(KEY)) { initial.remove(); }
+    else { playClip(initial); }
   }
 
-  function finish() {
-    timeouts.forEach(clearTimeout);
-    localStorage.setItem(KEY, '1');
-    overlay.classList.add('wc-done');
-    document.body.classList.remove('wc-active');
-    // Re-trigger landing animations via reflow
-    document.querySelectorAll('.morph-logo, .morph-title, .landing-header p, .landing-subtitle, .pathway-card, .mothership-card').forEach(function (el) {
-      el.style.animation = 'none';
-      void el.offsetHeight;
-      el.style.animation = '';
-    });
-    // Re-run neural canvas
-    if (typeof window._startNeuralCanvas === 'function') window._startNeuralCanvas();
-    setTimeout(function () { overlay.remove(); }, 1200);
+  function playClip(overlay) {
+    document.body.classList.add('wc-active');
+    var scenes = overlay.querySelectorAll('.wc-scene');
+    var skip = overlay.querySelector('.wc-skip');
+    var timeouts = [];
+
+    function run() {
+      TIMELINE.forEach(function (entry) {
+        var ms = entry[0], idx = entry[1];
+        timeouts.push(setTimeout(function () {
+          scenes.forEach(function (s) { s.classList.remove('active'); });
+          scenes[idx].classList.add('active');
+        }, ms));
+      });
+      timeouts.push(setTimeout(finish, TOTAL));
+    }
+
+    function finish() {
+      timeouts.forEach(clearTimeout);
+      localStorage.setItem(KEY, '1');
+      overlay.classList.add('wc-done');
+      document.body.classList.remove('wc-active');
+      document.querySelectorAll('.morph-logo, .morph-title, .landing-header p, .landing-subtitle, .pathway-card, .mothership-card').forEach(function (el) {
+        el.style.animation = 'none';
+        void el.offsetHeight;
+        el.style.animation = '';
+      });
+      if (typeof window._startNeuralCanvas === 'function') window._startNeuralCanvas();
+      setTimeout(function () { overlay.remove(); }, 1200);
+    }
+
+    skip.addEventListener('click', finish);
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) finish(); });
+    run();
   }
 
-  skip.addEventListener('click', finish);
-  runTimeline();
+  // Expose replay for footer link
+  window.replayWelcomeClip = function () {
+    if (!clipHTML || document.getElementById('welcome-clip')) return;
+    // Scroll to top first
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    // Show landing screen if in a pathway
+    var landing = document.getElementById('landing-screen');
+    if (landing) landing.style.display = '';
+    document.querySelectorAll('.pathway-content').forEach(function (p) { p.classList.remove('active'); });
+    // Re-insert and play
+    var tmp = document.createElement('div');
+    tmp.innerHTML = clipHTML;
+    var overlay = tmp.firstElementChild;
+    overlay.classList.remove('wc-done');
+    document.body.insertBefore(overlay, document.body.firstChild);
+    playClip(overlay);
+  };
 })();
 
 // ── Initialize: render pathways from data ──
