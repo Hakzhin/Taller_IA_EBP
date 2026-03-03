@@ -280,6 +280,10 @@ Reglas:
           <div class="assistant-tab-content" id="assistant-tablon"></div>
           <div class="assistant-tab-content" id="assistant-prompteca"></div>
           <div class="assistant-tab-content" id="assistant-chat">
+            <div class="chat-header-bar">
+              <span class="chat-header-title">💬 Chat con BupIA</span>
+              <button class="chat-clear-btn" id="chat-clear" title="Nueva conversación">🗑️</button>
+            </div>
             <div class="chat-messages" id="chat-messages"></div>
             <div class="chat-typing" id="chat-typing">
               <div class="chat-typing-dots">
@@ -290,6 +294,10 @@ Reglas:
             </div>
           </div>
           <div class="assistant-tab-content" id="assistant-explorar">
+            <div class="chat-header-bar">
+              <span class="chat-header-title">🔍 Explorador IA</span>
+              <button class="chat-clear-btn" id="explore-clear" title="Nueva búsqueda">🗑️</button>
+            </div>
             <div class="chat-messages" id="explore-messages"></div>
             <div class="chat-typing" id="explore-typing">
               <div class="chat-typing-dots">
@@ -400,6 +408,18 @@ Reglas:
       if (bulletinLink) {
         const toolId = bulletinLink.dataset.bulletinTool;
         this.navigateToToolFromId(toolId);
+        return;
+      }
+
+      // Chat: clear conversation (persistent memory)
+      if (target.closest('#chat-clear')) {
+        this.clearChat();
+        return;
+      }
+
+      // Explore: clear search history
+      if (target.closest('#explore-clear')) {
+        this.resetExplorar();
         return;
       }
 
@@ -951,14 +971,29 @@ Reglas:
     // Only render if empty (preserve existing messages)
     if (container.children.length > 0) return;
 
-    // Welcome message
-    this.appendMessage('assistant',
-      '¡Hola! 👋 Soy **BupIA**, tu asistente del Taller IA. Puedo ayudarte a:\n\n' +
-      '• Encontrar la herramienta perfecta para tu clase\n' +
-      '• Darte consejos sobre cómo escribir buenos prompts\n' +
-      '• Resolver dudas sobre las herramientas de la plataforma\n\n' +
-      '¿En qué puedo ayudarte?'
-    );
+    if (this.chatHistory.length > 0) {
+      // Restore saved conversation from persistent memory
+      this.chatHistory.forEach(msg => {
+        this.appendMessage(msg.role, msg.content);
+      });
+    } else {
+      // Welcome message for first-time users
+      this.appendMessage('assistant',
+        '¡Hola! 👋 Soy **BupIA**, tu asistente del Taller IA. Puedo ayudarte a:\n\n' +
+        '• Encontrar la herramienta perfecta para tu clase\n' +
+        '• Darte consejos sobre cómo escribir buenos prompts\n' +
+        '• Resolver dudas sobre las herramientas de la plataforma\n\n' +
+        '¿En qué puedo ayudarte?'
+      );
+    }
+  },
+
+  clearChat() {
+    this.chatHistory = [];
+    const container = this.root.querySelector('#chat-messages');
+    if (container) container.innerHTML = '';
+    this.saveState();
+    this.renderChat(); // Shows welcome again
   },
 
   handleSend() {
@@ -988,9 +1023,9 @@ Reglas:
     // Add to history
     this.chatHistory.push({ role: 'user', content: text });
 
-    // Trim history to last 10 messages
-    if (this.chatHistory.length > 10) {
-      this.chatHistory = this.chatHistory.slice(-10);
+    // Trim history to last 50 messages (persistent memory)
+    if (this.chatHistory.length > 50) {
+      this.chatHistory = this.chatHistory.slice(-50);
     }
 
     // Show typing
@@ -1149,6 +1184,20 @@ Reglas:
 
     if (container.children.length > 0) return;
 
+    if (this.exploreHistory.length > 0) {
+      // Restore saved exploration from persistent memory
+      this.exploreHistory.forEach(msg => {
+        this.appendExploreMessage(msg.role, msg.content);
+      });
+    } else {
+      this.renderExplorarWelcome(container);
+    }
+  },
+
+  renderExplorarWelcome(container) {
+    if (!container) container = this.root.querySelector('#explore-messages');
+    if (!container) return;
+
     this.appendExploreMessage('assistant',
       '**Modo Explorador** 🔍\n\n' +
       'Aquí te ayudo a descubrir herramientas de IA **que no están en la plataforma** pero que pueden ser muy útiles para tu aula.\n\n' +
@@ -1176,7 +1225,7 @@ Reglas:
     const container = this.root.querySelector('#explore-messages');
     if (container) container.innerHTML = '';
     this.exploreHistory = [];
-    this.renderExplorar();
+    this.renderExplorarWelcome(container);
     this.saveState();
   },
 
@@ -1203,8 +1252,8 @@ Reglas:
     this.appendExploreMessage('user', text);
     this.exploreHistory.push({ role: 'user', content: text });
 
-    if (this.exploreHistory.length > 10) {
-      this.exploreHistory = this.exploreHistory.slice(-10);
+    if (this.exploreHistory.length > 50) {
+      this.exploreHistory = this.exploreHistory.slice(-50);
     }
 
     this.showExploreTyping();
@@ -1641,7 +1690,8 @@ ${promptecaCatalog || '(ninguno disponible)'}`;
     }
 
     const systemPrompt = this.SYSTEM_PROMPTS[feature] || this.SYSTEM_PROMPTS.chat;
-    const apiMessages = messages.filter(m => m.role === 'user' || m.role === 'assistant');
+    // Send only last 20 messages to API (cost control), even though we store up to 50
+    const apiMessages = messages.filter(m => m.role === 'user' || m.role === 'assistant').slice(-20);
     const maxTokens = feature === 'ruta' ? 2000 : feature === 'explore' ? 1500 : 1000;
 
     const resp = await fetch(this.ANTHROPIC_URL, {
@@ -1774,22 +1824,30 @@ ${promptecaCatalog || '(ninguno disponible)'}`;
   },
 
   // ═══════════════════════════════════════
-  //  Persistence (sessionStorage)
+  //  Persistence (localStorage — survives browser close)
   // ═══════════════════════════════════════
 
   saveState() {
     try {
-      sessionStorage.setItem('assistant_state', JSON.stringify({
+      localStorage.setItem('assistant_state', JSON.stringify({
         activeTab: this.activeTab,
-        chatHistory: this.chatHistory.slice(-10),
-        exploreHistory: this.exploreHistory.slice(-10),
+        chatHistory: this.chatHistory.slice(-50),
+        exploreHistory: this.exploreHistory.slice(-50),
       }));
     } catch (e) { /* quota exceeded — ignore */ }
   },
 
   loadState() {
     try {
-      const raw = sessionStorage.getItem('assistant_state');
+      // Migrate from sessionStorage if exists (one-time)
+      let raw = localStorage.getItem('assistant_state');
+      if (!raw) {
+        raw = sessionStorage.getItem('assistant_state');
+        if (raw) {
+          localStorage.setItem('assistant_state', raw);
+          sessionStorage.removeItem('assistant_state');
+        }
+      }
       if (raw) {
         const state = JSON.parse(raw);
         this.activeTab = state.activeTab || 'hoy';
