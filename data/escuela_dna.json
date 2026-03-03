@@ -1,0 +1,111 @@
+{
+  "version": "1.0",
+  "nombre_completo": "Colegio El Buen Pastor",
+  "tipo": "Centro concertado de itinerario católico",
+  "ubicacion": "Plaza San Agustín, 1 – 30005 Murcia",
+  "telefono": "968 291 976",
+  "email": "administracion@elbuenpastor.es",
+  "web": "https://elbuenpastor.es",
+  "fundacion": {
+    "anio": 1946,
+    "fundador": "Don Federico Quirós García y su familia (6 hijas y 1 hijo)",
+    "origen_nombre": "El nombre proviene de la imagen del Buen Pastor de la Catedral de San Sebastián, donde Don Federico rezaba para llevar adelante su visión de crear un colegio familiar.",
+    "historia_breve": "Fundado en 1946 en la calle San Nicolás (Murcia), pasó por San Benito y Marqués de Ordoño (Barrio del Carmen) hasta instalarse definitivamente en 1965 en Plaza San Agustín, donde sigue hoy con casi 80 años de historia."
+  },
+  "identidad": {
+    "mision": "Formación humana y cristiana de niños y jóvenes, combinando tradición en conocimiento y valores cristianos de sus fundadores con los nuevos tiempos. Abogamos por una educación libre, respetuosa, de colaboración y diálogo.",
+    "vision": "Ser un colegio familiar donde se camina juntos en la misma dirección, formando creyentes capaces de comprometer su vida por el bien de la humanidad en Dios, por Dios y para Dios.",
+    "valores": [
+      "Fe cristiana",
+      "Educación en valores",
+      "Espíritu familiar",
+      "Respeto y diálogo",
+      "Colaboración",
+      "Vocación de servicio",
+      "Desarrollo pleno de la personalidad"
+    ],
+    "lema_pastoral": "Caminamos juntos en la misma dirección",
+    "caracter_propio": "Colegio familiar con una trayectoria de casi 80 años, donde generaciones de familias murcianas han confiado la educación de sus hijos. Un lugar donde la tradición educativa se une a la innovación."
+  },
+  "etapas_educativas": [
+    {
+      "nombre": "Educación Infantil",
+      "cursos": "3, 4 y 5 años",
+      "rango_edad": "3-6 años"
+    },
+    {
+      "nombre": "Educación Primaria",
+      "cursos": "1º a 6º de Primaria",
+      "rango_edad": "6-12 años"
+    },
+    {
+      "nombre": "Educación Secundaria Obligatoria (ESO)",
+      "cursos": "1º a 4º de ESO",
+      "rango_edad": "12-16 años"
+    }
+  ],
+  "pastoral": {
+    "descripcion": "Animado por el espíritu del Evangelio, el colegio participa en la misión educativa de la Iglesia Católica con su carisma propio emanado del fundador Federico Quirós. Su función es la formación humana y cristiana de los niños y jóvenes.",
+    "actividades_clave": [
+      "Oración diaria al inicio de clase",
+      "Clase semanal de Religión para todos los alumnos",
+      "Eucaristías de apertura y cierre de curso con familias",
+      "DOMUND – mes misionero (octubre)",
+      "Adviento con servicios penitenciales",
+      "Recogida solidaria de alimentos en Navidad",
+      "Día de la Paz (enero)",
+      "Convivencias y retiros espirituales para Primaria y ESO",
+      "Retiros de 3º y 4º ESO en el Monasterio de Santa Catalina (La Alberca)",
+      "Miércoles de Ceniza con Eucaristía",
+      "Vía Crucis procesional (cada clase representa una estación)",
+      "Procesión del Ángel en Semana Santa (junto a otros colegios religiosos de Murcia)",
+      "Procesión de Dolores por el recinto del colegio (Infantil y Primaria)",
+      "Ofrenda floral a la Virgen (mayo)",
+      "Eucaristía final de curso con todas las familias"
+    ],
+    "patron_anual": "San Felipe Neri (elegido anualmente)"
+  },
+  "programas_destacados": {
+    "erasmus_plus": {
+      "acreditacion": "KA120-SCH (obtenida en 2022)",
+      "descripcion": "Centro acreditado Erasmus+ con programa de movilidades internacionales para alumnos y profesores.",
+      "destinos_recientes": [
+        "Italia (5º y 6º Primaria)",
+        "Francia – Clermont-Ferrand (1º, 2º, 3º ESO)",
+        "Francia – París (1º ESO)",
+        "Finlandia (4º ESO)"
+      ],
+      "objetivos": [
+        "Excelencia académica y reducción del abandono escolar",
+        "Inclusión y multiculturalidad",
+        "Transformación digital",
+        "Competencia en lenguas extranjeras",
+        "Desarrollo profesional docente",
+        "STEM y sostenibilidad medioambiental"
+      ]
+    },
+    "idiomas": [
+      "Inglés (desde Infantil)",
+      "Francés como segunda lengua extranjera"
+    ],
+    "extraescolares": [
+      "Teatro",
+      "Radio escolar 'El Tobogán'",
+      "Revista escolar 'Punto de Encuentro'",
+      "Programas de refuerzo lingüístico"
+    ],
+    "apps_propias": [
+      "Taller IA – Plataforma de inteligencia artificial para docentes (donde vive BupIA)",
+      "Rubric@sEBP – Generador inteligente de rúbricas de evaluación alineadas con LOMLOE"
+    ]
+  },
+  "comunidad": {
+    "ampa": "Asociación de Madres y Padres de Alumnos, con participación activa en la vida del colegio",
+    "redes_sociales": {
+      "facebook": "BuenPastorMurcia",
+      "twitter": "@colebuen_pastor",
+      "instagram": "@colegioelbuenpastor"
+    },
+    "jornadas_puertas_abiertas": "Se celebran anualmente para familias interesadas en conocer el colegio"
+  }
+}

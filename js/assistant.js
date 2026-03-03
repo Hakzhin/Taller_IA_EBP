@@ -216,6 +216,7 @@ Reglas:
     this.updateBadge();
     this.loadExternalCatalog();
     this.loadPrompteca();
+    this.loadSchoolDNA();
   },
 
   async loadExternalCatalog() {
@@ -251,6 +252,44 @@ Reglas:
       console.log(`[BupIA] Prompteca cargada (${this.promptecaData.prompts.length} prompts)`);
     } catch (e) {
       this.promptecaData = null;
+    }
+  },
+
+  async loadSchoolDNA() {
+    try {
+      const resp = await fetch('data/escuela_dna.json');
+      if (!resp.ok) return;
+      const dna = await resp.json();
+
+      let text = `\n\nADN DEL COLEGIO (usa esta informacion cuando hablen del colegio, su historia, valores, programas o identidad):\n`;
+      text += `Nombre: ${dna.nombre_completo} | Tipo: ${dna.tipo}\n`;
+      text += `Ubicacion: ${dna.ubicacion} | Tel: ${dna.telefono} | Web: ${dna.web}\n`;
+      text += `Fundado en ${dna.fundacion.anio} por ${dna.fundacion.fundador}.\n`;
+      text += `${dna.fundacion.origen_nombre}\n`;
+      text += `${dna.fundacion.historia_breve}\n`;
+      text += `\nMision: ${dna.identidad.mision}\n`;
+      text += `Vision: ${dna.identidad.vision}\n`;
+      text += `Valores: ${dna.identidad.valores.join(', ')}.\n`;
+      text += `Caracter: ${dna.identidad.caracter_propio}\n`;
+      text += `\nEtapas educativas: ${dna.etapas_educativas.map(e => e.nombre + ' (' + e.cursos + ', ' + e.rango_edad + ')').join(' | ')}\n`;
+      text += `\nPastoral: ${dna.pastoral.descripcion}\n`;
+      text += `Actividades pastorales: ${dna.pastoral.actividades_clave.join('; ')}.\n`;
+      text += `\nERASMUS+: Acreditacion ${dna.programas_destacados.erasmus_plus.acreditacion}. ${dna.programas_destacados.erasmus_plus.descripcion}\n`;
+      text += `Destinos recientes: ${dna.programas_destacados.erasmus_plus.destinos_recientes.join(', ')}.\n`;
+      text += `Objetivos Erasmus+: ${dna.programas_destacados.erasmus_plus.objetivos.join('; ')}.\n`;
+      text += `Idiomas: ${dna.programas_destacados.idiomas.join(', ')}.\n`;
+      text += `Extraescolares: ${dna.programas_destacados.extraescolares.join(', ')}.\n`;
+      text += `Apps propias del colegio: ${dna.programas_destacados.apps_propias.join(', ')}.\n`;
+      text += `\nComunidad: ${dna.comunidad.ampa}. Redes: Instagram ${dna.comunidad.redes_sociales.instagram}, Facebook ${dna.comunidad.redes_sociales.facebook}, Twitter ${dna.comunidad.redes_sociales.twitter}.\n`;
+
+      // Inject DNA into ALL feature prompts
+      for (const key of Object.keys(this.SYSTEM_PROMPTS)) {
+        this.SYSTEM_PROMPTS[key] += text;
+      }
+
+      console.log(`[BupIA] ADN del colegio cargado`);
+    } catch (e) {
+      // DNA not available — BupIA works without it
     }
   },
 
