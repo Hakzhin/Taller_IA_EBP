@@ -218,6 +218,7 @@ Reglas:
     this.loadPrompteca();
     this.loadSchoolDNA();
     this.loadLOMLOE();
+    this.loadInspeccion();
   },
 
   async loadExternalCatalog() {
@@ -352,6 +353,72 @@ Reglas:
       console.log(`[BupIA] LOMLOE Murcia cargado`);
     } catch (e) {
       // LOMLOE not available — BupIA works with general knowledge
+    }
+  },
+
+  async loadInspeccion() {
+    try {
+      const resp = await fetch('data/inspeccion_murcia.json');
+      if (!resp.ok) return;
+      const ins = await resp.json();
+
+      let text = `\n\nINSPECCION DE EDUCACION (asesora a los docentes para estar preparados ante la inspeccion; da checklists practicos y cita normativa):\n`;
+
+      // Marco legal
+      text += `\nNORMATIVA DE INSPECCION:\n`;
+      for (const n of ins.marco_legal.normativa_inspeccion) {
+        text += `- ${n.nombre}: ${n.descripcion}`;
+        if (n.novedad) text += ` NOVEDAD: ${n.novedad}`;
+        text += `\n`;
+      }
+      text += `Organizacion: ${ins.marco_legal.organizacion}\n`;
+
+      // Programación didáctica
+      text += `\nELEMENTOS OBLIGATORIOS DE UNA PROGRAMACION DIDACTICA:\n`;
+      text += ins.que_revisan_los_inspectores.programacion_didactica.elementos_obligatorios.map(e => `- ${e}`).join('\n') + '\n';
+      text += `Errores frecuentes: ${ins.que_revisan_los_inspectores.programacion_didactica.errores_frecuentes.join('; ')}.\n`;
+
+      // Situaciones de aprendizaje
+      text += `\nELEMENTOS DE UNA SITUACION DE APRENDIZAJE (para inspeccion):\n`;
+      text += ins.que_revisan_los_inspectores.situaciones_de_aprendizaje.elementos_requeridos.map(e => `- ${e}`).join('\n') + '\n';
+
+      // Evaluación que revisan
+      text += `\nQUE REVISAN SOBRE EVALUACION:\n`;
+      text += ins.que_revisan_los_inspectores.evaluacion.map(e => `- ${e}`).join('\n') + '\n';
+
+      // Atención a la diversidad
+      text += `\nATENCION A LA DIVERSIDAD (inspeccion):\n`;
+      text += ins.que_revisan_los_inspectores.atencion_diversidad.map(e => `- ${e}`).join('\n') + '\n';
+
+      // Observación de aula
+      text += `\nQUE OBSERVAN EN EL AULA:\n`;
+      text += ins.que_revisan_los_inspectores.observacion_aula.que_observan.map(e => `- ${e}`).join('\n') + '\n';
+
+      // Derechos y deberes
+      text += `\nDERECHOS DEL DOCENTE ante inspeccion: ${ins.derechos_docente.join('; ')}.\n`;
+      text += `DEBERES DEL DOCENTE ante inspeccion: ${ins.deberes_docente.join('; ')}.\n`;
+
+      // Concertado
+      text += `\nESPECIFICO CENTROS CONCERTADOS: ${ins.especifico_concertado.obligaciones_concierto.join('; ')}.\n`;
+      text += `Ideario religioso: ${ins.especifico_concertado.ideario_religioso.proteccion} ${ins.especifico_concertado.ideario_religioso.limites}\n`;
+
+      // Checklists
+      text += `\nCHECKLIST PRE-INSPECCION para docentes:\n`;
+      text += ins.preparacion_practica.checklist_pre_inspeccion.map(e => `- ${e}`).join('\n') + '\n';
+      text += `DURANTE la inspeccion: ${ins.preparacion_practica.durante_inspeccion.join('; ')}.\n`;
+      text += `DESPUES de la inspeccion: ${ins.preparacion_practica.despues_inspeccion.join('; ')}.\n`;
+
+      // RD 68/2026
+      text += `\n${ins.rd_68_2026_novedades.titulo}: ${ins.rd_68_2026_novedades.implicacion_practica}\n`;
+
+      // Inject into ALL prompts
+      for (const key of Object.keys(this.SYSTEM_PROMPTS)) {
+        this.SYSTEM_PROMPTS[key] += text;
+      }
+
+      console.log(`[BupIA] Inspección Murcia cargado`);
+    } catch (e) {
+      // Inspection data not available — BupIA works without it
     }
   },
 

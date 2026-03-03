@@ -1,0 +1,183 @@
+{
+  "version": "1.0",
+  "marco_legal": {
+    "normativa_inspeccion": [
+      {
+        "nombre": "Decreto 316/2015, de 29 de diciembre",
+        "descripcion": "Regulacion principal de la Inspeccion de Educacion en la Region de Murcia. Define funciones, organizacion y actuacion de los inspectores.",
+        "ambito": "Regional (Murcia)"
+      },
+      {
+        "nombre": "Real Decreto 68/2026, de 4 de febrero",
+        "descripcion": "Nueva regulacion nacional de la inspeccion educativa. Amplia funciones: evaluacion explicita de la funcion docente y directiva, rol asesor reforzado, supervision de programas y servicios.",
+        "ambito": "Nacional",
+        "novedad": "Los inspectores ahora evaluan sistematicamente si la practica docente real coincide con la programacion didactica. Tambien asesoran activamente para la mejora."
+      },
+      {
+        "nombre": "Ley 1/2013, de 15 de febrero",
+        "descripcion": "Ley de Autoridad Docente de la Region de Murcia. Los inspectores gozan de condicion de autoridad publica.",
+        "ambito": "Regional (Murcia)"
+      }
+    ],
+    "organizacion": "La Inspeccion de Educacion de Murcia se organiza en 5 distritos geograficos: Murcia Norte, Murcia Sur, Cartagena-Mar Menor, Guadalentin y Noroeste-Altiplano. El Colegio El Buen Pastor pertenece al distrito de Murcia (centro)."
+  },
+  "que_revisan_los_inspectores": {
+    "programacion_didactica": {
+      "descripcion": "Documento donde el docente planifica la ensenanza y el aprendizaje de su area o materia para el curso.",
+      "elementos_obligatorios": [
+        "Contextualizacion al alumnado y al centro (adaptada al Buen Pastor)",
+        "Competencias especificas del area segun Decreto de Murcia",
+        "Criterios de evaluacion asociados a cada competencia especifica",
+        "Saberes basicos organizados por bloques",
+        "Situaciones de aprendizaje disenadas con detalle",
+        "Metodologias activas y participativas (no solo clase magistral)",
+        "Medidas de atencion a la diversidad concretas",
+        "Procedimientos e instrumentos de evaluacion variados (no solo examenes)",
+        "Criterios de calificacion claros (como se llega a la nota final)",
+        "Recursos didacticos y materiales",
+        "Actividades complementarias y extraescolares previstas",
+        "Elementos transversales (educacion en valores, igualdad, sostenibilidad)"
+      ],
+      "errores_frecuentes": [
+        "Copiar la programacion del curso anterior sin actualizar",
+        "Programacion generica descargada de internet, no contextualizada",
+        "No incluir medidas reales de atencion a la diversidad",
+        "Describir solo examenes como instrumento de evaluacion",
+        "Que la programacion no refleje lo que realmente se hace en el aula",
+        "No alinear los criterios de evaluacion con los del Decreto",
+        "Olvidar las competencias clave y su vinculacion"
+      ]
+    },
+    "situaciones_de_aprendizaje": {
+      "elementos_requeridos": [
+        "Justificacion: por que es relevante, que competencias desarrolla",
+        "Objetivos de aprendizaje claros y medibles",
+        "Conexion explicita con: criterios de evaluacion, competencias especificas, saberes basicos",
+        "Metodologias activas: el alumno es protagonista",
+        "Conexiones interdisciplinares cuando sea posible",
+        "Instrumentos de evaluacion concretos (rubrica, checklist, portfolio...)",
+        "Estrategias de diferenciacion para distintos niveles",
+        "Temporalizacion realista (numero de sesiones)",
+        "Producto final evaluable (presentacion, informe, maqueta, video, podcast...)"
+      ]
+    },
+    "evaluacion": [
+      "Los criterios de evaluacion usados coinciden con los del Decreto de Murcia",
+      "Existen rubricas con niveles de desempeno claros",
+      "Se usan instrumentos variados, no solo examenes (proyectos, portfolios, observacion, trabajos colaborativos)",
+      "Hay evidencias de evaluacion formativa (retroalimentacion continua al alumno)",
+      "Las calificaciones se pueden justificar con evidencias",
+      "Los registros de evaluacion estan completos y al dia"
+    ],
+    "atencion_diversidad": [
+      "Plan de Atencion a la Diversidad (PAD) del centro actualizado",
+      "Planes de Actuacion Personalizados (PAP) para alumnado ACNEAE",
+      "Adaptaciones curriculares documentadas cuando proceda",
+      "Evidencia de que las medidas se aplican realmente en el aula, no solo en papel",
+      "Comunicacion con familias sobre las medidas de atencion"
+    ],
+    "documentacion_administrativa": [
+      "Actas de evaluacion completas y firmadas",
+      "Actas de reuniones de departamento/equipo docente",
+      "Memoria Anual con reflexion sustantiva (no generica)",
+      "Registro de comunicaciones con familias",
+      "Plan de Convivencia del centro actualizado",
+      "Programacion General Anual (PGA) coherente con el Proyecto Educativo"
+    ],
+    "observacion_aula": {
+      "que_observan": [
+        "La metodologia real coincide con la descrita en la programacion",
+        "Los alumnos participan activamente (no solo escuchan)",
+        "Se atiende a la diversidad en tiempo real",
+        "Hay evaluacion formativa durante la clase",
+        "El clima de aula es respetuoso e inclusivo",
+        "Los alumnos saben explicar que estan aprendiendo y por que",
+        "Se usan recursos variados y adecuados"
+      ]
+    }
+  },
+  "derechos_docente": [
+    "Derecho a ser informado de que se evalua y con que criterios",
+    "Derecho a ser escuchado y explicar su practica profesional",
+    "Derecho al respeto profesional durante todo el proceso",
+    "Derecho a la confidencialidad de la informacion",
+    "Derecho al debido proceso si hay evaluacion negativa",
+    "Derecho a contar con representacion sindical",
+    "Derecho a una evaluacion basada en evidencias, no en impresiones"
+  ],
+  "deberes_docente": [
+    "Mantener la documentacion actualizada y accesible",
+    "Seguir el curriculo oficial (Decretos de Murcia)",
+    "Poder justificar calificaciones con evidencias",
+    "Cumplir los requisitos administrativos en plazo",
+    "Conducta profesional y etica",
+    "Colaborar con la inspeccion de forma constructiva",
+    "Implementar las mejoras recomendadas"
+  ],
+  "especifico_concertado": {
+    "obligaciones_concierto": [
+      "Cumplir todos los estandares educativos LOMLOE, igual que los centros publicos",
+      "Admision no discriminatoria (respetando el ideario del centro)",
+      "Transparencia en la gestion: Consejo Escolar con representacion de familias",
+      "Cualificacion del profesorado igual que en la publica",
+      "Los conciertos se renuevan cada 4 anios; el incumplimiento puede suponer la no renovacion"
+    ],
+    "ideario_religioso": {
+      "proteccion": "El Buen Pastor tiene derecho a ensenar desde la perspectiva catolica y a mantener su caracter propio.",
+      "limites": "El ideario no puede usarse para eludir los requisitos curriculares LOMLOE. La educacion religiosa debe tener el mismo rigor pedagogico que el resto de materias.",
+      "inspeccion_verifica": "Que la educacion religiosa sea educativa (no solo catequesis), que se respete al alumnado no catolico, que todas las materias cumplan estandares LOMLOE, y que la educacion religiosa tenga programacion, evaluacion y documentacion formal."
+    }
+  },
+  "preparacion_practica": {
+    "checklist_mensual": [
+      "Programacion didactica actualizada y coherente con lo que hago en el aula",
+      "Situaciones de aprendizaje documentadas con todos sus elementos",
+      "Rubricas creadas para las evaluaciones principales",
+      "Registros de evaluacion al dia con calificaciones justificadas",
+      "Adaptaciones para alumnado con necesidades especificas documentadas",
+      "Comunicaciones con familias registradas"
+    ],
+    "checklist_trimestral": [
+      "Revisar la coherencia entre programacion y practica real",
+      "Completar reflexion sobre resultados del trimestre",
+      "Verificar que las actas de evaluacion estan firmadas",
+      "Actualizar el PAP de alumnos ACNEAE si hay cambios",
+      "Participar activamente en reuniones de departamento y documentarlas"
+    ],
+    "checklist_pre_inspeccion": [
+      "Toda la documentacion organizada y facilmente accesible",
+      "Aula limpia, ordenada, con materiales etiquetados",
+      "Preparar una clase que muestre tu mejor practica docente",
+      "Tener rubricas e instrumentos de evaluacion visibles",
+      "Poder explicar tus decisiones pedagogicas con naturalidad",
+      "Tener muestras de trabajos de alumnos que evidencien progreso",
+      "Revisar que las calificaciones del cuaderno de notas coinciden con las actas oficiales"
+    ],
+    "durante_inspeccion": [
+      "Ser profesional y cooperativo en todo momento",
+      "Responder con honestidad, aportando evidencias",
+      "No ponerse a la defensiva ni discutir con el inspector",
+      "Si no tienes algo preparado, reconocerlo y comprometerte a tenerlo",
+      "Preguntar si algo no queda claro",
+      "Mostrar compromiso genuino con el aprendizaje del alumnado"
+    ],
+    "despues_inspeccion": [
+      "Documentar el feedback recibido por escrito",
+      "Implementar las recomendaciones del inspector",
+      "Actualizar la documentacion segun lo indicado",
+      "Reflejar la experiencia en la Memoria Anual",
+      "Compartir aprendizajes con el equipo docente"
+    ]
+  },
+  "rd_68_2026_novedades": {
+    "titulo": "Real Decreto 68/2026 - Cambios importantes desde febrero 2026",
+    "cambios_clave": [
+      "Evaluacion explicita y sistematica de la funcion docente: los inspectores comparan la practica real con la programacion",
+      "Evaluacion de la funcion directiva de los centros",
+      "Rol asesor reforzado: los inspectores no solo controlan, tambien orientan para la mejora",
+      "Pueden examinar todas las actividades del centro, incluyendo comunicaciones oficiales por email",
+      "La coherencia entre lo programado y lo ejecutado en el aula es ahora un requisito de cumplimiento formal"
+    ],
+    "implicacion_practica": "Los docentes deben esperar un escrutinio pedagogico mas detallado, pero tambien mas apoyo para mejorar. Es fundamental que la programacion didactica refleje fielmente lo que ocurre en el aula."
+  }
+}
