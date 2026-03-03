@@ -1,0 +1,115 @@
+{
+  "version": "1.0",
+  "marco_legal": {
+    "ley_nacional": "LOMLOE - Ley Organica 3/2020, de 29 de diciembre",
+    "decretos_murcia": [
+      {
+        "etapa": "Educacion Infantil",
+        "decreto": "Decreto 196/2022, de 3 de noviembre",
+        "borm": "BORM num. 267, 18 de noviembre de 2022",
+        "base_nacional": "Real Decreto 95/2022, de 1 de febrero"
+      },
+      {
+        "etapa": "Educacion Primaria",
+        "decreto": "Decreto 209/2022, de 17 de noviembre",
+        "borm": "BORM num. 267, 18 de noviembre de 2022",
+        "base_nacional": "Real Decreto 157/2022, de 1 de marzo"
+      },
+      {
+        "etapa": "ESO",
+        "decreto": "Decreto 235/2022, de 7 de diciembre",
+        "borm": "BORM num. 283, 9 de diciembre de 2022",
+        "base_nacional": "Real Decreto 217/2022, de 29 de marzo",
+        "modificacion": "Decreto 158/2024, de 1 de agosto (nueva optativa obligatoria en 3ro ESO sobre evolucion democratica, Constitucion de 1978 e instituciones de la UE)"
+      }
+    ]
+  },
+  "competencias_clave": {
+    "descripcion": "8 competencias que el alumnado debe desarrollar al finalizar la ensenanza basica, segun la Recomendacion de la UE de 22 de mayo de 2018",
+    "listado": [
+      { "sigla": "CCL", "nombre": "Competencia en Comunicacion Linguistica" },
+      { "sigla": "CP", "nombre": "Competencia Plurilingue" },
+      { "sigla": "STEM", "nombre": "Competencia Matematica y en Ciencia, Tecnologia e Ingenieria" },
+      { "sigla": "CD", "nombre": "Competencia Digital" },
+      { "sigla": "CPSAA", "nombre": "Competencia Personal, Social y de Aprender a Aprender" },
+      { "sigla": "CC", "nombre": "Competencia Ciudadana" },
+      { "sigla": "CE", "nombre": "Competencia Emprendedora" },
+      { "sigla": "CCEC", "nombre": "Competencia en Conciencia y Expresiones Culturales" }
+    ]
+  },
+  "conceptos_clave": {
+    "perfil_de_salida": "Conjunto de competencias clave que el alumnado debe haber adquirido al finalizar la ensenanza basica (fin de ESO). Es la referencia ultima para todas las decisiones curriculares, las estrategias de ensenanza y las orientaciones metodologicas.",
+    "competencias_especificas": "Desempenos propios de cada area o materia que el alumnado debe demostrar en actividades que requieran los saberes basicos de esa area. Conectan el perfil de salida con los saberes basicos y los criterios de evaluacion. Suelen ser entre 5 y 8 por area y se mantienen constantes a lo largo de los ciclos, con complejidad progresiva.",
+    "criterios_de_evaluacion": "Indicadores del nivel de desempeno esperado del alumno en situaciones o actividades vinculadas a las competencias especificas en un momento determinado del aprendizaje. Son la referencia directa para la evaluacion formativa y sumativa.",
+    "saberes_basicos": "Conocimientos, destrezas y actitudes que constituyen los contenidos de cada area o materia. Se organizan por bloques y se trabajan integrados dentro de las situaciones de aprendizaje, no de forma aislada. Incluyen aprendizajes conceptuales, procedimentales y actitudinales.",
+    "situaciones_de_aprendizaje": "Actividades o conjuntos de actividades que promueven el uso de competencias especificas de una o varias materias mediante la resolucion de problemas o retos significativos cercanos al contexto del alumno. Deben articular competencias, criterios de evaluacion y saberes basicos de forma integrada."
+  },
+  "evaluacion": {
+    "principios": "Continua, global y formativa. Se basa en los criterios de evaluacion, no en pruebas aisladas de contenidos.",
+    "infantil": "Evaluacion global, continua y formativa. La observacion directa y sistematica es la tecnica principal. No hay calificaciones numericas.",
+    "primaria": "Evaluacion continua y global. La Region de Murcia mantiene la escala numerica 1-10 con caracter informativo para las familias, aunque LOMLOE no la exige formalmente en Primaria. Se pueden otorgar Menciones Honorificas al alumnado con rendimiento academico excelente.",
+    "eso": "Calificaciones numericas 1-10. Evaluacion continua basada en los criterios de evaluacion. El profesorado tiene autonomia para elegir el metodo de calificacion cuando un criterio se evalua varias veces: media aritmetica, ultima calificacion obtenida o calificacion mas alta.",
+    "como_evaluar": "Disenar situaciones de aprendizaje conectadas al contexto real del alumnado. Crear rubricas alineadas con los verbos de accion de los criterios de evaluacion. Un mismo criterio puede evaluarse multiples veces en distintas situaciones a lo largo del curso. La evaluacion formativa es prioritaria: retroalimentacion continua al alumno sobre su progreso."
+  },
+  "areas_por_etapa": {
+    "infantil": {
+      "ciclos": "Primer ciclo (0-3 anios) y Segundo ciclo (3-6 anios)",
+      "areas": [
+        "Crecimiento en Armonia (conocimiento de si mismo, autonomia, desarrollo corporal)",
+        "Descubrimiento y Exploracion del Entorno (medio fisico, natural y social)",
+        "Comunicacion y Representacion de la Realidad (lenguajes verbal, artistico, corporal, digital)"
+      ]
+    },
+    "primaria": {
+      "ciclos": "Tres ciclos: 1ro-2do (6-8 anios), 3ro-4to (8-10 anios), 5to-6to (10-12 anios)",
+      "areas": [
+        "Matematicas",
+        "Lengua Castellana y Literatura",
+        "Conocimiento del Medio Natural, Social y Cultural (puede desdoblarse en Ciencias Naturales + Ciencias Sociales)",
+        "Educacion Fisica",
+        "Educacion Artistica (Plastica y Visual + Musica y Danza)",
+        "Lengua Extranjera (Ingles)",
+        "Valores Civicos y Eticos (solo en el ultimo curso de cada ciclo)"
+      ],
+      "nota": "Las areas tienen caracter integrado y global, centrado en el desarrollo competencial."
+    },
+    "eso": {
+      "cursos": "Cuatro cursos: 1ro a 4to de ESO",
+      "materias_comunes": [
+        "Lengua Castellana y Literatura",
+        "Lengua Extranjera (Ingles)",
+        "Matematicas",
+        "Educacion Fisica",
+        "Geografia e Historia"
+      ],
+      "materias_especificas_por_curso": {
+        "1eso": "Biologia y Geologia, Tecnologia y Digitalizacion",
+        "2eso": "Fisica y Quimica, Tecnologia y Digitalizacion",
+        "3eso": "Biologia y Geologia, Fisica y Quimica, mas optativas",
+        "4eso": "Variable segun itinerario academico o aplicado. Incluye materias de modalidad y optativas"
+      },
+      "novedad_2024": "Decreto 158/2024 de 1 de agosto: los centros deben ofertar en 3ro ESO una nueva materia optativa sobre evolucion democratica, la Constitucion espanola de 1978, las instituciones de la UE y la cultura democratica.",
+      "segunda_lengua": "Frances como segunda lengua extranjera (ofertada en el Buen Pastor)"
+    }
+  },
+  "guia_situaciones_aprendizaje": {
+    "descripcion": "Guia practica para que los docentes del Buen Pastor diseñen situaciones de aprendizaje alineadas con LOMLOE",
+    "pasos": [
+      "1. Identificar un contexto real cercano al alumnado del Buen Pastor (el barrio, Murcia, fiestas locales, Semana Santa, el programa ERASMUS+, etc.)",
+      "2. Seleccionar las competencias especificas del area o areas implicadas",
+      "3. Elegir los criterios de evaluacion asociados a esas competencias",
+      "4. Conectar los saberes basicos necesarios para resolver el reto",
+      "5. Disenar la actividad o reto con productos evaluables (presentacion, mural, informe, maqueta, video, podcast...)",
+      "6. Crear una rubrica alineada con los verbos de accion de los criterios (identifica, analiza, propone, valora...)",
+      "7. Planificar la evaluacion formativa durante el proceso, no solo al final"
+    ]
+  },
+  "recursos_oficiales": [
+    { "nombre": "Portal CARM - Desarrollo curricular LOMLOE", "url": "https://www.carm.es/web/pagina?IDCONTENIDO=71651&IDTIPO=100" },
+    { "nombre": "Normativa curricular Murcia (SEFCARM)", "url": "https://www.sefcarm.es/web/pagina?IDCONTENIDO=3993&IDTIPO=100" },
+    { "nombre": "BORM (Boletin Oficial Region de Murcia)", "url": "https://www.borm.es/" },
+    { "nombre": "Educarm - Portal educativo regional", "url": "https://servicios.educarm.es/" },
+    { "nombre": "SIDI Murcia - Resumen normativo educativo", "url": "https://sidimurcia.org/index.php/resumen-normativo/" },
+    { "nombre": "Centros de Profesores - Formacion docente", "url": "https://plan.centrodeprofesores.net/" }
+  ]
+}

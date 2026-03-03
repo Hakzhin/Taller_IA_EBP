@@ -217,6 +217,7 @@ Reglas:
     this.loadExternalCatalog();
     this.loadPrompteca();
     this.loadSchoolDNA();
+    this.loadLOMLOE();
   },
 
   async loadExternalCatalog() {
@@ -290,6 +291,67 @@ Reglas:
       console.log(`[BupIA] ADN del colegio cargado`);
     } catch (e) {
       // DNA not available — BupIA works without it
+    }
+  },
+
+  async loadLOMLOE() {
+    try {
+      const resp = await fetch('data/lomloe_murcia.json');
+      if (!resp.ok) return;
+      const lom = await resp.json();
+
+      let text = `\n\nLOMLOE REGION DE MURCIA (eres experta en esta normativa; cita decretos cuando sea relevante):\n`;
+
+      // Marco legal
+      text += `\nMARCO LEGAL: ${lom.marco_legal.ley_nacional}\n`;
+      for (const d of lom.marco_legal.decretos_murcia) {
+        text += `- ${d.etapa}: ${d.decreto} (${d.borm}). Base: ${d.base_nacional}.`;
+        if (d.modificacion) text += ` Modificacion: ${d.modificacion}`;
+        text += `\n`;
+      }
+
+      // Competencias clave
+      text += `\n${lom.competencias_clave.descripcion}:\n`;
+      text += lom.competencias_clave.listado.map(c => `${c.sigla} = ${c.nombre}`).join('; ') + '.\n';
+
+      // Conceptos clave
+      text += `\nCONCEPTOS CLAVE LOMLOE:\n`;
+      for (const [key, val] of Object.entries(lom.conceptos_clave)) {
+        text += `- ${key.replace(/_/g, ' ').toUpperCase()}: ${val}\n`;
+      }
+
+      // Evaluación
+      text += `\nEVALUACION:\n`;
+      text += `Principios: ${lom.evaluacion.principios}\n`;
+      text += `Infantil: ${lom.evaluacion.infantil}\n`;
+      text += `Primaria: ${lom.evaluacion.primaria}\n`;
+      text += `ESO: ${lom.evaluacion.eso}\n`;
+      text += `Como evaluar: ${lom.evaluacion.como_evaluar}\n`;
+
+      // Áreas por etapa
+      text += `\nAREAS POR ETAPA:\n`;
+      text += `Infantil (${lom.areas_por_etapa.infantil.ciclos}): ${lom.areas_por_etapa.infantil.areas.join('; ')}.\n`;
+      text += `Primaria (${lom.areas_por_etapa.primaria.ciclos}): ${lom.areas_por_etapa.primaria.areas.join('; ')}. ${lom.areas_por_etapa.primaria.nota}\n`;
+      text += `ESO (${lom.areas_por_etapa.eso.cursos}): Comunes: ${lom.areas_por_etapa.eso.materias_comunes.join(', ')}. ${lom.areas_por_etapa.eso.novedad_2024}\n`;
+
+      // Guía situaciones de aprendizaje
+      text += `\nGUIA PARA DISENAR SITUACIONES DE APRENDIZAJE:\n`;
+      text += lom.guia_situaciones_aprendizaje.pasos.join('\n') + '\n';
+
+      // Recursos oficiales
+      text += `\nRECURSOS OFICIALES MURCIA:\n`;
+      for (const r of lom.recursos_oficiales) {
+        text += `- ${r.nombre}: ${r.url}\n`;
+      }
+
+      // Inject into ALL prompts
+      for (const key of Object.keys(this.SYSTEM_PROMPTS)) {
+        this.SYSTEM_PROMPTS[key] += text;
+      }
+
+      console.log(`[BupIA] LOMLOE Murcia cargado`);
+    } catch (e) {
+      // LOMLOE not available — BupIA works with general knowledge
     }
   },
 
