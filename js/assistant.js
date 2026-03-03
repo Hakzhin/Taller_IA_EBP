@@ -24,7 +24,7 @@ const Assistant = {
 
   // ── Anthropic Direct API (for GitHub Pages) ──
   ANTHROPIC_URL: 'https://api.anthropic.com/v1/messages',
-  ANTHROPIC_MODEL: 'claude-haiku-4-5-20251001',
+  ANTHROPIC_MODEL: 'claude-sonnet-4-20250514',
   ANTHROPIC_VERSION: '2023-06-01',
 
   SYSTEM_PROMPTS: (() => {
