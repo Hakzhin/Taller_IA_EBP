@@ -81,7 +81,11 @@ Reglas:
 - Usa un tono cercano y motivador. Eres una companera, no un manual.
 - Si preguntan por RUBRICAS o evaluacion, recomienda Rubric@sEBP (app propia del colegio) con el enlace directo. Explica brevemente que pueden elegir etapa, asignatura y criterios LOMLOE, y la IA genera la rubrica completa.
 - Si preguntan por el itinerario IA PRO, explica que es para usuarios avanzados que quieren crear proyectos, agentes o aplicaciones con IA.
-- Si te preguntan sobre ti misma (que eres, como funcionas, que modelo usas, quien te creo), responde con la informacion de la seccion "SOBRE TI" de forma natural y cercana, sin sonar robotica.`;
+- Si te preguntan sobre ti misma (que eres, como funcionas, que modelo usas, quien te creo), responde con la informacion de la seccion "SOBRE TI" de forma natural y cercana, sin sonar robotica.
+- Usa markdown para dar formato: **negrita** para resaltar, listas con • para opciones, y separa secciones con saltos de linea.
+- Respuestas entre 80-200 palabras idealmente. Si el tema lo requiere, puedes extenderte, pero avisa al usuario ("Te lo explico en detalle:").
+- Si la pregunta es sencilla, responde en 1-3 frases. No alargues innecesariamente.
+- Si te hacen preguntas no relacionadas con educacion, IA o el colegio, redirige amablemente: "¡Buena pregunta! Pero mi especialidad es ayudarte con herramientas de IA para el aula. ¿En que puedo ayudarte con eso?". No respondas a temas politicos, medicos, legales no educativos ni personales.`;
 
     return {
       chat: BASE,
@@ -248,12 +252,14 @@ Reglas:
 
   async loadPrompteca() {
     try {
+      this.promptecaData = undefined; // undefined = loading, null = error
       const resp = await fetch('data/prompts.json');
-      if (!resp.ok) return;
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       this.promptecaData = await resp.json();
       console.log(`[BupIA] Prompteca cargada (${this.promptecaData.prompts.length} prompts)`);
     } catch (e) {
       this.promptecaData = null;
+      console.warn('[BupIA] Error cargando Prompteca:', e.message);
     }
   },
 
@@ -448,7 +454,7 @@ Reglas:
           <div class="assistant-tabs">
             <button class="assistant-tab-btn" data-assistant-tab="hoy"><span class="tab-icon">🚀</span><span class="tab-label"> Hoy</span></button>
             <button class="assistant-tab-btn" data-assistant-tab="tablon"><span class="tab-icon">📋</span><span class="tab-label"> Tablón</span></button>
-            <button class="assistant-tab-btn" data-assistant-tab="prompteca"><span class="tab-icon">📖</span><span class="tab-label"> Prompts</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="prompteca"><span class="tab-icon">📖</span><span class="tab-label"> Recetas</span></button>
             <button class="assistant-tab-btn" data-assistant-tab="explorar"><span class="tab-icon">🔍</span><span class="tab-label"> Explorar</span></button>
             <button class="assistant-tab-btn" data-assistant-tab="chat"><span class="tab-icon">💬</span><span class="tab-label"> Chat</span></button>
           </div>
@@ -494,7 +500,8 @@ Reglas:
           <button class="chat-send-btn" id="chat-send" data-assistant-action="send">➤</button>
         </div>
         <div class="assistant-footer">
-          BupIA · Potenciado por Claude
+          <span>BupIA · Potenciado por Claude</span>
+          <span class="rate-counter" id="rate-counter"></span>
         </div>
       </div>
     `;
@@ -616,6 +623,13 @@ Reglas:
       const exploreReset = target.closest('[data-explore-reset]');
       if (exploreReset) {
         this.resetExplorar();
+        return;
+      }
+
+      // Prompteca: retry on error
+      const retryBtn = target.closest('[data-prompteca-retry]');
+      if (retryBtn) {
+        this.loadPrompteca().then(() => this.renderPrompteca());
         return;
       }
 
@@ -749,6 +763,7 @@ Reglas:
     this.panel.classList.add('open');
     this.fab.classList.add('open');
     this.renderActiveTab();
+    this.updateRateCounter();
     this.saveState();
   },
 
@@ -1229,6 +1244,7 @@ Reglas:
 
     this.isSending = false;
     if (sendBtn) sendBtn.disabled = false;
+    this.updateRateCounter();
 
     // Focus input
     const input = this.root.querySelector('#chat-input');
@@ -1456,6 +1472,7 @@ Reglas:
 
     this.isSending = false;
     if (sendBtn) sendBtn.disabled = false;
+    this.updateRateCounter();
 
     const input = this.root.querySelector('#chat-input');
     if (input) input.focus();
@@ -1495,8 +1512,22 @@ Reglas:
     const container = this.root.querySelector('#assistant-prompteca');
     if (!container) return;
 
-    if (!this.promptecaData) {
+    // Still loading
+    if (this.promptecaData === undefined) {
       container.innerHTML = '<div class="wizard-title">Cargando Prompteca...</div>';
+      return;
+    }
+
+    // Error loading
+    if (this.promptecaData === null) {
+      container.innerHTML = `
+        <div class="wizard-title">No se pudo cargar la Prompteca</div>
+        <p style="text-align:center;color:var(--text-muted);margin:8px 0 16px;">
+          Comprueba tu conexión e inténtalo de nuevo.
+        </p>
+        <div style="text-align:center;">
+          <button class="pathway-chip" data-prompteca-retry>🔄 Reintentar</button>
+        </div>`;
       return;
     }
 
@@ -1559,12 +1590,12 @@ Reglas:
     }).join('');
 
     container.innerHTML = `
-      <div class="ranking-header">📖 Prompteca — Prompts listos para usar</div>
+      <div class="ranking-header">📖 Prompteca — Recetas listas para usar</div>
       <div class="prompteca-filters">
         <div class="prompteca-filter-row">${etapaPills}</div>
         <div class="prompteca-filter-row">${catPills}</div>
       </div>
-      <div class="prompteca-count">${prompts.length} prompts</div>
+      <div class="prompteca-count">${prompts.length} recetas</div>
       <div class="prompteca-list">${cards}</div>
     `;
   },
@@ -1743,7 +1774,7 @@ Reglas:
 - Asignatura: ${asigLabel}
 - Nivel tecnológico: ${nivel}
 
-Prompts disponibles en la Prompteca para esta etapa:
+Recetas disponibles en la Prompteca para esta etapa:
 ${promptecaCatalog || '(ninguno disponible)'}`;
 
     try {
@@ -1886,7 +1917,7 @@ ${promptecaCatalog || '(ninguno disponible)'}`;
         system: systemPrompt,
         messages: apiMessages,
         max_tokens: maxTokens,
-        temperature: 0.7,
+        temperature: (feature === 'ruta' || feature === 'bulletin') ? 0.3 : 0.7,
       }),
     });
 
@@ -1935,6 +1966,18 @@ ${promptecaCatalog || '(ninguno disponible)'}`;
     stored.count++;
     localStorage.setItem('bupia_usage', JSON.stringify(stored));
     return true;
+  },
+
+  updateRateCounter() {
+    const el = this.root.querySelector('#rate-counter');
+    if (!el) return;
+    const today = new Date().toISOString().slice(0, 10);
+    const stored = JSON.parse(localStorage.getItem('bupia_usage') || '{}');
+    const used = (stored.date === today) ? stored.count : 0;
+    const remaining = this._DAILY_LIMIT - used;
+    el.textContent = `${remaining}/${this._DAILY_LIMIT} consultas`;
+    el.style.opacity = remaining <= 10 ? '1' : '0.5';
+    el.style.color = remaining <= 5 ? '#ef4444' : '';
   },
 
   // ═══════════════════════════════════════

@@ -308,6 +308,60 @@
       "etapas": ["infantil", "primaria", "eso"],
       "herramienta": "Gemini / Grok Aurora / Copilot",
       "prompt": "Genera 5 prompts optimizados para crear imágenes educativas con IA sobre [TEMA] de [ASIGNATURA] para [ETAPA]. Cada prompt debe:\n\n1. Ser específico y descriptivo (50-100 palabras)\n2. Indicar estilo visual: [ilustración infantil / diagrama / fotografía realista / infografía / cómic]\n3. Incluir detalles de composición, colores y elementos\n4. Ser apropiado para el aula (sin violencia, inclusivo)\n\nFormato:\n- Imagen 1: [Descripción de uso en clase]\n  Prompt: \"...\"\n- Imagen 2: ...\n\nIncluye un prompt extra para crear una portada o cartel del tema."
+    },
+    {
+      "id": "exam-infantil-01",
+      "titulo": "Registro de observación sistemática",
+      "descripcion": "Parrilla de observación para evaluar competencias en Educación Infantil (3-6 años)",
+      "categoria": "examenes",
+      "etapas": ["infantil"],
+      "herramienta": "ChatGPT / Claude / Gemini",
+      "prompt": "Actúa como un experto en evaluación en Educación Infantil (3-6 años). Crea un registro de observación sistemática para el área de [ÁREA: Crecimiento en Armonía / Descubrimiento y Exploración del Entorno / Comunicación y Representación de la Realidad] para alumnos de [EDAD: 3/4/5 años].\n\nIncluye:\n1. Título y período de observación\n2. Tabla con 8-10 ítems observables redactados como conductas concretas (\"El alumno...\")\n3. Escala de valoración: Iniciado ⭐ / En proceso ⭐⭐ / Conseguido ⭐⭐⭐\n4. Columna de observaciones para cada ítem\n5. Espacio para observaciones generales y propuestas de mejora\n6. Vinculación de cada ítem con los criterios de evaluación del Decreto 196/2022 de Murcia\n\nLos ítems deben ser observables en el aula sin pruebas escritas (el niño aún no lee/escribe). Usa lenguaje claro y profesional."
+    },
+    {
+      "id": "rub-infantil-01",
+      "titulo": "Rúbrica de evaluación Infantil",
+      "descripcion": "Rúbrica con indicadores observables adaptada a 3-6 años (sin pruebas escritas)",
+      "categoria": "rubricas",
+      "etapas": ["infantil"],
+      "herramienta": "ChatGPT / Claude / Gemini",
+      "prompt": "Actúa como especialista en evaluación en Educación Infantil. Diseña una rúbrica de evaluación para [ACTIVIDAD o PROYECTO] en el área de [ÁREA] para alumnos de [EDAD: 3/4/5 años].\n\nRequisitos:\n1. 5-6 criterios de evaluación basados en indicadores OBSERVABLES (no escritos)\n2. 3 niveles de desempeño para cada criterio:\n   - 🌱 Iniciado: descripción de lo que hace el niño en este nivel\n   - 🌿 En proceso: descripción de lo que hace el niño en este nivel\n   - 🌳 Conseguido: descripción de lo que hace el niño en este nivel\n3. Cada descriptor debe ser una conducta concreta y observable (\"Participa en...\", \"Identifica...\", \"Expresa...\")\n4. Vincula cada criterio con las competencias específicas del Decreto 196/2022 de Murcia\n5. Incluye una sección de \"Cómo observar\" con momentos y técnicas de recogida de información\n\nFormato: tabla clara con emojis para que sea visual y fácil de usar."
+    },
+    {
+      "id": "mat-infantil-01",
+      "titulo": "Ficha manipulativa y sensorial",
+      "descripcion": "Actividades manipulativas y sensoriales para el aula de Infantil (3-6 años)",
+      "categoria": "materiales",
+      "etapas": ["infantil"],
+      "herramienta": "ChatGPT / Claude / Gemini",
+      "prompt": "Actúa como un maestro experto en Educación Infantil con enfoque manipulativo y sensorial. Diseña una ficha de actividades manipulativas sobre [TEMA] para alumnos de [EDAD: 3/4/5 años] en el área de [ÁREA].\n\nIncluye:\n1. Título atractivo y motivador para los niños\n2. Objetivos de aprendizaje (3-4, vinculados a competencias específicas del Decreto 196/2022 de Murcia)\n3. Materiales necesarios (económicos y fáciles de conseguir)\n4. 4-5 actividades manipulativas y/o sensoriales con:\n   - Descripción paso a paso (cómo presentarla al niño)\n   - Variante fácil (para quienes necesitan más apoyo)\n   - Variante avanzada (para quienes van más rápido)\n   - Sentidos implicados (tacto, vista, oído...)\n5. Consejo para el maestro: cómo observar y evaluar durante la actividad\n6. Extensión para casa: actividad sencilla para hacer con la familia\n\nEvita actividades que requieran lectoescritura formal. Prioriza el juego, la exploración y la experimentación."
+    },
+    {
+      "id": "act-infantil-01",
+      "titulo": "Rincón de aprendizaje temático",
+      "descripcion": "Diseña un rincón de aula con materiales, objetivos y dinámicas para Infantil",
+      "categoria": "actividades",
+      "etapas": ["infantil"],
+      "herramienta": "ChatGPT / Claude / Gemini",
+      "prompt": "Actúa como un experto en metodologías activas para Educación Infantil. Diseña un rincón de aprendizaje temático sobre [TEMA] para un aula de [EDAD: 3/4/5 años].\n\nIncluye:\n1. Nombre creativo del rincón y ambientación visual\n2. Objetivos de aprendizaje (vinculados a competencias específicas del Decreto 196/2022 de Murcia)\n3. Materiales necesarios (lista detallada, priorizando materiales reciclados y económicos)\n4. Organización del espacio: dónde ubicarlo, cómo señalizarlo\n5. 5-6 actividades o propuestas para el rincón, cada una con:\n   - Instrucciones claras (cómo se la explica el maestro al niño)\n   - Agrupamiento (individual, parejas, pequeño grupo)\n   - Duración aproximada\n6. Normas del rincón (3-4, con pictogramas sugeridos)\n7. Registro de observación: qué observar mientras los niños trabajan\n8. Rotación: cómo integrar el rincón en la rutina semanal del aula\n\nEl rincón debe fomentar la autonomía, la exploración libre y el aprendizaje entre iguales."
+    },
+    {
+      "id": "act-infantil-02",
+      "titulo": "Rutina de asamblea de aula",
+      "descripcion": "Genera una asamblea completa con preguntas, canciones y dinámicas para Infantil",
+      "categoria": "actividades",
+      "etapas": ["infantil"],
+      "herramienta": "ChatGPT / Claude / Gemini",
+      "prompt": "Actúa como un maestro de Educación Infantil experto en rutinas y asambleas. Diseña una rutina de asamblea de aula para alumnos de [EDAD: 3/4/5 años] centrada en el tema [TEMA o PROYECTO DEL MOMENTO].\n\nEstructura de la asamblea (duración total: 20-30 minutos):\n1. **Bienvenida y saludo** (3 min): canción o rima de inicio, pasar lista de forma participativa\n2. **Calendario y tiempo** (3 min): dinámica para trabajar el día, mes, estación y clima\n3. **Momento emocional** (5 min): ¿cómo me siento hoy? Con recurso visual (emoticonos, termómetro emocional)\n4. **Tema del día** (10 min): introducción al tema con preguntas abiertas, objeto sorpresa o cuento corto\n5. **Juego o dinámica grupal** (5 min): actividad de movimiento, ritmo o cooperación relacionada con el tema\n6. **Despedida y transición** (2 min): canción de cierre y anticipar qué haremos después\n\nPara cada momento incluye:\n- Preguntas concretas para hacer a los niños\n- Recursos o materiales necesarios\n- Adaptación para niños con necesidades especiales\n\nFormato visual con emojis. Tono cálido y motivador."
+    },
+    {
+      "id": "prog-sa-01",
+      "titulo": "Situación de aprendizaje LOMLOE",
+      "descripcion": "Diseña una SA completa alineada con LOMLOE y el currículo de la Región de Murcia",
+      "categoria": "programaciones",
+      "etapas": ["infantil", "primaria", "eso"],
+      "herramienta": "ChatGPT / Claude / Gemini",
+      "prompt": "Actúa como un experto en diseño curricular LOMLOE especializado en la Región de Murcia. Diseña una situación de aprendizaje completa para [ASIGNATURA/ÁREA] en [CURSO] sobre [TEMA O RETO].\n\nEstructura obligatoria:\n1. **Título** y **justificación**: por qué es relevante para el alumnado y cómo conecta con su contexto cercano\n2. **Competencias específicas** del área implicadas (según los Decretos de Murcia: 196/2022 Infantil, 209/2022 Primaria o 235/2022 ESO)\n3. **Criterios de evaluación** asociados a cada competencia específica seleccionada\n4. **Saberes básicos** que se trabajan, organizados por bloques\n5. **Competencias clave** vinculadas (CCL, CP, STEM, CD, CPSAA, CC, CE, CCEC)\n6. **Metodología**: enfoque activo y participativo. El alumno es protagonista. Describe agrupamientos, roles y dinámicas.\n7. **Secuencia de actividades** detallada:\n   - Fase de motivación/activación (1-2 sesiones)\n   - Fase de desarrollo (3-5 sesiones)\n   - Fase de síntesis y producto final (1-2 sesiones)\n   Para cada sesión: objetivos, actividades concretas, recursos y agrupamientos\n8. **Producto final evaluable**: presentación, informe, maqueta, vídeo, podcast, exposición...\n9. **Evaluación**:\n   - Instrumentos variados (rúbrica, checklist, portfolio, observación directa)\n   - Rúbrica alineada con los criterios de evaluación seleccionados (3-4 niveles de desempeño)\n   - Momentos de evaluación formativa durante el proceso\n10. **Atención a la diversidad**: adaptaciones para diferentes ritmos y capacidades\n11. **Conexiones interdisciplinares** con otras áreas cuando sea posible\n12. **Temporalización**: número total de sesiones y distribución\n\nUsa un lenguaje profesional pero accesible. Asegúrate de que todas las referencias normativas correspondan a los decretos curriculares de la Región de Murcia."
     }
   ]
 }

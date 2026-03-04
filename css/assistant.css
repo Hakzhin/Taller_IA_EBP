@@ -800,12 +800,19 @@
 
 /* ── Footer ── */
 .assistant-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 8px 16px;
-  text-align: center;
   font-size: 10px;
   color: var(--text-light);
   border-top: 1px solid rgba(0,0,0,0.04);
   flex-shrink: 0;
+}
+.rate-counter {
+  font-size: 0.65rem;
+  opacity: 0.5;
+  transition: opacity 0.3s, color 0.3s;
 }
 .assistant-footer a {
   color: var(--accent-purple);
