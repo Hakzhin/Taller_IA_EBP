@@ -9,7 +9,7 @@
     --glass-shadow: rgba(0,0,0,0.08);
     --text-dark: #2d2b3d;
     --text-medium: #5a5775;
-    --text-light: #8b87a0;
+    --text-light: #6b6580;
     --accent-warm: #ff7b54;
     --accent-purple: #7c5cbf;
     --accent-green: #2ec4a0;
@@ -24,6 +24,23 @@
     color: var(--text-dark);
     overflow-x: hidden;
     position: relative;
+  }
+
+  /* ── Skip-to-content (accessibility) ── */
+  .skip-to-content {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    z-index: 10000;
+    padding: 0.5rem 1rem;
+    background: var(--text-dark);
+    color: #fff;
+    border-radius: 0.25rem;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  .skip-to-content:focus {
+    top: 1rem;
   }
 
   /* ── Bokeh Background ── */
@@ -1909,3 +1926,19 @@
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
   }
+
+  /* ── Tutorial Content Utility Classes (Sprint F) ── */
+  .tut-heading     { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+  .tut-heading-lg  { font-size: 1.25rem; display: flex; align-items: center; gap: 10px; color: #fff; }
+  .tut-paragraph   { font-size: 0.95rem; color: var(--text-medium); margin-bottom: 18px; line-height: 1.5; }
+  .tut-section-gap { margin: 36px 0 8px; padding: 0 4px; }
+  .tut-semibold    { font-weight: 600; font-size: 1rem; }
+  .tut-icon-badge  { background: rgba(255,255,255,0.2); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+  .tut-flex-row    { display: flex; align-items: center; gap: 12px; margin: 18px 0 10px; flex-wrap: wrap; }
+  .tut-text-box    { background: rgba(255,255,255,0.35); margin-top: 10px; font-size: 1rem; line-height: 1.7; }
+  .tut-caption     { font-weight: 400; font-size: 0.82rem; color: var(--text-light); }
+  .tut-accent-text { color: var(--tut-accent, #2e1065); }
+  .tut-accent-border { border-left: 3px solid var(--tut-accent, currentColor); }
+  .tut-code        { background: rgba(0,0,0,0.06); padding: 2px 8px; border-radius: 6px; font-family: monospace; font-size: 0.92rem; }
+  .tut-example-box { background: rgba(255,255,255,0.35); border-radius: 12px; padding: 16px; margin: 10px 0; }
+  .tut-chuleta-title { font-weight: 700; }

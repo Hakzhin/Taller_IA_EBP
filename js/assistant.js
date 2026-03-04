@@ -448,7 +448,7 @@ Reglas:
         <div class="bupia-intro-modal">
           <video class="bupia-intro-video" id="bupia-intro-video"
                  src="media/bupia-intro.mp4"
-                 playsinline preload="metadata"
+                 playsinline preload="none"
                  aria-label="Video de presentacion de BupIA"></video>
           <button class="bupia-intro-skip" id="bupia-intro-skip" aria-label="Saltar video de introduccion">Saltar ⏭️</button>
         </div>
@@ -887,7 +887,7 @@ Reglas:
       <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
                   padding:40px 30px;text-align:center;background:linear-gradient(135deg,#2d2b3d,#4a3f6b);
                   width:100%;min-height:300px;border-radius:20px;">
-        <img src="img/bupia.png" alt="BupIA"
+        <img src="img/bupia.png" alt="BupIA" loading="lazy"
              style="width:80px;height:80px;border-radius:50%;margin-bottom:20px;
                     box-shadow:0 4px 20px rgba(124,92,191,0.5);">
         <div style="color:#fff;font-size:1.25rem;font-weight:700;margin-bottom:8px;
@@ -1051,7 +1051,7 @@ Reglas:
 
     const etapasHtml = (item.etapas || []).map(e => {
       const labels = { infantil: 'Infantil', primaria: 'Primaria', eso: 'ESO' };
-      return `<span class="ranking-etapa">${labels[e] || e}</span>`;
+      return `<span class="ranking-etapa">${labels[e] || this.escapeHtml(e)}</span>`;
     }).join('');
 
     return `
@@ -1061,18 +1061,18 @@ Reglas:
         </div>
         <div class="ranking-card-right">
           <div class="ranking-card-header">
-            <span class="ranking-card-icon">${item.icono}</span>
-            <span class="ranking-card-nombre">${item.nombre}</span>
-            <span class="ranking-card-empresa">${item.empresa}</span>
+            <span class="ranking-card-icon">${this.escapeHtml(item.icono)}</span>
+            <span class="ranking-card-nombre">${this.escapeHtml(item.nombre)}</span>
+            <span class="ranking-card-empresa">${this.escapeHtml(item.empresa)}</span>
             <span class="ranking-precio-badge ${precioBadge}">${precioLabel}</span>
           </div>
-          <div class="ranking-card-body">${item.que_hace}</div>
-          <div class="ranking-card-destaca"><strong>Destaca por:</strong> ${item.por_que_top}</div>
+          <div class="ranking-card-body">${this.escapeHtml(item.que_hace)}</div>
+          <div class="ranking-card-destaca"><strong>Destaca por:</strong> ${this.escapeHtml(item.por_que_top)}</div>
           <div class="ranking-card-footer">
             <div class="ranking-etapas">${etapasHtml}</div>
-            <span class="ranking-card-precio">${item.precio}</span>
+            <span class="ranking-card-precio">${this.escapeHtml(item.precio)}</span>
           </div>
-          <a class="ranking-card-link" href="${item.url}" target="_blank" rel="noopener">Visitar ${item.nombre} ↗</a>
+          <a class="ranking-card-link" href="${this.escapeHtml(item.url)}" target="_blank" rel="noopener">Visitar ${this.escapeHtml(item.nombre)} ↗</a>
         </div>
       </div>
     `;
@@ -1130,7 +1130,7 @@ Reglas:
 
     container.innerHTML = `
       <div class="wizard-hero">
-        <img class="wizard-hero-avatar" src="img/bupia.png" alt="BupIA">
+        <img class="wizard-hero-avatar" src="img/bupia.png" alt="BupIA" loading="lazy">
         <div class="wizard-hero-text">
           <div class="wizard-greeting">¡Hola, profe!</div>
           <div class="wizard-greeting-sub">Soy <strong>BupIA</strong>, tu asistente</div>
@@ -1264,11 +1264,11 @@ Reglas:
       <div class="wizard-subtitle">Herramientas recomendadas</div>
       <div class="wizard-results">
         ${toolEntries.map(({ tool: t, sectionId, pathway }) => `
-          <div class="wizard-tool-card" data-wizard-tool="${t.id}" data-wizard-section="${sectionId}" data-wizard-pathway="${pathway}">
-            <img class="wizard-tool-logo" src="${t.logo}" alt="${t.logoAlt}">
+          <div class="wizard-tool-card" data-wizard-tool="${this.escapeHtml(t.id)}" data-wizard-section="${this.escapeHtml(sectionId)}" data-wizard-pathway="${this.escapeHtml(pathway)}">
+            <img class="wizard-tool-logo" src="${this.escapeHtml(t.logo)}" alt="${this.escapeHtml(t.logoAlt)}">
             <div class="wizard-tool-info">
-              <div class="wizard-tool-name">${t.name}</div>
-              <div class="wizard-tool-tagline">${t.tagline}</div>
+              <div class="wizard-tool-name">${this.escapeHtml(t.name)}</div>
+              <div class="wizard-tool-tagline">${this.escapeHtml(t.tagline)}</div>
             </div>
             <span class="wizard-tool-arrow">→</span>
           </div>
@@ -1295,7 +1295,7 @@ Reglas:
         slot.innerHTML = `
           <div class="wizard-ai-comment">
             <div class="wizard-ai-label">💡 Consejo de BupIA</div>
-            ${result.content}
+            ${this.formatMarkdown(result.content)}
           </div>
         `;
       }
@@ -1404,6 +1404,13 @@ Reglas:
     // Focus input
     const input = this.root.querySelector('#chat-input');
     if (input) input.focus();
+  },
+
+  // ── HTML Escape (for dynamic data in innerHTML) ──
+  escapeHtml(text) {
+    if (!text) return '';
+    const map = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'};
+    return String(text).replace(/[&<>"']/g, m => map[m]);
   },
 
   // ── Markdown renderer (lightweight, no dependencies) ──
@@ -1734,23 +1741,23 @@ Reglas:
       const catMeta = meta[p.categoria] || {};
       const etapasHtml = (p.etapas || []).map(e => {
         const labels = { infantil: 'Infantil', primaria: 'Primaria', eso: 'ESO' };
-        return `<span class="ranking-etapa">${labels[e] || e}</span>`;
+        return `<span class="ranking-etapa">${labels[e] || this.escapeHtml(e)}</span>`;
       }).join('');
 
       return `
-        <div class="prompteca-card" id="prompteca-card-${p.id}">
-          <div class="prompteca-card-header" data-prompteca-toggle="${p.id}">
-            <span class="prompteca-card-icon">${catMeta.icono || '📄'}</span>
-            <div class="prompteca-card-title">${p.titulo}</div>
-            <button class="prompteca-toggle-btn" data-prompteca-toggle="${p.id}">▼</button>
+        <div class="prompteca-card" id="prompteca-card-${this.escapeHtml(p.id)}">
+          <div class="prompteca-card-header" data-prompteca-toggle="${this.escapeHtml(p.id)}">
+            <span class="prompteca-card-icon">${this.escapeHtml(catMeta.icono) || '📄'}</span>
+            <div class="prompteca-card-title">${this.escapeHtml(p.titulo)}</div>
+            <button class="prompteca-toggle-btn" data-prompteca-toggle="${this.escapeHtml(p.id)}">▼</button>
           </div>
-          <div class="prompteca-card-desc">${p.descripcion}</div>
+          <div class="prompteca-card-desc">${this.escapeHtml(p.descripcion)}</div>
           <div class="prompteca-card-meta">
             ${etapasHtml}
-            <span class="prompteca-tool-badge">${p.herramienta}</span>
+            <span class="prompteca-tool-badge">${this.escapeHtml(p.herramienta)}</span>
           </div>
-          <div class="prompteca-card-prompt" id="prompt-body-${p.id}" style="display:none">
-            <pre class="prompteca-prompt-text">${p.prompt}</pre>
+          <div class="prompteca-card-prompt" id="prompt-body-${this.escapeHtml(p.id)}" style="display:none">
+            <pre class="prompteca-prompt-text">${this.escapeHtml(p.prompt)}</pre>
             <div class="prompteca-card-actions">
               <button class="prompteca-copy-btn" data-prompteca-copy="${p.id}">📋 Copiar</button>
               <button class="prompteca-personalize-btn" data-prompteca-personalize="${p.id}">✨ Personalizar</button>
@@ -1976,7 +1983,7 @@ ${promptecaCatalog || '(ninguno disponible)'}`;
         container.innerHTML = `
           <button class="wizard-back-btn" data-ruta-action="back-hoy">← Volver</button>
           <div class="wizard-title">😕 No se pudo generar la ruta</div>
-          <div class="wizard-subtitle">${err.message || 'Error desconocido'}</div>
+          <div class="wizard-subtitle">${this.escapeHtml(err.message) || 'Error desconocido'}</div>
           <button class="ruta-regenerate-btn" data-ruta-action="regenerate">🔄 Intentar de nuevo</button>
         `;
       }
@@ -1986,20 +1993,20 @@ ${promptecaCatalog || '(ninguno disponible)'}`;
   renderRutaResult(container, rutaData) {
     const weeks = (rutaData.semanas || []).map(w => {
       const promptLink = w.prompt_recomendado_id ?
-        `<div class="ruta-week-prompt" data-ruta-prompt="${w.prompt_recomendado_id}">📖 Ver prompt recomendado →</div>` : '';
+        `<div class="ruta-week-prompt" data-ruta-prompt="${this.escapeHtml(w.prompt_recomendado_id)}">📖 Ver prompt recomendado →</div>` : '';
 
       return `
         <div class="ruta-week">
           <div class="ruta-week-header">
-            <span class="ruta-week-number">Semana ${w.numero}</span>
-            <span class="ruta-week-title">${w.titulo}</span>
+            <span class="ruta-week-number">Semana ${this.escapeHtml(String(w.numero))}</span>
+            <span class="ruta-week-title">${this.escapeHtml(w.titulo)}</span>
           </div>
           <div class="ruta-week-body">
-            <div class="ruta-week-row">🎯 <strong>Objetivo:</strong> ${w.objetivo}</div>
-            <div class="ruta-week-row">🔧 <strong>Herramientas:</strong> ${(w.herramientas || []).join(', ')}</div>
-            <div class="ruta-week-row">📝 ${w.actividad}</div>
+            <div class="ruta-week-row">🎯 <strong>Objetivo:</strong> ${this.escapeHtml(w.objetivo)}</div>
+            <div class="ruta-week-row">🔧 <strong>Herramientas:</strong> ${(w.herramientas || []).map(h => this.escapeHtml(h)).join(', ')}</div>
+            <div class="ruta-week-row">📝 ${this.escapeHtml(w.actividad)}</div>
             ${promptLink}
-            <div class="ruta-week-tip">💡 ${w.consejo}</div>
+            <div class="ruta-week-tip">💡 ${this.escapeHtml(w.consejo)}</div>
           </div>
         </div>
       `;
@@ -2008,8 +2015,8 @@ ${promptecaCatalog || '(ninguno disponible)'}`;
     container.innerHTML = `
       <button class="wizard-back-btn" data-ruta-action="back-hoy">← Volver al inicio</button>
       <div class="ruta-container">
-        <div class="ruta-title">🗺️ ${rutaData.titulo || 'Tu Ruta Personalizada'}</div>
-        <div class="ruta-summary">${rutaData.resumen || ''}</div>
+        <div class="ruta-title">🗺️ ${this.escapeHtml(rutaData.titulo) || 'Tu Ruta Personalizada'}</div>
+        <div class="ruta-summary">${this.escapeHtml(rutaData.resumen) || ''}</div>
         <div class="ruta-timeline">${weeks}</div>
         <button class="ruta-regenerate-btn" data-ruta-action="regenerate">🔄 Regenerar ruta</button>
       </div>
