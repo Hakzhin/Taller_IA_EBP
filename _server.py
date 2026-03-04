@@ -17,7 +17,7 @@ API_KEY_FILE = "api_key.txt"
 TAVILY_KEY_FILE = "tavily_key.txt"
 ANTHROPIC_URL = "https://api.anthropic.com/v1/messages"
 ANTHROPIC_VERSION = "2023-06-01"
-MODEL = "claude-haiku-4-5-20251001"
+MODEL = "claude-sonnet-4-20250514"
 TAVILY_URL = "https://api.tavily.com/search"
 
 # ── Cargar API key (Anthropic) ──
@@ -285,12 +285,14 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
                     web_context += "\nUsa estos resultados como fuente actualizada para complementar el catalogo. Verifica que las URLs sean reales antes de recomendarlas. Si un resultado no es relevante o no es una herramienta IA educativa, ignoralo."
                     system_prompt = system_prompt + web_context
 
+        temperature = 0.3 if feature in ("ruta", "bulletin") else 0.7
+
         payload = json.dumps({
             "model": MODEL,
             "system": system_prompt,
             "messages": api_messages,
             "max_tokens": max_tokens,
-            "temperature": 0.7,
+            "temperature": temperature,
         }).encode("utf-8")
 
         req = urllib.request.Request(
@@ -338,20 +340,31 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
         except Exception as e:
             self.send_json(500, {"error": str(e)})
 
+    _LOCAL_ORIGINS = ["http://localhost:8085", "http://127.0.0.1:8085"]
+
+    def _cors_origin(self):
+        """Return allowed origin if request origin matches, else empty string."""
+        origin = self.headers.get("Origin", "")
+        return origin if origin in self._LOCAL_ORIGINS else ""
+
     def send_json(self, code, data):
         """Envia una respuesta JSON con el codigo HTTP dado."""
         body = json.dumps(data, ensure_ascii=False).encode("utf-8")
         self.send_response(code)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
-        self.send_header("Access-Control-Allow-Origin", "*")
+        origin = self._cors_origin()
+        if origin:
+            self.send_header("Access-Control-Allow-Origin", origin)
         self.end_headers()
         self.wfile.write(body)
 
     def do_OPTIONS(self):
         """CORS preflight para peticiones POST desde el navegador."""
         self.send_response(204)
-        self.send_header("Access-Control-Allow-Origin", "*")
+        origin = self._cors_origin()
+        if origin:
+            self.send_header("Access-Control-Allow-Origin", origin)
         self.send_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()

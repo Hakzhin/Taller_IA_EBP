@@ -23,10 +23,9 @@ const Assistant = {
   panel: null,
   badge: null,
 
-  // ── Anthropic Direct API (for GitHub Pages) ──
-  ANTHROPIC_URL: 'https://api.anthropic.com/v1/messages',
-  ANTHROPIC_MODEL: 'claude-sonnet-4-20250514',
-  ANTHROPIC_VERSION: '2023-06-01',
+  // ── Proxy URL (Cloud Run en producción, localhost en desarrollo) ──
+  // Reemplazar XXXXXXXXXX con el project number de GCP tras desplegar
+  PROXY_URL: 'https://bupia-proxy-XXXXXXXXXX.us-west1.run.app/api/chat',
 
   // ── System Prompts (single source of truth — solo editar aquí) ──
   // CATALOG: se mantiene aquí como fallback; la fuente canónica es data/catalog.json.
@@ -2040,92 +2039,39 @@ ${promptecaCatalog || '(ninguno disponible)'}`;
 
   async apiCall(feature, messages) {
     const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    const url = isLocal ? '/api/chat' : this.PROXY_URL;
 
-    // ── Localhost: use Python proxy ──
-    if (isLocal) {
-      const resp = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ feature, messages }),
-      });
-      const data = await resp.json();
-      if (!resp.ok) {
-        throw new Error(data.error || data.detail || `Error HTTP ${resp.status}`);
-      }
-      if (data.choices && data.choices[0] && data.choices[0].message) {
-        return { content: data.choices[0].message.content };
-      }
-      if (data.error) {
-        throw new Error(typeof data.error === 'string' ? data.error : data.error.message || 'Error desconocido');
-      }
-      return null;
-    }
-
-    // ── GitHub Pages: call Anthropic directly ──
-    const apiKey = this.getApiKey();
-    if (!apiKey) {
-      throw new Error('El asistente no está disponible en este dominio.');
-    }
-
-    if (!this.checkRateLimit()) {
+    // Client-side rate limit (UX feedback — server enforces the real limit)
+    if (!isLocal && !this.checkRateLimit()) {
       throw new Error('Has alcanzado el límite diario de consultas. Vuelve mañana 😊');
     }
 
-    const systemPrompt = this.SYSTEM_PROMPTS[feature] || this.SYSTEM_PROMPTS.chat;
-    // Send only last 20 messages to API (cost control), even though we store up to 50
-    const apiMessages = messages.filter(m => m.role === 'user' || m.role === 'assistant').slice(-20);
-    const maxTokens = feature === 'ruta' ? 2000 : feature === 'explore' ? 1500 : 1000;
-
-    const resp = await fetch(this.ANTHROPIC_URL, {
+    const resp = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': this.ANTHROPIC_VERSION,
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
-      body: JSON.stringify({
-        model: this.ANTHROPIC_MODEL,
-        system: systemPrompt,
-        messages: apiMessages,
-        max_tokens: maxTokens,
-        temperature: (feature === 'ruta' || feature === 'bulletin') ? 0.3 : 0.7,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ feature, messages }),
     });
 
     const data = await resp.json();
-
     if (!resp.ok) {
-      const errMsg = data.error?.message || data.error || `Error HTTP ${resp.status}`;
-      if (resp.status === 401) {
-        localStorage.removeItem('bupia_api_key');
-        throw new Error('API key inválida. Recarga la página para introducir una nueva.');
+      if (resp.status === 429) {
+        throw new Error('Has alcanzado el límite diario de consultas. Vuelve mañana 😊');
       }
-      throw new Error(typeof errMsg === 'string' ? errMsg : JSON.stringify(errMsg));
+      throw new Error(data.error || data.detail || `Error HTTP ${resp.status}`);
     }
 
-    // Parse Anthropic response format
-    let text = '';
-    if (data.content) {
-      for (const block of data.content) {
-        if (block.type === 'text') text += block.text || '';
-      }
+    // OpenAI-compatible format (proxy transforms Anthropic response)
+    if (data.choices?.[0]?.message) {
+      return { content: data.choices[0].message.content };
     }
-
-    return text ? { content: text } : null;
+    if (data.error) {
+      throw new Error(typeof data.error === 'string' ? data.error : data.error.message || 'Error desconocido');
+    }
+    return null;
   },
 
-  // ── API key protection ──
-  _ALLOWED_HOSTS: ['hakzhin.github.io', 'localhost', '127.0.0.1'],
+  // ── Rate limit (client-side UX only — server enforces the real limit) ──
   _DAILY_LIMIT: 50,
-
-  getApiKey() {
-    // Domain restriction
-    if (!this._ALLOWED_HOSTS.includes(window.location.hostname)) return null;
-    // XOR-obfuscated key (not plain text)
-    const d = [89,65,7,75,68,94,7,75,90,67,26,25,7,26,80,80,125,93,111,7,124,83,24,69,89,31,114,94,31,98,69,80,96,30,66,125,92,26,27,79,80,120,115,73,31,103,105,88,123,89,104,108,99,25,93,79,101,83,89,117,104,7,80,93,110,125,97,123,7,125,108,122,79,19,101,90,71,24,127,76,109,105,101,65,103,82,95,70,105,123,82,102,79,123,79,126,92,28,123,7,110,108,90,82,91,77,107,107];
-    return d.map(c => String.fromCharCode(c ^ 42)).join('');
-  },
 
   checkRateLimit() {
     const today = new Date().toISOString().slice(0, 10);
