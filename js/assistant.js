@@ -12,6 +12,7 @@ const Assistant = {
   exploreHistory: [],
   wizardState: { intent: null, level: null, sectionId: null },
   isSending: false,
+  _lastSendTime: 0,
   promptecaData: null,
   promptecaFilters: { etapa: null, categoria: null },
   rutaWizardState: { step: 0, etapa: null, asignatura: null, nivel: null },
@@ -27,6 +28,9 @@ const Assistant = {
   ANTHROPIC_MODEL: 'claude-sonnet-4-20250514',
   ANTHROPIC_VERSION: '2023-06-01',
 
+  // ── System Prompts (single source of truth — solo editar aquí) ──
+  // CATALOG: se mantiene aquí como fallback; la fuente canónica es data/catalog.json.
+  // Python (_server.py) carga el catálogo directamente desde el JSON.
   SYSTEM_PROMPTS: (() => {
     const CATALOG = `Catalogo de herramientas disponibles en la plataforma:
 
@@ -1343,6 +1347,11 @@ Reglas:
 
     const text = overrideText || (input ? input.value.trim() : '');
     if (!text || this.isSending) return;
+
+    // Debounce: prevent rapid duplicate sends (300ms)
+    const now = Date.now();
+    if (now - this._lastSendTime < 300) return;
+    this._lastSendTime = now;
 
     if (input && !overrideText) input.value = '';
 
