@@ -86,28 +86,18 @@ def search_tavily(query):
         print(f"[Tavily] Busqueda fallida: {e}")
         return []
 
-# ── System prompts ──
-CATALOG = """Catalogo de herramientas disponibles en la plataforma:
+# ── Load catalog from shared JSON (single source of truth) ──
+_catalog_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "catalog.json")
+try:
+    with open(_catalog_path, "r", encoding="utf-8") as _f:
+        _catalog_data = json.load(_f)
+    CATALOG = _catalog_data.get("catalog_text", "")
+    print(f"[Catalogo] Cargado v{_catalog_data.get('version', '?')}")
+except Exception as _e:
+    print(f"[Catalogo] Error: {_e}, usando fallback")
+    CATALOG = "Catalogo no disponible."
 
-INFANTIL (3-6 anos):
-- Imagenes: Gemini (Google), Grok Aurora (xAI, gratuito), Copilot/DALL-E (Microsoft)
-- Musica: Suno (canciones con letra y voz), Gemini (piezas instrumentales)
-- Cuentos: Storybook con Gemini (cuentos ilustrados automaticos)
-
-PRIMARIA (6-12 anos):
-- Imagenes: Gemini, Grok, Copilot
-- Videos: Flow/Runway (clips cortos), Grok Video, Luma Dream Machine
-- Musica: Suno, Gemini
-- Cuadernos: NotebookLM (resumenes en audio, podcasts de temas)
-- Materiales: Gemini, ChatGPT, Claude (programaciones, fichas, examenes, rubricas)
-
-ESO (12-16 anos):
-- Imagenes: Gemini, Grok, Copilot
-- Videos: Flow, Grok Video, Luma
-- Cuadernos: NotebookLM
-- Materiales: Gemini, ChatGPT, Claude"""
-
-BASE_PROMPT = f"""Eres "BupIA", el asistente de la plataforma "Taller IA" del Colegio El Buen Pastor (Madrid).
+BASE_PROMPT = f"""Eres "BupIA", el asistente de la plataforma "Taller IA" del Colegio El Buen Pastor (Murcia).
 Ayudas a profesores a descubrir y usar herramientas de IA para educacion.
 
 {CATALOG}
@@ -136,7 +126,7 @@ Menciona una herramienta concreta del catalogo.
 Formato: un titulo llamativo (max 8 palabras) y 2-3 frases de contenido.
 Responde SOLO con JSON valido: {"title": "...", "body": "...", "toolId": "..."}
 El toolId debe ser un ID del catalogo como "pri-gemini", "eso-chatgpt", "inf-suno", etc.""",
-    "explore": """Eres "BupIA" en modo Explorador. Ayudas a profesores del Colegio El Buen Pastor (Madrid) a descubrir herramientas de IA EXTERNAS que NO estan en su plataforma.
+    "explore": """Eres "BupIA" en modo Explorador. Ayudas a profesores del Colegio El Buen Pastor (Murcia) a descubrir herramientas de IA EXTERNAS que NO estan en su plataforma.
 
 Tu publico son docentes con pocos o nulos conocimientos informaticos. Esto define TODO tu estilo:
 

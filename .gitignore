@@ -1,1 +1,8 @@
 api_key.txt
+tavily_key.txt
+__pycache__/
+*.pyc
+.claude/
+nul
+.env
+.env.local

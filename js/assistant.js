@@ -455,10 +455,10 @@ Reglas:
         <div class="assistant-header">
           <div class="assistant-tabs" role="tablist" aria-label="Secciones del asistente">
             <button class="assistant-tab-btn" data-assistant-tab="hoy" role="tab" id="tab-hoy" aria-selected="true" aria-controls="assistant-hoy"><span class="tab-icon" aria-hidden="true">🚀</span><span class="tab-label"> Hoy</span></button>
-            <button class="assistant-tab-btn" data-assistant-tab="tablon" role="tab" id="tab-tablon" aria-selected="false" aria-controls="assistant-tablon"><span class="tab-icon" aria-hidden="true">📋</span><span class="tab-label"> Tablón</span></button>
-            <button class="assistant-tab-btn" data-assistant-tab="prompteca" role="tab" id="tab-prompteca" aria-selected="false" aria-controls="assistant-prompteca"><span class="tab-icon" aria-hidden="true">📖</span><span class="tab-label"> Recetas</span></button>
-            <button class="assistant-tab-btn" data-assistant-tab="explorar" role="tab" id="tab-explorar" aria-selected="false" aria-controls="assistant-explorar"><span class="tab-icon" aria-hidden="true">🔍</span><span class="tab-label"> Explorar</span></button>
-            <button class="assistant-tab-btn" data-assistant-tab="chat" role="tab" id="tab-chat" aria-selected="false" aria-controls="assistant-chat"><span class="tab-icon" aria-hidden="true">💬</span><span class="tab-label"> Chat</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="tablon" role="tab" id="tab-tablon" aria-selected="false" aria-controls="assistant-tablon" tabindex="-1"><span class="tab-icon" aria-hidden="true">📋</span><span class="tab-label"> Tablón</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="prompteca" role="tab" id="tab-prompteca" aria-selected="false" aria-controls="assistant-prompteca" tabindex="-1"><span class="tab-icon" aria-hidden="true">📖</span><span class="tab-label"> Recetas</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="explorar" role="tab" id="tab-explorar" aria-selected="false" aria-controls="assistant-explorar" tabindex="-1"><span class="tab-icon" aria-hidden="true">🔍</span><span class="tab-label"> Explorar</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="chat" role="tab" id="tab-chat" aria-selected="false" aria-controls="assistant-chat" tabindex="-1"><span class="tab-icon" aria-hidden="true">💬</span><span class="tab-label"> Chat</span></button>
           </div>
           <button class="assistant-close-btn" data-assistant-action="close" aria-label="Cerrar asistente">✕</button>
         </div>
@@ -636,6 +636,32 @@ Reglas:
         return;
       }
 
+      // Chat: retry on error
+      const chatRetry = target.closest('[data-chat-retry]');
+      if (chatRetry) {
+        const errorMsg = chatRetry.closest('.chat-msg-error');
+        if (errorMsg) errorMsg.remove();
+        const lastUserMsg = this.chatHistory[this.chatHistory.length - 1];
+        if (lastUserMsg && lastUserMsg.role === 'user') {
+          this.chatHistory.pop();
+          this.handleSend(lastUserMsg.content);
+        }
+        return;
+      }
+
+      // Explore: retry on error
+      const exploreRetry = target.closest('[data-explore-retry]');
+      if (exploreRetry) {
+        const errorMsg = exploreRetry.closest('.chat-msg-error');
+        if (errorMsg) errorMsg.remove();
+        const lastUserMsg = this.exploreHistory[this.exploreHistory.length - 1];
+        if (lastUserMsg && lastUserMsg.role === 'user') {
+          this.exploreHistory.pop();
+          this.sendExploreMessage(lastUserMsg.content);
+        }
+        return;
+      }
+
       // Prompteca: filter by etapa
       const etapaFilter = target.closest('[data-prompteca-etapa]');
       if (etapaFilter) {
@@ -745,6 +771,59 @@ Reglas:
         }
       });
     }
+
+    // Keyboard: ESC to close panel
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.isOpen) {
+        e.preventDefault();
+        this.close();
+      }
+    });
+
+    // Focus trap inside open panel
+    this.panel.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+      const focusable = [...this.panel.querySelectorAll(
+        'button:not([disabled]):not([style*="display:none"]), input:not([disabled]), [tabindex="0"]'
+      )].filter(el => el.offsetParent !== null); // only visible
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+
+    // Arrow key navigation in tablist (WAI-ARIA Tabs pattern)
+    const tablist = this.root.querySelector('[role="tablist"]');
+    if (tablist) {
+      tablist.addEventListener('keydown', (e) => {
+        const tabs = [...tablist.querySelectorAll('[role="tab"]')];
+        const idx = tabs.indexOf(document.activeElement);
+        if (idx === -1) return;
+
+        let newIdx;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          newIdx = (idx + 1) % tabs.length;
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          newIdx = (idx - 1 + tabs.length) % tabs.length;
+        } else if (e.key === 'Home') {
+          newIdx = 0;
+        } else if (e.key === 'End') {
+          newIdx = tabs.length - 1;
+        } else {
+          return;
+        }
+        e.preventDefault();
+        tabs[newIdx].focus();
+        tabs[newIdx].click();
+      });
+    }
   },
 
   // ═══════════════════════════════════════
@@ -769,6 +848,9 @@ Reglas:
     this.renderActiveTab();
     this.updateRateCounter();
     this.saveState();
+    // Focus active tab button for keyboard users
+    const activeTabBtn = this.root.querySelector('.assistant-tab-btn.active');
+    if (activeTabBtn) activeTabBtn.focus();
   },
 
   // ── Intro Video ──
@@ -838,8 +920,12 @@ Reglas:
       this.isOpen = true;
       this.panel.classList.add('open');
       this.fab.classList.add('open');
+      this.fab.setAttribute('aria-expanded', 'true');
       this.renderActiveTab();
       this.saveState();
+      // Focus active tab button for keyboard users
+      const activeTabBtn = this.root.querySelector('.assistant-tab-btn.active');
+      if (activeTabBtn) activeTabBtn.focus();
     }
   },
 
@@ -849,6 +935,8 @@ Reglas:
     this.fab.classList.remove('open');
     this.fab.setAttribute('aria-expanded', 'false');
     this.saveState();
+    // Return focus to FAB
+    this.fab.focus();
   },
 
   // ═══════════════════════════════════════
@@ -858,11 +946,12 @@ Reglas:
   switchTab(tab) {
     this.activeTab = tab;
 
-    // Update tab buttons (visual + ARIA)
+    // Update tab buttons (visual + ARIA + roving tabindex)
     this.root.querySelectorAll('.assistant-tab-btn').forEach(btn => {
       const isActive = btn.dataset.assistantTab === tab;
       btn.classList.toggle('active', isActive);
       btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      btn.setAttribute('tabindex', isActive ? '0' : '-1');
     });
 
     // Update tab content
@@ -888,11 +977,12 @@ Reglas:
     const target = this.root.querySelector('#' + ids[this.activeTab]);
     if (target) target.classList.add('active');
 
-    // Update tab button active states (visual + ARIA)
+    // Update tab button active states (visual + ARIA + roving tabindex)
     this.root.querySelectorAll('.assistant-tab-btn').forEach(btn => {
       const isActive = btn.dataset.assistantTab === this.activeTab;
       btn.classList.toggle('active', isActive);
       btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      btn.setAttribute('tabindex', isActive ? '0' : '-1');
     });
 
     // Show/hide chat input bar
@@ -921,10 +1011,18 @@ Reglas:
 
     let html = '<div class="ranking-header">🏆 Top 10 Herramientas IA para Docentes</div>';
 
-    if (typeof RANKING_DATA !== 'undefined') {
+    if (typeof RANKING_DATA !== 'undefined' && RANKING_DATA.length > 0) {
       for (const item of RANKING_DATA) {
         html += this.renderRankingCard(item);
       }
+    } else {
+      html += `
+        <div class="tablon-empty-state">
+          <div class="tablon-empty-icon" aria-hidden="true">📋</div>
+          <div class="tablon-empty-title">Ranking no disponible</div>
+          <div class="tablon-empty-text">El ranking de herramientas se actualizara proximamente.</div>
+        </div>
+      `;
     }
 
     container.innerHTML = html;
@@ -1239,14 +1337,14 @@ Reglas:
     this.renderChat(); // Shows welcome again
   },
 
-  handleSend() {
+  handleSend(overrideText) {
     const input = this.root.querySelector('#chat-input');
-    if (!input) return;
+    if (!input && !overrideText) return;
 
-    const text = input.value.trim();
+    const text = overrideText || (input ? input.value.trim() : '');
     if (!text || this.isSending) return;
 
-    input.value = '';
+    if (input && !overrideText) input.value = '';
 
     if (this.activeTab === 'explorar') {
       this.sendExploreMessage(text);
@@ -1396,7 +1494,15 @@ Reglas:
 
     const div = document.createElement('div');
     div.className = `chat-msg chat-msg-${role}`;
-    div.innerHTML = this.formatMarkdown(text);
+
+    if (role === 'error') {
+      div.innerHTML = `
+        <span class="chat-error-text">${this.formatMarkdown(text)}</span>
+        <button class="chat-retry-btn" data-chat-retry aria-label="Reintentar mensaje">🔄 Reintentar</button>
+      `;
+    } else {
+      div.innerHTML = this.formatMarkdown(text);
+    }
 
     container.appendChild(div);
 
@@ -1533,7 +1639,15 @@ Reglas:
 
     const div = document.createElement('div');
     div.className = `chat-msg chat-msg-${role}`;
-    div.innerHTML = this.formatMarkdown(text);
+
+    if (role === 'error') {
+      div.innerHTML = `
+        <span class="chat-error-text">${this.formatMarkdown(text)}</span>
+        <button class="chat-retry-btn" data-explore-retry aria-label="Reintentar mensaje">🔄 Reintentar</button>
+      `;
+    } else {
+      div.innerHTML = this.formatMarkdown(text);
+    }
 
     container.appendChild(div);
 

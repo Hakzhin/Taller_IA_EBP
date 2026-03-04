@@ -296,6 +296,31 @@
 }
 .ranking-card-link:hover { text-decoration: underline; }
 
+/* ── Tablón Empty State ── */
+.tablon-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+}
+.tablon-empty-icon { font-size: 2.5rem; margin-bottom: 12px; opacity: 0.6; }
+.tablon-empty-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-medium);
+  margin-bottom: 6px;
+}
+.tablon-empty-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8125rem;
+  color: var(--text-medium);
+  max-width: 280px;
+  line-height: 1.5;
+}
+
 /* ── Recomendador (Wizard) ── */
 .wizard-title {
   font-size: 0.9375rem;
@@ -671,6 +696,26 @@
   font-size: 0.75rem;
   text-align: center;
   border-radius: 12px;
+}
+.chat-retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  padding: 6px 14px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 14px;
+  background: rgba(239, 68, 68, 0.08);
+  color: #dc2626;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.chat-retry-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.5);
 }
 
 /* Typing indicator */
@@ -1245,6 +1290,7 @@
 .bupia-intro-skip:focus-visible,
 .bupia-rewatch-btn:focus-visible,
 .ranking-card-link:focus-visible,
+.chat-retry-btn:focus-visible,
 .pathway-chip:focus-visible {
   outline: 2px solid var(--accent-purple);
   outline-offset: 2px;
