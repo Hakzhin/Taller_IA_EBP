@@ -18,7 +18,15 @@ app = Flask(__name__)
 #  Configuration (from environment variables)
 # ══════════════════════════════════════════════════
 
-API_KEY = os.environ["ANTHROPIC_API_KEY"]
+API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+if not API_KEY:
+    # Fallback: load from file (for local development, same as _server.py)
+    _key_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "api_key.txt")
+    if os.path.exists(_key_path):
+        with open(_key_path, "r", encoding="utf-8") as f:
+            API_KEY = f.read().strip()
+if not API_KEY:
+    print("[!] ANTHROPIC_API_KEY not set. Set env var or create ../api_key.txt")
 MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-20250514")
 ANTHROPIC_URL = "https://api.anthropic.com/v1/messages"
 ANTHROPIC_VERSION = "2023-06-01"
