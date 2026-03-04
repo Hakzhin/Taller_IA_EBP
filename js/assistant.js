@@ -434,43 +434,45 @@ Reglas:
 
   buildDOM() {
     this.root.innerHTML = `
-      <button class="assistant-fab" data-assistant-action="toggle">
+      <button class="assistant-fab" data-assistant-action="toggle"
+              aria-label="Abrir asistente BupIA" aria-expanded="false" aria-controls="bupia-panel">
         <img class="fab-avatar" src="img/bupia.png" alt="BupIA">
-        <span class="fab-badge"></span>
+        <span class="fab-badge" aria-hidden="true"></span>
       </button>
 
       <!-- Intro video modal (first visit) -->
-      <div class="bupia-intro-overlay" id="bupia-intro-overlay">
+      <div class="bupia-intro-overlay" id="bupia-intro-overlay" aria-hidden="true">
         <div class="bupia-intro-modal">
           <video class="bupia-intro-video" id="bupia-intro-video"
                  src="media/bupia-intro.mp4"
-                 playsinline preload="metadata"></video>
-          <button class="bupia-intro-skip" id="bupia-intro-skip">Saltar ⏭️</button>
+                 playsinline preload="metadata"
+                 aria-label="Video de presentacion de BupIA"></video>
+          <button class="bupia-intro-skip" id="bupia-intro-skip" aria-label="Saltar video de introduccion">Saltar ⏭️</button>
         </div>
       </div>
 
-      <div class="assistant-panel">
+      <div class="assistant-panel" id="bupia-panel" role="complementary" aria-label="Asistente BupIA">
         <div class="assistant-header">
-          <div class="assistant-tabs">
-            <button class="assistant-tab-btn" data-assistant-tab="hoy"><span class="tab-icon">🚀</span><span class="tab-label"> Hoy</span></button>
-            <button class="assistant-tab-btn" data-assistant-tab="tablon"><span class="tab-icon">📋</span><span class="tab-label"> Tablón</span></button>
-            <button class="assistant-tab-btn" data-assistant-tab="prompteca"><span class="tab-icon">📖</span><span class="tab-label"> Recetas</span></button>
-            <button class="assistant-tab-btn" data-assistant-tab="explorar"><span class="tab-icon">🔍</span><span class="tab-label"> Explorar</span></button>
-            <button class="assistant-tab-btn" data-assistant-tab="chat"><span class="tab-icon">💬</span><span class="tab-label"> Chat</span></button>
+          <div class="assistant-tabs" role="tablist" aria-label="Secciones del asistente">
+            <button class="assistant-tab-btn" data-assistant-tab="hoy" role="tab" id="tab-hoy" aria-selected="true" aria-controls="assistant-hoy"><span class="tab-icon" aria-hidden="true">🚀</span><span class="tab-label"> Hoy</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="tablon" role="tab" id="tab-tablon" aria-selected="false" aria-controls="assistant-tablon"><span class="tab-icon" aria-hidden="true">📋</span><span class="tab-label"> Tablón</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="prompteca" role="tab" id="tab-prompteca" aria-selected="false" aria-controls="assistant-prompteca"><span class="tab-icon" aria-hidden="true">📖</span><span class="tab-label"> Recetas</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="explorar" role="tab" id="tab-explorar" aria-selected="false" aria-controls="assistant-explorar"><span class="tab-icon" aria-hidden="true">🔍</span><span class="tab-label"> Explorar</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="chat" role="tab" id="tab-chat" aria-selected="false" aria-controls="assistant-chat"><span class="tab-icon" aria-hidden="true">💬</span><span class="tab-label"> Chat</span></button>
           </div>
-          <button class="assistant-close-btn" data-assistant-action="close">✕</button>
+          <button class="assistant-close-btn" data-assistant-action="close" aria-label="Cerrar asistente">✕</button>
         </div>
         <div class="assistant-body">
-          <div class="assistant-tab-content" id="assistant-hoy"></div>
-          <div class="assistant-tab-content" id="assistant-tablon"></div>
-          <div class="assistant-tab-content" id="assistant-prompteca"></div>
-          <div class="assistant-tab-content" id="assistant-chat">
+          <div class="assistant-tab-content" id="assistant-hoy" role="tabpanel" aria-labelledby="tab-hoy"></div>
+          <div class="assistant-tab-content" id="assistant-tablon" role="tabpanel" aria-labelledby="tab-tablon"></div>
+          <div class="assistant-tab-content" id="assistant-prompteca" role="tabpanel" aria-labelledby="tab-prompteca"></div>
+          <div class="assistant-tab-content" id="assistant-chat" role="tabpanel" aria-labelledby="tab-chat">
             <div class="chat-header-bar">
               <span class="chat-header-title">💬 Chat con BupIA</span>
-              <button class="chat-clear-btn" id="chat-clear" title="Nueva conversación">🗑️</button>
+              <button class="chat-clear-btn" id="chat-clear" title="Nueva conversación" aria-label="Borrar conversacion">🗑️</button>
             </div>
-            <div class="chat-messages" id="chat-messages"></div>
-            <div class="chat-typing" id="chat-typing">
+            <div class="chat-messages" id="chat-messages" aria-live="polite" aria-relevant="additions"></div>
+            <div class="chat-typing" id="chat-typing" aria-hidden="true">
               <div class="chat-typing-dots">
                 <div class="chat-typing-dot"></div>
                 <div class="chat-typing-dot"></div>
@@ -478,13 +480,13 @@ Reglas:
               </div>
             </div>
           </div>
-          <div class="assistant-tab-content" id="assistant-explorar">
+          <div class="assistant-tab-content assistant-explorar-mode" id="assistant-explorar" role="tabpanel" aria-labelledby="tab-explorar">
             <div class="chat-header-bar">
               <span class="chat-header-title">🔍 Explorador IA</span>
-              <button class="chat-clear-btn" id="explore-clear" title="Nueva búsqueda">🗑️</button>
+              <button class="chat-clear-btn" id="explore-clear" title="Nueva búsqueda" aria-label="Borrar busqueda">🗑️</button>
             </div>
-            <div class="chat-messages" id="explore-messages"></div>
-            <div class="chat-typing" id="explore-typing">
+            <div class="chat-messages" id="explore-messages" aria-live="polite" aria-relevant="additions"></div>
+            <div class="chat-typing" id="explore-typing" aria-hidden="true">
               <div class="chat-typing-dots">
                 <div class="chat-typing-dot"></div>
                 <div class="chat-typing-dot"></div>
@@ -496,10 +498,11 @@ Reglas:
         <div class="chat-input-bar" id="chat-input-bar" style="display:none">
           <input type="text" class="chat-input" id="chat-input"
                  placeholder="Pregunta a BupIA..."
-                 autocomplete="off">
-          <button class="chat-send-btn" id="chat-send" data-assistant-action="send">➤</button>
+                 autocomplete="off"
+                 aria-label="Mensaje para BupIA">
+          <button class="chat-send-btn" id="chat-send" data-assistant-action="send" aria-label="Enviar mensaje">➤</button>
         </div>
-        <div class="assistant-footer">
+        <div class="assistant-footer" role="contentinfo">
           <span>BupIA · Potenciado por Claude</span>
           <span class="rate-counter" id="rate-counter"></span>
         </div>
@@ -762,6 +765,7 @@ Reglas:
     this.isOpen = true;
     this.panel.classList.add('open');
     this.fab.classList.add('open');
+    this.fab.setAttribute('aria-expanded', 'true');
     this.renderActiveTab();
     this.updateRateCounter();
     this.saveState();
@@ -775,11 +779,51 @@ Reglas:
     if (!overlay || !video) return;
 
     overlay.classList.add('visible');
+    overlay.setAttribute('aria-hidden', 'false');
     video.currentTime = 0;
-    video.play().catch(() => {});
+
+    video.play().catch(() => {
+      // Video failed to play — show fallback welcome
+      this.showVideoFallback(overlay);
+    });
+
+    // Handle network/load errors
+    video.onerror = () => this.showVideoFallback(overlay);
 
     // When video ends naturally → close and open BupIA
     video.onended = () => this.closeIntroVideo(true);
+  },
+
+  showVideoFallback(overlay) {
+    const modal = overlay.querySelector('.bupia-intro-modal');
+    if (!modal) return;
+
+    modal.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
+                  padding:40px 30px;text-align:center;background:linear-gradient(135deg,#2d2b3d,#4a3f6b);
+                  width:100%;min-height:300px;border-radius:20px;">
+        <img src="img/bupia.png" alt="BupIA"
+             style="width:80px;height:80px;border-radius:50%;margin-bottom:20px;
+                    box-shadow:0 4px 20px rgba(124,92,191,0.5);">
+        <div style="color:#fff;font-size:1.25rem;font-weight:700;margin-bottom:8px;
+                    font-family:'Poppins',sans-serif;">
+          ¡Hola, profe! 👋
+        </div>
+        <div style="color:rgba(255,255,255,0.8);font-size:0.875rem;line-height:1.6;
+                    max-width:320px;font-family:'Poppins',sans-serif;margin-bottom:24px;">
+          Soy <strong>BupIA</strong>, tu asistente de IA del Colegio El Buen Pastor.
+          Estoy aqui para ayudarte a descubrir herramientas increibles para el aula.
+        </div>
+        <button onclick="Assistant.closeIntroVideo(true)"
+                style="padding:10px 28px;border:none;border-radius:20px;
+                       background:linear-gradient(135deg,#7c5cbf,#ff7b54);color:#fff;
+                       font-family:'Poppins',sans-serif;font-size:0.875rem;font-weight:600;
+                       cursor:pointer;"
+                aria-label="Comenzar a usar BupIA">
+          Comenzar 🚀
+        </button>
+      </div>
+    `;
   },
 
   closeIntroVideo(openPanel) {
@@ -803,6 +847,7 @@ Reglas:
     this.isOpen = false;
     this.panel.classList.remove('open');
     this.fab.classList.remove('open');
+    this.fab.setAttribute('aria-expanded', 'false');
     this.saveState();
   },
 
@@ -813,9 +858,11 @@ Reglas:
   switchTab(tab) {
     this.activeTab = tab;
 
-    // Update tab buttons
+    // Update tab buttons (visual + ARIA)
     this.root.querySelectorAll('.assistant-tab-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.assistantTab === tab);
+      const isActive = btn.dataset.assistantTab === tab;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
     });
 
     // Update tab content
@@ -841,9 +888,11 @@ Reglas:
     const target = this.root.querySelector('#' + ids[this.activeTab]);
     if (target) target.classList.add('active');
 
-    // Update tab button active states
+    // Update tab button active states (visual + ARIA)
     this.root.querySelectorAll('.assistant-tab-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.assistantTab === this.activeTab);
+      const isActive = btn.dataset.assistantTab === this.activeTab;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
     });
 
     // Show/hide chat input bar

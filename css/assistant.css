@@ -19,7 +19,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
+  font-size: 1.75rem;
   box-shadow: 0 4px 24px rgba(124,92,191,0.4);
   transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s;
   animation: fab-pulse 3s ease-in-out infinite;
@@ -60,7 +60,7 @@
   border-radius: 11px;
   background: var(--accent-warm);
   color: #fff;
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -132,7 +132,7 @@
   background: rgba(0,0,0,0.04);
   color: var(--text-medium);
   font-family: 'Poppins', sans-serif;
-  font-size: 11.5px;
+  font-size: 0.719rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.25s;
@@ -153,8 +153,8 @@
   border: none;
   border-radius: 50%;
   background: rgba(0,0,0,0.06);
-  color: var(--text-light);
-  font-size: 16px;
+  color: var(--text-medium);
+  font-size: 1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -187,7 +187,7 @@
 
 /* ── Tablón (Ranking Top 10) ── */
 .ranking-header {
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 700;
   color: var(--text-dark);
   text-align: center;
@@ -216,12 +216,12 @@
   padding-top: 2px;
 }
 .ranking-position {
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 800;
-  color: var(--text-light);
+  color: var(--text-medium);
   line-height: 1;
 }
-.ranking-top3 .ranking-position { font-size: 22px; }
+.ranking-top3 .ranking-position { font-size: 1.375rem; }
 .ranking-card-right { flex: 1; min-width: 0; }
 .ranking-card-header {
   display: flex;
@@ -230,18 +230,18 @@
   margin-bottom: 4px;
   flex-wrap: wrap;
 }
-.ranking-card-icon { font-size: 18px; line-height: 1; }
+.ranking-card-icon { font-size: 1.125rem; line-height: 1; }
 .ranking-card-nombre {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 700;
   color: var(--text-dark);
 }
 .ranking-card-empresa {
-  font-size: 11px;
-  color: var(--text-light);
+  font-size: 0.6875rem;
+  color: var(--text-medium);
 }
 .ranking-precio-badge {
-  font-size: 9px;
+  font-size: 0.625rem;
   font-weight: 700;
   text-transform: uppercase;
   padding: 2px 7px;
@@ -250,16 +250,16 @@
   margin-left: auto;
 }
 .ranking-precio-gratis { background: rgba(46,196,160,0.15); color: #1a9a7a; }
-.ranking-precio-freemium { background: rgba(255,193,7,0.18); color: #b8860b; }
+.ranking-precio-freemium { background: rgba(255,193,7,0.18); color: #92600a; }
 .ranking-precio-pago { background: rgba(220,53,69,0.12); color: #b02a37; }
 .ranking-card-body {
-  font-size: 12.5px;
+  font-size: 0.781rem;
   line-height: 1.5;
   color: var(--text-medium);
   margin-bottom: 4px;
 }
 .ranking-card-destaca {
-  font-size: 11.5px;
+  font-size: 0.719rem;
   line-height: 1.45;
   color: var(--text-medium);
   margin-bottom: 6px;
@@ -274,7 +274,7 @@
 }
 .ranking-etapas { display: flex; gap: 4px; flex-wrap: wrap; }
 .ranking-etapa {
-  font-size: 9.5px;
+  font-size: 0.625rem;
   font-weight: 600;
   padding: 1px 6px;
   border-radius: 4px;
@@ -282,14 +282,14 @@
   color: var(--accent-purple);
 }
 .ranking-card-precio {
-  font-size: 10.5px;
-  color: var(--text-light);
+  font-size: 0.656rem;
+  color: var(--text-medium);
   margin-left: auto;
 }
 .ranking-card-link {
   display: inline-block;
   margin-top: 4px;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--accent-purple);
   text-decoration: none;
@@ -298,15 +298,15 @@
 
 /* ── Recomendador (Wizard) ── */
 .wizard-title {
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--text-dark);
   margin-bottom: 12px;
   text-align: center;
 }
 .wizard-subtitle {
-  font-size: 12px;
-  color: var(--text-light);
+  font-size: 0.75rem;
+  color: var(--text-medium);
   text-align: center;
   margin-bottom: 14px;
 }
@@ -338,13 +338,13 @@
 }
 .wizard-hero-text { flex: 1; }
 .wizard-greeting {
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 700;
   color: var(--text-dark);
   line-height: 1.2;
 }
 .wizard-greeting-sub {
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--text-medium);
   margin-top: 2px;
 }
@@ -378,23 +378,23 @@
   transform: translateX(3px);
 }
 .wizard-intent-icon {
-  font-size: 24px;
+  font-size: 1.5rem;
   line-height: 1;
   flex-shrink: 0;
 }
 .wizard-intent-info { flex: 1; min-width: 0; }
 .wizard-intent-label {
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--text-dark);
 }
 .wizard-intent-desc {
-  font-size: 11px;
-  color: var(--text-light);
+  font-size: 0.6875rem;
+  color: var(--text-medium);
   line-height: 1.3;
 }
 .wizard-intent-arrow {
-  font-size: 20px;
+  font-size: 1.25rem;
   color: var(--accent-purple);
   opacity: 0.3;
   transition: opacity 0.2s;
@@ -427,18 +427,18 @@
   background: rgba(124,92,191,0.08);
 }
 .wizard-level-icon {
-  font-size: 24px;
+  font-size: 1.5rem;
   display: block;
   margin-bottom: 4px;
 }
 .wizard-level-name {
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--text-dark);
 }
 .wizard-level-ages {
-  font-size: 10px;
-  color: var(--text-light);
+  font-size: 0.625rem;
+  color: var(--text-medium);
 }
 
 .wizard-categories {
@@ -453,7 +453,7 @@
   border-radius: 20px;
   background: rgba(255,255,255,0.5);
   font-family: 'Poppins', sans-serif;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 500;
   color: var(--text-medium);
   cursor: pointer;
@@ -500,20 +500,20 @@
 }
 .wizard-tool-info { flex: 1; min-width: 0; }
 .wizard-tool-name {
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--text-dark);
 }
 .wizard-tool-tagline {
-  font-size: 11px;
-  color: var(--text-light);
+  font-size: 0.6875rem;
+  color: var(--text-medium);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .wizard-tool-arrow {
   color: var(--accent-purple);
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 700;
   opacity: 0.5;
   transition: opacity 0.2s;
@@ -525,13 +525,13 @@
   padding: 12px 14px;
   background: linear-gradient(135deg, rgba(124,92,191,0.06), rgba(255,123,84,0.06));
   border-radius: 14px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   line-height: 1.5;
   color: var(--text-medium);
   border-left: 3px solid var(--accent-purple);
 }
 .wizard-ai-label {
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -549,7 +549,7 @@
   background: rgba(0,0,0,0.05);
   color: var(--text-medium);
   font-family: 'Poppins', sans-serif;
-  font-size: 12px;
+  font-size: 0.75rem;
   cursor: pointer;
   margin-bottom: 12px;
   transition: background 0.2s;
@@ -566,7 +566,7 @@
   padding: 6px 14px;
   border-bottom: 1px solid rgba(0,0,0,0.06);
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: #64748b;
   flex-shrink: 0;
 }
 .chat-header-title {
@@ -578,7 +578,7 @@
   border: none;
   cursor: pointer;
   font-size: 0.85rem;
-  opacity: 0.45;
+  opacity: 0.65;
   transition: opacity 0.2s, background 0.2s;
   padding: 4px 8px;
   border-radius: 6px;
@@ -601,7 +601,7 @@
   max-width: 85%;
   padding: 10px 14px;
   border-radius: 16px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   line-height: 1.5;
   word-wrap: break-word;
 }
@@ -634,12 +634,12 @@
 
 .chat-msg .chat-heading {
   margin: 8px 0 4px 0;
-  font-size: 13.5px;
+  font-size: 0.844rem;
   font-weight: 700;
   color: var(--accent-purple);
   line-height: 1.3;
 }
-.chat-msg h3.chat-heading { font-size: 14px; }
+.chat-msg h3.chat-heading { font-size: 0.875rem; }
 
 .chat-msg ul, .chat-msg ol {
   margin: 4px 0;
@@ -660,7 +660,7 @@
   background: rgba(0,0,0,0.06);
   padding: 1px 5px;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-family: 'Courier New', monospace;
 }
 
@@ -668,7 +668,7 @@
   align-self: center;
   background: rgba(220,53,69,0.08);
   color: #b02a37;
-  font-size: 12px;
+  font-size: 0.75rem;
   text-align: center;
   border-radius: 12px;
 }
@@ -720,7 +720,7 @@
   border-radius: 14px;
   background: rgba(255,255,255,0.7);
   font-family: 'Poppins', sans-serif;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--text-dark);
   outline: none;
   transition: border-color 0.2s;
@@ -735,7 +735,7 @@
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent-purple), var(--accent-warm));
   color: #fff;
-  font-size: 18px;
+  font-size: 1.125rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -767,7 +767,7 @@
   border-radius: 20px;
   background: rgba(255,255,255,0.6);
   font-family: 'Poppins', sans-serif;
-  font-size: 11.5px;
+  font-size: 0.719rem;
   font-weight: 500;
   color: var(--text-medium);
   cursor: pointer;
@@ -787,7 +787,7 @@
   border-radius: 20px;
   background: rgba(255,255,255,0.6);
   font-family: 'Poppins', sans-serif;
-  font-size: 12.5px;
+  font-size: 0.781rem;
   font-weight: 600;
   color: var(--accent-purple);
   cursor: pointer;
@@ -804,8 +804,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 8px 16px;
-  font-size: 10px;
-  color: var(--text-light);
+  font-size: 0.625rem;
+  color: var(--text-medium);
   border-top: 1px solid rgba(0,0,0,0.04);
   flex-shrink: 0;
 }
@@ -836,8 +836,8 @@
   gap: 4px;
 }
 .prompteca-count {
-  font-size: 11px;
-  color: var(--text-light);
+  font-size: 0.6875rem;
+  color: var(--text-medium);
   margin-bottom: 8px;
 }
 .prompteca-list {
@@ -863,10 +863,10 @@
   gap: 8px;
   cursor: pointer;
 }
-.prompteca-card-icon { font-size: 18px; flex-shrink: 0; }
+.prompteca-card-icon { font-size: 1.125rem; flex-shrink: 0; }
 .prompteca-card-title {
   flex: 1;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--text-dark);
 }
@@ -876,16 +876,16 @@
   border-radius: 6px;
   width: 24px;
   height: 24px;
-  font-size: 10px;
+  font-size: 0.625rem;
   cursor: pointer;
-  color: var(--text-light);
+  color: var(--text-medium);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 .prompteca-card-desc {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--text-medium);
   margin: 4px 0;
   line-height: 1.4;
@@ -898,12 +898,12 @@
   margin-top: 6px;
 }
 .prompteca-tool-badge {
-  font-size: 9.5px;
+  font-size: 0.625rem;
   font-weight: 600;
   padding: 1px 7px;
   border-radius: 4px;
   background: rgba(0,0,0,0.06);
-  color: var(--text-light);
+  color: var(--text-medium);
   margin-left: auto;
 }
 .prompteca-card-prompt {
@@ -912,7 +912,7 @@
   padding-top: 10px;
 }
 .prompteca-prompt-text {
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.5;
   color: var(--text-medium);
   background: rgba(0,0,0,0.03);
@@ -936,7 +936,7 @@
   border: none;
   border-radius: 10px;
   font-family: 'Poppins', sans-serif;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -991,7 +991,7 @@
   position: relative;
   background: rgba(255,255,255,0.75);
   padding: 0 12px;
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--text-light);
 }
 .ruta-cta-btn {
@@ -1013,10 +1013,10 @@
   background: rgba(124,92,191,0.06);
   transform: translateX(3px);
 }
-.ruta-cta-icon { font-size: 24px; flex-shrink: 0; }
+.ruta-cta-icon { font-size: 1.5rem; flex-shrink: 0; }
 .ruta-cta-text { flex: 1; }
-.ruta-cta-title { font-size: 13px; font-weight: 600; color: var(--text-dark); }
-.ruta-cta-desc { font-size: 11px; color: var(--text-light); }
+.ruta-cta-title { font-size: 0.8125rem; font-weight: 600; color: var(--text-dark); }
+.ruta-cta-desc { font-size: 0.6875rem; color: var(--text-medium); }
 
 /* Saved ruta card in Hoy */
 .ruta-saved {
@@ -1035,21 +1035,21 @@
   border-color: var(--accent-purple);
   transform: translateX(3px);
 }
-.ruta-saved-icon { font-size: 22px; flex-shrink: 0; }
+.ruta-saved-icon { font-size: 1.375rem; flex-shrink: 0; }
 .ruta-saved-text { flex: 1; }
-.ruta-saved-title { font-size: 13px; font-weight: 600; color: var(--text-dark); }
-.ruta-saved-desc { font-size: 11px; color: var(--text-light); }
+.ruta-saved-title { font-size: 0.8125rem; font-weight: 600; color: var(--text-dark); }
+.ruta-saved-desc { font-size: 0.6875rem; color: var(--text-medium); }
 
 /* Ruta result timeline */
 .ruta-container { padding-bottom: 12px; }
 .ruta-title {
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--text-dark);
   margin-bottom: 6px;
 }
 .ruta-summary {
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--text-medium);
   margin-bottom: 14px;
   line-height: 1.5;
@@ -1075,7 +1075,7 @@
   margin-bottom: 8px;
 }
 .ruta-week-number {
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 700;
   text-transform: uppercase;
   padding: 2px 8px;
@@ -1086,12 +1086,12 @@
   flex-shrink: 0;
 }
 .ruta-week-title {
-  font-size: 13.5px;
+  font-size: 0.844rem;
   font-weight: 600;
   color: var(--text-dark);
 }
 .ruta-week-body {
-  font-size: 12.5px;
+  font-size: 0.781rem;
   line-height: 1.55;
   color: var(--text-medium);
 }
@@ -1100,7 +1100,7 @@
 .ruta-week-prompt {
   color: var(--accent-purple);
   font-weight: 600;
-  font-size: 12px;
+  font-size: 0.75rem;
   cursor: pointer;
   margin: 6px 0;
   transition: color 0.2s;
@@ -1108,8 +1108,8 @@
 .ruta-week-prompt:hover { color: #7c3aed; text-decoration: underline; }
 .ruta-week-tip {
   margin-top: 6px;
-  font-size: 11.5px;
-  color: var(--text-light);
+  font-size: 0.719rem;
+  color: var(--text-medium);
   font-style: italic;
 }
 .ruta-regenerate-btn {
@@ -1120,7 +1120,7 @@
   border-radius: 12px;
   background: rgba(255,255,255,0.5);
   font-family: 'Poppins', sans-serif;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--accent-purple);
   cursor: pointer;
@@ -1191,7 +1191,7 @@
   border-radius: 24px;
   padding: 7px 18px;
   font-family: 'Poppins', sans-serif;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -1209,7 +1209,7 @@
   border-radius: 50%;
   width: 36px;
   height: 36px;
-  font-size: 17px;
+  font-size: 1.0625rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -1224,6 +1224,88 @@
   transform: scale(1.1);
 }
 
+/* ── Focus Indicators (WCAG 2.4.7) ── */
+.assistant-fab:focus-visible,
+.assistant-tab-btn:focus-visible,
+.assistant-close-btn:focus-visible,
+.chat-send-btn:focus-visible,
+.chat-clear-btn:focus-visible,
+.wizard-intent-btn:focus-visible,
+.wizard-level-btn:focus-visible,
+.wizard-tool-card:focus-visible,
+.wizard-back-btn:focus-visible,
+.wizard-cat-pill:focus-visible,
+.explore-chip:focus-visible,
+.explore-reset-btn:focus-visible,
+.prompteca-toggle-btn:focus-visible,
+.prompteca-copy-btn:focus-visible,
+.prompteca-personalize-btn:focus-visible,
+.ruta-cta-btn:focus-visible,
+.ruta-regenerate-btn:focus-visible,
+.bupia-intro-skip:focus-visible,
+.bupia-rewatch-btn:focus-visible,
+.ranking-card-link:focus-visible,
+.pathway-chip:focus-visible {
+  outline: 2px solid var(--accent-purple);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(124, 92, 191, 0.25);
+}
+.chat-input:focus-visible {
+  border-color: var(--accent-purple);
+  outline: 2px solid var(--accent-purple);
+  outline-offset: -1px;
+}
+
+/* ── Explorar Mode Visual Differentiation ── */
+.assistant-explorar-mode .chat-header-bar {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(6, 182, 212, 0.06));
+  border-bottom: 1px solid rgba(16, 185, 129, 0.15);
+  color: #0f766e;
+}
+.assistant-explorar-mode .chat-msg-assistant {
+  background: rgba(240, 253, 250, 0.8);
+  border-color: rgba(16, 185, 129, 0.12);
+}
+.assistant-explorar-mode .chat-msg-assistant strong {
+  color: #0d9488;
+}
+.assistant-explorar-mode .chat-msg-assistant a {
+  color: #0d9488;
+}
+.assistant-explorar-mode .chat-msg-assistant a:hover {
+  color: #0f766e;
+}
+.assistant-explorar-mode .chat-typing-dot {
+  background: #0d9488;
+}
+
+/* ── Reduced Motion (WCAG 2.3.3) ── */
+@media (prefers-reduced-motion: reduce) {
+  .assistant-fab,
+  .wizard-hero-avatar {
+    animation: none;
+  }
+  .chat-typing-dot {
+    animation: none;
+    opacity: 0.7;
+  }
+  .bupia-intro-modal {
+    animation: none;
+  }
+  .assistant-panel,
+  .assistant-fab,
+  .assistant-tab-btn,
+  .assistant-close-btn,
+  .chat-send-btn,
+  .wizard-intent-btn,
+  .wizard-level-btn,
+  .explore-chip,
+  .ranking-card,
+  .prompteca-card {
+    transition: none;
+  }
+}
+
 /* ── Responsive ── */
 @media (max-width: 700px) {
   .assistant-fab {
@@ -1231,7 +1313,7 @@
     right: 18px;
     width: 54px;
     height: 54px;
-    font-size: 24px;
+    font-size: 1.5rem;
   }
   .assistant-panel {
     right: 0;
@@ -1245,11 +1327,11 @@
     transform: translateY(0) scale(1);
   }
   .assistant-fab .fab-avatar { width: 44px; height: 44px; }
-  .assistant-tab-btn { font-size: 10.5px; padding: 6px 1px; }
+  .assistant-tab-btn { font-size: 0.656rem; padding: 6px 1px; }
   .assistant-tab-btn .tab-label { display: none; }
-  .assistant-tab-btn .tab-icon { font-size: 15px; }
+  .assistant-tab-btn .tab-icon { font-size: 0.9375rem; }
   .wizard-level-btn { padding: 10px 6px; }
-  .explore-chip { font-size: 10.5px; padding: 5px 9px; }
+  .explore-chip { font-size: 0.656rem; padding: 5px 9px; }
   .wizard-hero-avatar { width: 52px; height: 52px; }
 }
 
@@ -1260,7 +1342,7 @@
     right: 10px;
     width: 48px;
     height: 48px;
-    font-size: 20px;
+    font-size: 1.25rem;
   }
   .assistant-fab .fab-avatar { width: 40px; height: 40px; }
   .assistant-panel {
@@ -1271,7 +1353,7 @@
     border-radius: 18px;
   }
   .assistant-header { padding: 10px 12px 8px; }
-  .assistant-tab-btn { padding: 5px 3px; font-size: 11px; }
+  .assistant-tab-btn { padding: 5px 3px; font-size: 0.6875rem; }
   .chat-input-bar { padding: 8px 12px; }
   .bulletin-card { padding: 10px 12px; margin-bottom: 8px; }
   .chat-messages { min-height: 120px; }
@@ -1284,7 +1366,7 @@
     right: 6px;
     width: 42px;
     height: 42px;
-    font-size: 18px;
+    font-size: 1.125rem;
   }
   .assistant-fab .fab-avatar { width: 34px; height: 34px; }
   .assistant-panel {
