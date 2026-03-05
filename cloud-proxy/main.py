@@ -2,14 +2,14 @@
 """
 BupIA Cloud Run Proxy — Proxy seguro para la API de Anthropic.
 Elimina la necesidad de exponer la API key en el frontend.
-Basado en los patrones de _server.py del repositorio principal.
+Incluye streaming SSE y todos los feature prompts.
 """
 
 import os
 import time
 import json
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response, stream_with_context
 import requests as http_client
 
 app = Flask(__name__)
@@ -20,33 +20,34 @@ app = Flask(__name__)
 
 API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 if not API_KEY:
-    # Fallback: load from file (for local development, same as _server.py)
     _key_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "api_key.txt")
     if os.path.exists(_key_path):
         with open(_key_path, "r", encoding="utf-8") as f:
             API_KEY = f.read().strip()
 if not API_KEY:
     print("[!] ANTHROPIC_API_KEY not set. Set env var or create ../api_key.txt")
+
 MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-20250514")
 ANTHROPIC_URL = "https://api.anthropic.com/v1/messages"
 ANTHROPIC_VERSION = "2023-06-01"
 ALLOWED_ORIGINS = os.environ.get(
     "ALLOWED_ORIGINS", "https://hakzhin.github.io"
 ).split(",")
-DAILY_LIMIT = int(os.environ.get("DAILY_LIMIT", "50"))
+DAILY_LIMIT = int(os.environ.get("DAILY_LIMIT", "100"))
 TAVILY_KEY = os.environ.get("TAVILY_API_KEY", "")
 TAVILY_URL = "https://api.tavily.com/search"
+MAX_MESSAGES = 20
+MAX_MESSAGE_CHARS = 2000
 
 
 # ══════════════════════════════════════════════════
 #  Rate Limiting (in-memory, resets on cold start)
 # ══════════════════════════════════════════════════
 
-_rate = {}  # ip -> {"date": "YYYY-MM-DD", "count": int}
+_rate = {}
 
 
 def check_rate(ip):
-    """Enforce per-IP daily request limit. Returns True if allowed."""
     today = time.strftime("%Y-%m-%d")
     entry = _rate.get(ip, {"date": "", "count": 0})
     if entry["date"] != today:
@@ -59,7 +60,7 @@ def check_rate(ip):
 
 
 # ══════════════════════════════════════════════════
-#  Load catalog (single source of truth)
+#  Load catalog
 # ══════════════════════════════════════════════════
 
 _data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
@@ -75,7 +76,7 @@ except Exception as e:
 
 
 # ══════════════════════════════════════════════════
-#  System Prompts (mirrors JS SYSTEM_PROMPTS)
+#  System Prompts (synced with _server.py)
 # ══════════════════════════════════════════════════
 
 BASE_PROMPT = f"""Eres "BupIA", el asistente inteligente de la plataforma "Taller IA" del Colegio El Buen Pastor, en Murcia.
@@ -114,10 +115,10 @@ EXPLORE_PROMPT = """Eres "BupIA" en modo Explorador. Ayudas a profesores del Col
 Tu publico son docentes con pocos o nulos conocimientos informaticos. Esto define TODO tu estilo:
 
 TONO Y ESTILO:
-- Cercano, humano, incluso con toques de humor o ironia suave ("Si, otra IA mas... pero esta merece la pena, prometido").
+- Cercano, humano, incluso con toques de humor o ironia suave.
 - Nada de jerga tecnica. Si usas un termino tecnico, explicalo entre parentesis en lenguaje llano.
 - Frases cortas. Parrafos cortos. Que no parezca un manual de instrucciones.
-- Transmite que es FACIL y que ellos PUEDEN. Nada de "configura el endpoint" sino "entra, dale a crear y listo".
+- Transmite que es FACIL y que ellos PUEDEN.
 - Cuando menciones una herramienta, explica para que sirve como se lo contarias a un companero en el cafe.
 
 FORMATO DE RESPUESTA (usa markdown):
@@ -139,24 +140,11 @@ Para cada herramienta recomendada usa EXACTAMENTE este formato:
 
 ---
 
-IMPORTANTE: Solo recomienda herramientas que usen Inteligencia Artificial como funcionalidad central (generacion de texto, imagenes, video, audio, analisis automatico, tutores IA, etc.). NO recomiendes herramientas genericas de productividad, diseno o gestion que no incorporen IA de forma significativa.
+IMPORTANTE: Solo recomienda herramientas que usen Inteligencia Artificial como funcionalidad central. NO recomiendes herramientas genericas que no incorporen IA de forma significativa.
 
 Herramientas YA catalogadas (NO las recomiendes): Gemini, Grok/Aurora, Copilot/DALL-E, Suno, Flow/Runway, Luma Dream Machine, NotebookLM, ChatGPT, Claude, Storybook.
 
-Contexto importante: Los docentes del colegio tienen acceso a **Canva para Educadores** (plan premium gratuito para profesores). Esto incluye funciones IA de Canva (Magic Write, Magic Design, texto a imagen, presentaciones IA, etc.), miles de plantillas educativas y herramientas de diseno avanzadas. Tenlo en cuenta al recomendar: si Canva ya cubre una necesidad, mencionalo como alternativa que ya tienen disponible antes de sugerir otra herramienta externa. No lo cuentes como una de las 2-3 recomendaciones externas.
-
-Etapas educativas del colegio:
-- Infantil (3-6 anos)
-- Primaria (6-12 anos)
-- ESO (12-16 anos)
-
-Criterios para recomendar una herramienta:
-1. GRATUITA o con plan gratuito generoso (sin tarjeta de credito obligatoria)
-2. Accesible desde navegador (Chrome/Edge), sin instalacion de software
-3. Registro simple (idealmente Google SSO o sin cuenta)
-4. Alto valor pedagogico: genera recursos utiles para el aula
-5. Funciona razonablemente en espanol
-6. Aporta algo que Canva para Educadores NO cubre (o lo hace significativamente mejor)
+Contexto importante: Los docentes del colegio tienen acceso a **Canva para Educadores** (plan premium gratuito). Tenlo en cuenta al recomendar.
 
 Reglas:
 - Responde SIEMPRE en espanol
@@ -166,13 +154,38 @@ Reglas:
 - Los enlaces deben ser URLs reales y clicables con formato markdown: [texto](url)"""
 
 FEATURE_PROMPTS = {
-    "chat": BASE_PROMPT,
-    "recommend": BASE_PROMPT + "\n\nContexto adicional: El usuario esta en el recomendador de herramientas.\nResponde con 2-3 frases practicas explicando por que esas herramientas son utiles para su caso.\nNo repitas la lista de herramientas (ya se muestra en la interfaz).\nSugiere un prompt de ejemplo que podrian probar.",
-    "bulletin": BASE_PROMPT + '\n\nContexto adicional: Genera un consejo breve y practico del dia para profesores que usan IA en el aula.\nMenciona una herramienta concreta del catalogo.\nFormato: un titulo llamativo (max 8 palabras) y 2-3 frases de contenido.\nResponde SOLO con JSON valido: {"title": "...", "body": "...", "toolId": "..."}\nEl toolId debe ser un ID del catalogo como "pri-gemini", "eso-chatgpt", "inf-suno", etc.',
+    "chat": BASE_PROMPT + """
+
+OBLIGATORIO — SIEMPRE al final de cada respuesta, DEBES incluir exactamente 3 sugerencias de seguimiento usando EXACTAMENTE este formato (con las etiquetas [SUGERENCIAS] y [/SUGERENCIAS]). NUNCA omitas este bloque:
+
+[SUGERENCIAS]
+1. Pregunta sugerida contextual
+2. Pregunta sugerida contextual
+3. Pregunta sugerida contextual
+[/SUGERENCIAS]
+
+Las sugerencias deben ser preguntas breves (max 12 palabras) relacionadas con tu respuesta. Este bloque es OBLIGATORIO en TODAS tus respuestas sin excepcion.""",
+
+    "recommend": BASE_PROMPT + """
+
+Contexto adicional: El usuario esta en el recomendador de herramientas.
+Responde con 2-3 frases practicas explicando por que esas herramientas son utiles para su caso.
+No repitas la lista de herramientas (ya se muestra en la interfaz).
+Sugiere un prompt de ejemplo que podrian probar.""",
+
+    "bulletin": BASE_PROMPT + """
+
+Contexto adicional: Genera un consejo breve y practico del dia para profesores que usan IA en el aula.
+Menciona una herramienta concreta del catalogo.
+Formato: un titulo llamativo (max 8 palabras) y 2-3 frases de contenido.
+Responde SOLO con JSON valido: {"title": "...", "body": "...", "toolId": "..."}
+El toolId debe ser un ID del catalogo como "pri-gemini", "eso-chatgpt", "inf-suno", etc.""",
+
     "explore": EXPLORE_PROMPT,
+
     "ruta": BASE_PROMPT + """
 
-Contexto adicional: El profesor quiere una RUTA DE APRENDIZAJE personalizada de 4 semanas para aprender a usar IA en el aula.
+Contexto adicional: El profesor quiere una RUTA DE APRENDIZAJE personalizada de 4 semanas.
 
 Genera una ruta de 4 semanas con EXACTAMENTE este formato JSON (sin texto antes ni despues, SOLO el JSON):
 {
@@ -192,11 +205,108 @@ Genera una ruta de 4 semanas con EXACTAMENTE este formato JSON (sin texto antes 
 }
 
 Reglas:
-- Semana 1: empieza con la herramienta mas facil para ese nivel. Principiante: Gemini. Intermedio: ChatGPT. Avanzado: combinar varias.
+- Semana 1: empieza con la herramienta mas facil para ese nivel.
 - Cada semana introduce algo nuevo de forma gradual.
 - Actividades CONCRETAS relacionadas con la asignatura real del profesor.
-- Cuando sea posible, referencia prompts de la Prompteca usando su "id" en prompt_recomendado_id.
 - Responde SOLO con el JSON valido. Sin texto adicional.""",
+
+    "generator_ud": BASE_PROMPT + """
+
+Contexto: Genera una UNIDAD DIDACTICA completa y lista para usar.
+Responde SOLO con JSON valido, sin texto antes ni despues:
+{
+  "titulo": "Titulo de la unidad didactica",
+  "etapa": "Infantil|Primaria|ESO",
+  "asignatura": "...",
+  "temporalizacion": "X sesiones de Y minutos",
+  "objetivos": ["Objetivo 1", "Objetivo 2", "Objetivo 3"],
+  "competencias_clave": ["Competencia 1"],
+  "contenidos": ["Contenido 1", "Contenido 2"],
+  "actividades": [
+    {"sesion": 1, "titulo": "...", "descripcion": "...", "duracion": "X min", "recursos": ["recurso1"]}
+  ],
+  "evaluacion": {"criterios": ["Criterio 1"], "instrumentos": ["Instrumento 1"]},
+  "atencion_diversidad": "Medidas de atencion a la diversidad"
+}
+Adapta el contenido a la etapa educativa y legislacion LOMLOE.""",
+
+    "generator_examen": BASE_PROMPT + """
+
+Contexto: Genera un EXAMEN o TEST completo.
+Responde SOLO con JSON valido:
+{
+  "titulo": "Examen de [tema]",
+  "asignatura": "...",
+  "etapa": "...",
+  "duracion": "X minutos",
+  "instrucciones": "Instrucciones para el alumno",
+  "preguntas": [
+    {"numero": 1, "tipo": "opcion_multiple|verdadero_falso|desarrollo|completar", "enunciado": "...", "opciones": ["A)...", "B)..."], "respuesta_correcta": "A", "puntuacion": 1}
+  ],
+  "puntuacion_total": 10,
+  "criterios_calificacion": "Descripcion de como se califica"
+}
+Incluye variedad de tipos de preguntas. Adapta la dificultad a la etapa.""",
+
+    "generator_rubrica": BASE_PROMPT + """
+
+Contexto: Genera una RUBRICA DE EVALUACION completa con criterios y niveles.
+Responde SOLO con JSON valido:
+{
+  "titulo": "Rubrica de evaluacion: [actividad]",
+  "asignatura": "...",
+  "etapa": "...",
+  "criterios": [
+    {
+      "nombre": "Nombre del criterio",
+      "peso": "25%",
+      "niveles": {
+        "excelente": "Descriptor del nivel excelente (9-10)",
+        "notable": "Descriptor del nivel notable (7-8)",
+        "bien": "Descriptor del nivel bien (5-6)",
+        "insuficiente": "Descriptor del nivel insuficiente (0-4)"
+      }
+    }
+  ],
+  "observaciones": "Notas adicionales para el profesor"
+}
+Usa descriptores claros y observables. Alinea con competencias LOMLOE.""",
+
+    "generator_actividad": BASE_PROMPT + """
+
+Contexto: Genera una ACTIVIDAD DE AULA detallada y lista para aplicar.
+Responde SOLO con JSON valido:
+{
+  "titulo": "Nombre de la actividad",
+  "asignatura": "...",
+  "etapa": "...",
+  "duracion": "X minutos",
+  "objetivos": ["Objetivo 1", "Objetivo 2"],
+  "materiales": ["Material 1", "Material 2"],
+  "descripcion": "Descripcion general de la actividad",
+  "pasos": [
+    {"paso": 1, "titulo": "...", "descripcion": "...", "duracion": "X min"}
+  ],
+  "adaptaciones": "Sugerencias para adaptar a diferentes niveles",
+  "evaluacion": "Como evaluar la actividad",
+  "extension": "Ideas para ampliar o continuar"
+}
+La actividad debe ser practica, motivadora y realista para el aula.""",
+
+    "generator_comunicacion": BASE_PROMPT + """
+
+Contexto: Genera una COMUNICACION PARA FAMILIAS profesional y cercana.
+Responde SOLO con JSON valido:
+{
+  "asunto": "Asunto del mensaje",
+  "saludo": "Estimadas familias,",
+  "cuerpo": "Texto principal del mensaje (varios parrafos)",
+  "cierre": "Despedida profesional",
+  "firma": "El equipo docente",
+  "tono": "formal|cercano|informativo|urgente",
+  "canal_sugerido": "email|agenda|plataforma"
+}
+El tono debe ser profesional pero cercano. Adapta la comunicacion al contexto del Colegio El Buen Pastor.""",
 }
 
 # ── Load external catalog for explorer ──
@@ -206,7 +316,7 @@ if os.path.exists(_ext_catalog_path):
         _ext_data = json.load(f)
     _lines = [
         f"\n\nCATALOGO DE HERRAMIENTAS EXTERNAS VERIFICADAS (revision {_ext_data.get('ultima_revision', '?')}):",
-        "Usa este catalogo como referencia PRIORITARIA al recomendar. Son herramientas verificadas por el equipo del colegio.\n",
+        "Usa este catalogo como referencia PRIORITARIA al recomendar.\n",
     ]
     for cat in _ext_data.get("categorias", []):
         _lines.append(f"\n{cat['icono']} {cat['nombre'].upper()}:")
@@ -221,16 +331,14 @@ if os.path.exists(_ext_catalog_path):
     _count = sum(len(c.get("herramientas", [])) for c in _ext_data["categorias"])
     print(f"[OK] Catalogo externo cargado ({_count} herramientas)")
 else:
-    print(f"[!] No se encontro {_ext_catalog_path}. El explorador usara solo conocimiento del modelo.")
+    print(f"[!] No se encontro catalogo externo en {_ext_catalog_path}")
 
 
 # ══════════════════════════════════════════════════
 #  Tavily Search (for Explorer feature)
 # ══════════════════════════════════════════════════
 
-
 def search_tavily(query):
-    """Search the web via Tavily API. Returns list of results or []."""
     if not TAVILY_KEY:
         return []
     try:
@@ -245,51 +353,61 @@ def search_tavily(query):
             timeout=5,
         )
         resp.raise_for_status()
-        results = []
-        for r in resp.json().get("results", []):
-            results.append({
-                "title": r.get("title", ""),
-                "url": r.get("url", ""),
-                "content": r.get("content", "")[:200],
-            })
-        return results
+        return [
+            {"title": r.get("title", ""), "url": r.get("url", ""), "content": r.get("content", "")[:200]}
+            for r in resp.json().get("results", [])
+        ]
     except Exception as e:
         print(f"[Tavily] Search failed: {e}")
         return []
 
 
 # ══════════════════════════════════════════════════
-#  Flask Routes
+#  Request validation helpers
 # ══════════════════════════════════════════════════
 
-
-@app.route("/api/chat", methods=["POST"])
-def chat():
-    """Main proxy endpoint. Receives {feature, messages} and forwards to Anthropic."""
-    # ── Origin validation ──
-    origin = request.headers.get("Origin", "")
-    if origin and origin not in ALLOWED_ORIGINS:
-        return jsonify(error="Origin not allowed"), 403
-
-    # ── Rate limiting ──
+def get_client_ip():
     ip = request.headers.get("X-Forwarded-For", request.remote_addr)
     if ip and "," in ip:
         ip = ip.split(",")[0].strip()
-    if not check_rate(ip):
-        return jsonify(error="Limite diario alcanzado. Vuelve manana 😊"), 429
+    return ip
 
-    # ── Parse request ──
+
+def validate_request():
+    """Validate common request parameters. Returns (feature, messages, error_response)."""
+    origin = request.headers.get("Origin", "")
+    if origin and origin not in ALLOWED_ORIGINS:
+        return None, None, (jsonify(error="Origin not allowed"), 403)
+
+    ip = get_client_ip()
+    if not check_rate(ip):
+        return None, None, (jsonify(error="Limite diario alcanzado. Vuelve manana."), 429)
+
+    if not API_KEY:
+        return None, None, (jsonify(error="API key no configurada en el servidor"), 503)
+
     body = request.get_json(silent=True)
     if not body or not body.get("messages"):
-        return jsonify(error="El campo 'messages' es obligatorio"), 400
+        return None, None, (jsonify(error="El campo 'messages' es obligatorio"), 400)
 
     feature = body.get("feature", "chat")
     messages = [m for m in body["messages"] if m.get("role") in ("user", "assistant")]
 
-    # ── Build system prompt ──
+    if len(messages) > MAX_MESSAGES:
+        return None, None, (jsonify(error=f"Demasiados mensajes (max {MAX_MESSAGES})"), 400)
+    for msg in messages:
+        content = msg.get("content", "")
+        if isinstance(content, str) and len(content) > MAX_MESSAGE_CHARS:
+            return None, None, (jsonify(error=f"Mensaje demasiado largo (max {MAX_MESSAGE_CHARS} chars)"), 400)
+
+    return feature, messages, None
+
+
+def build_prompt_and_settings(feature, messages):
+    """Build system prompt and API settings for a given feature."""
     system_prompt = FEATURE_PROMPTS.get(feature, FEATURE_PROMPTS["chat"])
 
-    # ── Tavily web search for Explorer ──
+    # Tavily web search for Explorer
     if feature == "explore" and TAVILY_KEY and messages:
         last_user_msg = ""
         for m in reversed(messages):
@@ -302,18 +420,31 @@ def chat():
                 web_ctx = "\n\nRESULTADOS DE BUSQUEDA WEB RECIENTES:\n"
                 for i, r in enumerate(results, 1):
                     web_ctx += f"{i}. {r['title']} ({r['url']}) — {r['content']}\n"
-                web_ctx += (
-                    "\nUsa estos resultados como fuente actualizada para complementar "
-                    "el catalogo. Verifica que las URLs sean reales antes de recomendarlas. "
-                    "Si un resultado no es relevante o no es una herramienta IA educativa, ignoralo."
-                )
-                system_prompt = system_prompt + web_ctx
+                web_ctx += ("\nUsa estos resultados como fuente actualizada. "
+                            "Verifica que las URLs sean reales. "
+                            "Si un resultado no es relevante, ignoralo.")
+                system_prompt += web_ctx
 
-    # ── Feature-specific settings ──
-    max_tokens = 2000 if feature == "ruta" else 1500 if feature == "explore" else 1000
-    temperature = 0.3 if feature in ("ruta", "bulletin") else 0.7
+    is_generator = feature.startswith("generator_")
+    max_tokens = 3000 if is_generator else 2000 if feature == "ruta" else 1500 if feature == "explore" else 1000
+    temperature = 0.3 if feature in ("ruta", "bulletin") or is_generator else 0.7
 
-    # ── Forward to Anthropic ──
+    return system_prompt, max_tokens, temperature
+
+
+# ══════════════════════════════════════════════════
+#  Flask Routes
+# ══════════════════════════════════════════════════
+
+@app.route("/api/chat", methods=["POST"])
+def chat():
+    """Standard (non-streaming) proxy endpoint."""
+    feature, messages, error = validate_request()
+    if error:
+        return error
+
+    system_prompt, max_tokens, temperature = build_prompt_and_settings(feature, messages)
+
     try:
         resp = http_client.post(
             ANTHROPIC_URL,
@@ -334,7 +465,6 @@ def chat():
     except http_client.exceptions.RequestException as e:
         return jsonify(error=f"No se pudo conectar a Anthropic: {e}"), 502
 
-    # ── Transform response (Anthropic → OpenAI-compatible) ──
     if not resp.ok:
         return (resp.text, resp.status_code, {"Content-Type": "application/json"})
 
@@ -347,6 +477,80 @@ def chat():
     return jsonify(choices=[{"message": {"role": "assistant", "content": text}}])
 
 
+@app.route("/api/chat/stream", methods=["POST"])
+def chat_stream():
+    """SSE streaming proxy endpoint."""
+    feature, messages, error = validate_request()
+    if error:
+        return error
+
+    system_prompt, max_tokens, temperature = build_prompt_and_settings(feature, messages)
+
+    def generate():
+        try:
+            resp = http_client.post(
+                ANTHROPIC_URL,
+                json={
+                    "model": MODEL,
+                    "system": system_prompt,
+                    "messages": messages,
+                    "max_tokens": max_tokens,
+                    "temperature": temperature,
+                    "stream": True,
+                },
+                headers={
+                    "x-api-key": API_KEY,
+                    "anthropic-version": ANTHROPIC_VERSION,
+                    "Content-Type": "application/json",
+                },
+                timeout=60,
+                stream=True,
+            )
+
+            if not resp.ok:
+                error_text = resp.text
+                yield f'data: {json.dumps({"error": error_text})}\n\n'
+                return
+
+            for raw_line in resp.iter_lines():
+                if not raw_line:
+                    continue
+                line = raw_line.decode("utf-8")
+                if not line.startswith("data: "):
+                    continue
+                json_str = line[6:]
+                if json_str == "[DONE]":
+                    break
+                try:
+                    event = json.loads(json_str)
+                except json.JSONDecodeError:
+                    continue
+                if event.get("type") == "content_block_delta":
+                    token = event.get("delta", {}).get("text", "")
+                    if token:
+                        yield f'data: {json.dumps({"token": token})}\n\n'
+
+        except Exception as e:
+            yield f'data: {json.dumps({"error": str(e)})}\n\n'
+
+        yield 'data: {"done": true}\n\n'
+
+    origin = request.headers.get("Origin", "")
+    headers = {
+        "Content-Type": "text/event-stream; charset=utf-8",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+        "X-Accel-Buffering": "no",
+    }
+    if origin in ALLOWED_ORIGINS:
+        headers["Access-Control-Allow-Origin"] = origin
+        headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        headers["Access-Control-Allow-Headers"] = "Content-Type"
+
+    return Response(stream_with_context(generate()), headers=headers)
+
+
+@app.route("/api/chat/stream", methods=["OPTIONS"])
 @app.route("/api/chat", methods=["OPTIONS"])
 def cors_preflight():
     """CORS preflight for POST requests."""
@@ -355,14 +559,12 @@ def cors_preflight():
 
 @app.route("/health", methods=["GET"])
 def health():
-    """Health check for Cloud Run."""
     return jsonify(status="ok", model=MODEL)
 
 
 # ══════════════════════════════════════════════════
-#  CORS Headers
+#  CORS Headers (applied to all responses)
 # ══════════════════════════════════════════════════
-
 
 @app.after_request
 def add_cors(response):

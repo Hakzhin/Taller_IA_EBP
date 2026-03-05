@@ -32,8 +32,8 @@ const Assistant = {
   badge: null,
 
   // ── Proxy URL (Cloud Run en producción, localhost en desarrollo) ──
-  // Reemplazar XXXXXXXXXX con el project number de GCP tras desplegar
-  PROXY_URL: 'https://bupia-proxy-XXXXXXXXXX.us-west1.run.app/api/chat',
+  // Cloud Run proxy (producción)
+  PROXY_URL: 'https://bupia-proxy-322838173417.us-west1.run.app/api/chat',
 
   // ── System Prompts (single source of truth — solo editar aquí) ──
   // CATALOG: se mantiene aquí como fallback; la fuente canónica es data/catalog.json.
