@@ -1,10 +1,11 @@
 // ══════════════════════════════════════════
 //  Taller IA · Service Worker
-//  Cache-first for static assets
-//  Network-first for API calls
+//  Stale-while-revalidate for code/HTML
+//  Cache-first for images
+//  Network-first for API & fonts
 // ══════════════════════════════════════════
 
-const CACHE_NAME = 'taller-ia-v1';
+const CACHE_NAME = 'taller-ia-v2';
 
 const STATIC_ASSETS = [
   '/',
@@ -44,6 +45,9 @@ const STATIC_ASSETS = [
   '/manifest.json',
 ];
 
+// Extensions that change frequently → stale-while-revalidate
+const CODE_EXTENSIONS = /\.(html|js|css|json)(\?.*)?$/i;
+
 // Install: pre-cache static assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -52,7 +56,7 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Activate: clean old caches
+// Activate: clean ALL old caches immediately
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -75,16 +79,48 @@ self.addEventListener('fetch', (event) => {
       url.hostname.includes('tavily.com') ||
       url.hostname.includes('run.app')) return;
 
-  // Network-first for Google Fonts (they update occasionally)
+  // Network-first for Google Fonts
   if (url.hostname.includes('googleapis.com') ||
       url.hostname.includes('gstatic.com')) {
     event.respondWith(networkFirst(event.request));
     return;
   }
 
-  // Cache-first for all other static assets
+  // Stale-while-revalidate for code & data (HTML, JS, CSS, JSON)
+  // Serves cached version instantly, fetches fresh copy in background
+  if (url.origin === self.location.origin &&
+      (CODE_EXTENSIONS.test(url.pathname) || url.pathname === '/')) {
+    event.respondWith(staleWhileRevalidate(event.request));
+    return;
+  }
+
+  // Cache-first for images and other static assets (rarely change)
   event.respondWith(cacheFirst(event.request));
 });
+
+// Serve from cache immediately, update cache in background for next load
+async function staleWhileRevalidate(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const cached = await cache.match(request);
+
+  // Always fetch fresh version in background
+  const fetchPromise = fetch(request).then((response) => {
+    if (response.ok) {
+      cache.put(request, response.clone());
+    }
+    return response;
+  }).catch(() => null);
+
+  // Return cached immediately if available, otherwise wait for network
+  if (cached) return cached;
+
+  const response = await fetchPromise;
+  if (response) return response;
+
+  // Offline navigation → fallback
+  if (request.mode === 'navigate') return offlineFallback();
+  return new Response('', { status: 503 });
+}
 
 async function cacheFirst(request) {
   const cached = await caches.match(request);
@@ -98,7 +134,6 @@ async function cacheFirst(request) {
     }
     return response;
   } catch (err) {
-    // Offline navigation → show fallback
     if (request.mode === 'navigate') return offlineFallback();
     throw err;
   }
