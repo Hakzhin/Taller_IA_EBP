@@ -14,6 +14,7 @@ const Assistant = {
 
   // ── State ──
   isOpen: false,
+  isMaximized: false,
   activeTab: 'hoy',
   chatHistory: [],
   exploreHistory: [],
@@ -67,17 +68,18 @@ IA PRO (nivel avanzado):
 APPS PROPIAS DEL COLEGIO:
 - Rubric@sEBP (https://rubric-s-830258786759.us-west1.run.app/): Generador inteligente de rubricas de evaluacion alineadas con LOMLOE. Usa Gemini para generar rubricas completas. El profesor elige etapa (Infantil/Primaria/Secundaria), asignatura, curso, elemento a evaluar, criterios LOMLOE e items con ponderacion. La IA genera descriptores para cada nivel de desempeno (Insuficiente a Sobresaliente). Exporta a Excel y PDF. Incluye chat con Gemini para dudas. Disponible en espanol, ingles y frances.`;
 
-    const BASE = `Eres "BupIA", el asistente inteligente de la plataforma "Taller IA" del Colegio El Buen Pastor, en Murcia.
+    const BASE = `Eres "BupIA", el copiloto de inteligencia artificial de la plataforma "Taller IA" del Colegio El Buen Pastor, en Murcia.
 
 SOBRE TI (autoconocimiento — responde con naturalidad si te preguntan):
 - Nombre: BupIA (pronunciado "bupia"). El nombre viene de "Buen Pastor" + "IA".
-- Que eres: Un asistente de inteligencia artificial especializado en educacion, integrado en la plataforma "Taller IA" del colegio.
+- Que eres: Un copiloto integral de IA educativa que combina recomendacion de herramientas, generacion de contenido didactico, asesoria en atencion a la diversidad e inclusion, y formacion personalizada para docentes. Estas integrada en la plataforma "Taller IA" del colegio.
 - Modelo: Funcionas con Claude Sonnet 4.6, un modelo de Anthropic. Anthropic es una empresa lider en IA segura y responsable.
 - Creador: Fuiste disenada y desarrollada por el equipo del Colegio El Buen Pastor como herramienta pionera de apoyo al profesorado.
 - Plataforma: Vives dentro de "Taller IA", una plataforma web creada por el colegio que organiza herramientas de IA por etapas educativas (Infantil, Primaria, ESO, IA PRO).
-- Proposito: Ayudar a los maestros y profesores del colegio a descubrir, entender y usar herramientas de IA en su dia a dia docente.
+- Proposito: Acompanar a los docentes del colegio en todo su flujo de trabajo con IA: desde descubrir herramientas hasta generar unidades didacticas, examenes, rubricas, actividades, comunicaciones a familias y adaptaciones curriculares completas. Tambien asesoras en atencion a la diversidad (TDAH, dislexia, TEA, altas capacidades...) aplicando principios DUA, y ofreces rutas de aprendizaje personalizadas de 4 semanas.
 - Usuarios: Tus interlocutores son docentes del Colegio El Buen Pastor (Murcia). Pueden ser maestros de Infantil, Primaria o profesores de ESO. Tratalos con respeto, cercanía y paciencia.
 - Memoria: Tienes memoria persistente. Recuerdas las conversaciones anteriores del usuario dentro del mismo navegador.
+- Capacidades: (1) Recomendar herramientas IA del catalogo de la plataforma, (2) Generar contenido didactico con 6 generadores (Unidad Didactica, Examen, Rubrica, Actividad, Comunicacion a familias, Adaptacion Curricular), (3) Asesorar en atencion a la diversidad e inclusion educativa con enfoque DUA, (4) Explorar herramientas IA externas con busqueda web en tiempo real, (5) Crear rutas de aprendizaje personalizadas de 4 semanas, (6) Ofrecer una Prompteca con recetas listas para usar.
 - Marca: BupIA es una marca registrada del Colegio El Buen Pastor.
 
 ${CATALOG}
@@ -108,7 +110,8 @@ Reglas:
 - Responde SIEMPRE en espanol.
 - Se conciso y practico (los profesores tienen poco tiempo).
 - Al recomendar, usa nombres exactos del catalogo. Indica que herramienta y por que.
-- Si preguntan por herramientas fuera del catalogo, di que solo conoces las de la plataforma pero que pueden usar el modo Explorador para descubrir mas.
+- Si preguntan por herramientas fuera del catalogo, recuerda que tienes el modo Explorador con busqueda web en tiempo real. Invitalos a usar la pestana Explorar.
+- Si un profesor necesita crear material didactico (unidades, examenes, rubricas, actividades, comunicaciones o adaptaciones), recuerdale que puede usar los generadores de la pestana Hoy.
 - Para consejos de prompts, referencia la "formula de 4 ingredientes": QUE quiero + COMO + PARA QUIEN + DETALLES.
 - No inventes URLs ni funcionalidades que no existan.
 - Usa un tono cercano y motivador. Eres una companera, no un manual.
@@ -814,6 +817,7 @@ Reglas:
             <button class="assistant-tab-btn" data-assistant-tab="explorar" role="tab" id="tab-explorar" aria-selected="false" aria-controls="assistant-explorar" tabindex="-1" title="Descubre herramientas IA externas"><span class="tab-icon" aria-hidden="true">🔍</span><span class="tab-label"> Explorar</span></button>
             <button class="assistant-tab-btn" data-assistant-tab="chat" role="tab" id="tab-chat" aria-selected="false" aria-controls="assistant-chat" tabindex="-1" title="Chat con BupIA"><span class="tab-icon" aria-hidden="true">💬</span><span class="tab-label"> Chat</span></button>
           </div>
+          <button class="assistant-maximize-btn" data-assistant-action="maximize" aria-label="Maximizar panel" title="Maximizar">⛶</button>
           <button class="assistant-close-btn" data-assistant-action="close" aria-label="Cerrar asistente">✕</button>
         </div>
         <div class="assistant-body">
@@ -917,6 +921,7 @@ Reglas:
         const action = actionEl.dataset.assistantAction;
         if (action === 'toggle') this.toggle();
         else if (action === 'close') this.close();
+        else if (action === 'maximize') this.toggleMaximize();
         else if (action === 'send') this.handleSend();
         return;
       }
@@ -1312,11 +1317,15 @@ Reglas:
       });
     }
 
-    // Keyboard: ESC to close panel
+    // Keyboard: ESC — first restore from maximized, second closes panel
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && this.isOpen) {
         e.preventDefault();
-        this.close();
+        if (this.isMaximized) {
+          this.toggleMaximize();
+        } else {
+          this.close();
+        }
       }
     });
 
@@ -1433,8 +1442,8 @@ Reglas:
         </div>
         <div style="color:rgba(255,255,255,0.8);font-size:0.875rem;line-height:1.6;
                     max-width:320px;font-family:'Poppins',sans-serif;margin-bottom:24px;">
-          Soy <strong>BupIA</strong>, tu asistente de IA del Colegio El Buen Pastor.
-          Estoy aqui para ayudarte a descubrir herramientas increibles para el aula.
+          Soy <strong>BupIA</strong>, tu copiloto IA del Colegio El Buen Pastor.
+          Genero contenido, asesoro en diversidad y te ayudo a descubrir herramientas para el aula.
         </div>
         <button onclick="Assistant.closeIntroVideo(true)"
                 style="padding:10px 28px;border:none;border-radius:20px;
@@ -1470,6 +1479,8 @@ Reglas:
   },
 
   close() {
+    // Restore from maximized first if needed
+    if (this.isMaximized) this.toggleMaximize();
     this.isOpen = false;
     this.panel.classList.remove('open');
     this.fab.classList.remove('open');
@@ -1477,6 +1488,18 @@ Reglas:
     this.saveState();
     // Return focus to FAB
     this.fab.focus();
+  },
+
+  toggleMaximize() {
+    this.isMaximized = !this.isMaximized;
+    this.panel.classList.toggle('maximized', this.isMaximized);
+    this.fab.classList.toggle('hidden-for-maximize', this.isMaximized);
+    const btn = this.panel.querySelector('.assistant-maximize-btn');
+    if (btn) {
+      btn.textContent = this.isMaximized ? '⧉' : '⛶';
+      btn.title = this.isMaximized ? 'Restaurar' : 'Maximizar';
+      btn.setAttribute('aria-label', this.isMaximized ? 'Restaurar panel' : 'Maximizar panel');
+    }
   },
 
   // ═══════════════════════════════════════
@@ -1676,7 +1699,7 @@ Reglas:
         <img class="wizard-hero-avatar" src="img/bupia.png" alt="BupIA" loading="lazy">
         <div class="wizard-hero-text">
           <div class="wizard-greeting">¡Hola, profe!</div>
-          <div class="wizard-greeting-sub">Soy <strong>BupIA</strong>, tu asistente</div>
+          <div class="wizard-greeting-sub">Soy <strong>BupIA</strong>, tu copiloto IA</div>
         </div>
         <button class="bupia-rewatch-btn" data-bupia-rewatch title="Ver vídeo de presentación">🎬</button>
       </div>
@@ -1885,11 +1908,13 @@ Reglas:
 
       // Welcome message for first-time users
       this.appendMessage('assistant',
-        '¡Hola! 👋 Soy **BupIA**, tu asistente del Taller IA. Puedo ayudarte a:\n\n' +
-        '• Encontrar la herramienta perfecta para tu clase\n' +
-        '• Darte consejos sobre cómo escribir buenos prompts\n' +
-        '• Resolver dudas sobre las herramientas de la plataforma\n\n' +
-        '¿En qué puedo ayudarte?'
+        '¡Hola! 👋 Soy **BupIA**, tu copiloto IA del Taller IA. Puedo ayudarte a:\n\n' +
+        '• **Generar contenido**: unidades didácticas, exámenes, rúbricas, actividades y más\n' +
+        '• **Adaptar a la diversidad**: estrategias para TDAH, dislexia, TEA, altas capacidades...\n' +
+        '• **Encontrar herramientas**: recomendaciones del catálogo y exploración web\n' +
+        '• **Mejorar tus prompts**: consejos con la fórmula de 4 ingredientes\n' +
+        '• **Planificar tu formación**: rutas de aprendizaje personalizadas\n\n' +
+        '¿En qué puedo ayudarte hoy?'
       );
     }
   },
@@ -2356,7 +2381,7 @@ Reglas:
       '• Gratuitas o con plan free generoso\n' +
       '• Accesibles desde el navegador\n' +
       '• Con valor pedagógico real\n\n' +
-      'Prueba con los atajos de abajo o escríbeme lo que necesitas.'
+      'Prueba con los atajos de abajo o escríbeme lo que necesitas. También puedo buscar herramientas de **accesibilidad e inclusión** 🧩'
     );
 
     const chipsDiv = document.createElement('div');
