@@ -758,9 +758,66 @@
   flex-shrink: 0;
   background: rgba(255,255,255,0.4);
 }
+/* ── Input wrapper & character counter ── */
+.chat-input-wrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.chat-char-counter {
+  position: absolute;
+  right: 0.625rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.625rem;
+  color: var(--text-light);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, color 0.2s;
+}
+.chat-char-counter.chat-char-warning {
+  color: #f59e0b;
+  opacity: 1;
+}
+.chat-char-counter.chat-char-danger {
+  color: #ef4444;
+  opacity: 1;
+  font-weight: 600;
+}
+
+/* ── Connection status bar ── */
+.connection-status-bar {
+  background: rgba(239, 68, 68, 0.1);
+  color: #b91c1c;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: center;
+  padding: 0.375rem 0.75rem;
+  border-bottom: 1px solid rgba(239, 68, 68, 0.15);
+  flex-shrink: 0;
+  animation: conn-slide-down 0.3s ease-out;
+}
+.connection-status-bar.conn-fade-out {
+  animation: conn-fade-out 0.5s ease-out forwards;
+}
+@keyframes conn-slide-down {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes conn-fade-out {
+  to { opacity: 0; transform: translateY(-100%); }
+}
+
+/* ── Error message icons ── */
+.chat-error-icon {
+  display: inline-block;
+  margin-right: 0.25rem;
+}
+
 .chat-input {
   flex: 1;
-  padding: 0.625rem 0.875rem;
+  padding: 0.625rem 2.5rem 0.625rem 0.875rem;
   border: 1px solid rgba(0,0,0,0.08);
   border-radius: 0.875rem;
   background: rgba(255,255,255,0.7);

@@ -233,6 +233,25 @@ else:
 class TallerHandler(http.server.SimpleHTTPRequestHandler):
     """Sirve archivos estaticos + proxea /api/chat a Anthropic (Claude)."""
 
+    def do_GET(self):
+        """Override para servir sw.js con headers anti-cache (requisito PWA)."""
+        if self.path == '/sw.js' or self.path.startswith('/sw.js?'):
+            sw_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sw.js')
+            try:
+                with open(sw_path, 'rb') as f:
+                    content = f.read()
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/javascript; charset=utf-8')
+                self.send_header('Content-Length', str(len(content)))
+                self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+                self.send_header('Service-Worker-Allowed', '/')
+                self.end_headers()
+                self.wfile.write(content)
+            except FileNotFoundError:
+                self.send_error(404, 'sw.js not found')
+            return
+        super().do_GET()
+
     def do_POST(self):
         if self.path != "/api/chat":
             self.send_error(404, "Not Found")

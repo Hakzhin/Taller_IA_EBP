@@ -3,6 +3,13 @@
 //  Hoy + Tablón + Chat + Prompteca + Explorar
 // ══════════════════════════════════════════
 
+class ApiError extends Error {
+  constructor(message, type = 'unknown') {
+    super(message);
+    this.type = type; // 'network' | 'timeout' | 'rate_limit' | 'api' | 'unknown'
+  }
+}
+
 const Assistant = {
 
   // ── State ──
@@ -226,6 +233,7 @@ Reglas:
     this.loadSchoolDNA();
     this.loadLOMLOE();
     this.loadInspeccion();
+    this._setupConnectivityMonitor();
   },
 
   async loadExternalCatalog() {
@@ -499,10 +507,13 @@ Reglas:
           </div>
         </div>
         <div class="chat-input-bar" id="chat-input-bar" style="display:none">
-          <input type="text" class="chat-input" id="chat-input"
-                 placeholder="Pregunta a BupIA..."
-                 autocomplete="off"
-                 aria-label="Mensaje para BupIA">
+          <div class="chat-input-wrapper">
+            <input type="text" class="chat-input" id="chat-input"
+                   placeholder="Pregunta a BupIA..."
+                   autocomplete="off" maxlength="500"
+                   aria-label="Mensaje para BupIA">
+            <span class="chat-char-counter" id="chat-char-counter" aria-live="polite"></span>
+          </div>
           <button class="chat-send-btn" id="chat-send" data-assistant-action="send" aria-label="Enviar mensaje">➤</button>
         </div>
         <div class="assistant-footer" role="contentinfo">
@@ -772,6 +783,9 @@ Reglas:
           e.preventDefault();
           this.handleSend();
         }
+      });
+      chatInput.addEventListener('input', () => {
+        this.updateCharCounter();
       });
     }
 
@@ -1347,6 +1361,12 @@ Reglas:
     const text = overrideText || (input ? input.value.trim() : '');
     if (!text || this.isSending) return;
 
+    // Length guard for programmatic sends (input enforces 500 via maxlength)
+    if (text.length > 2000) {
+      this.appendMessage('error', `Mensaje demasiado largo (${text.length}/2000 caracteres). Acórtalo.`);
+      return;
+    }
+
     // Debounce: prevent rapid duplicate sends (300ms)
     const now = Date.now();
     if (now - this._lastSendTime < 300) return;
@@ -1394,7 +1414,7 @@ Reglas:
       }
     } catch (err) {
       this.hideTyping();
-      this.appendMessage('error', err.message || 'Error al conectar con el asistente.');
+      this.appendMessage('error', err.message || 'Error al conectar con el asistente.', err.type || 'unknown');
     }
 
     this.isSending = false;
@@ -1503,7 +1523,7 @@ Reglas:
     return html;
   },
 
-  appendMessage(role, text) {
+  appendMessage(role, text, errorType) {
     const container = this.root.querySelector('#chat-messages');
     if (!container) return;
 
@@ -1511,9 +1531,13 @@ Reglas:
     div.className = `chat-msg chat-msg-${role}`;
 
     if (role === 'error') {
+      const icons = { network: '📡', timeout: '⏱️', rate_limit: '🚫', api: '⚠️', unknown: '❌' };
+      const icon = icons[errorType] || '❌';
+      const showRetry = errorType !== 'rate_limit';
       div.innerHTML = `
+        <span class="chat-error-icon">${icon}</span>
         <span class="chat-error-text">${this.formatMarkdown(text)}</span>
-        <button class="chat-retry-btn" data-chat-retry aria-label="Reintentar mensaje">🔄 Reintentar</button>
+        ${showRetry ? '<button class="chat-retry-btn" data-chat-retry aria-label="Reintentar mensaje">🔄 Reintentar</button>' : ''}
       `;
     } else {
       div.innerHTML = this.formatMarkdown(text);
@@ -1637,7 +1661,7 @@ Reglas:
       }
     } catch (err) {
       this.hideExploreTyping();
-      this.appendExploreMessage('error', err.message || 'Error al conectar con el asistente.');
+      this.appendExploreMessage('error', err.message || 'Error al conectar con el asistente.', err.type || 'unknown');
     }
 
     this.isSending = false;
@@ -1648,7 +1672,7 @@ Reglas:
     if (input) input.focus();
   },
 
-  appendExploreMessage(role, text) {
+  appendExploreMessage(role, text, errorType) {
     const container = this.root.querySelector('#explore-messages');
     if (!container) return;
 
@@ -1656,9 +1680,13 @@ Reglas:
     div.className = `chat-msg chat-msg-${role}`;
 
     if (role === 'error') {
+      const icons = { network: '📡', timeout: '⏱️', rate_limit: '🚫', api: '⚠️', unknown: '❌' };
+      const icon = icons[errorType] || '❌';
+      const showRetry = errorType !== 'rate_limit';
       div.innerHTML = `
+        <span class="chat-error-icon">${icon}</span>
         <span class="chat-error-text">${this.formatMarkdown(text)}</span>
-        <button class="chat-retry-btn" data-explore-retry aria-label="Reintentar mensaje">🔄 Reintentar</button>
+        ${showRetry ? '<button class="chat-retry-btn" data-explore-retry aria-label="Reintentar mensaje">🔄 Reintentar</button>' : ''}
       `;
     } else {
       div.innerHTML = this.formatMarkdown(text);
@@ -1824,7 +1852,10 @@ Reglas:
     if (!prompt) return;
 
     // Switch to chat tab with prompt pre-loaded
-    const msg = `Quiero adaptar este prompt de la Prompteca para mi clase:\n\n"${prompt.titulo}"\n\n${prompt.prompt}\n\nAyúdame a personalizarlo para mi contexto.`;
+    const promptText = prompt.prompt.length > 500
+      ? prompt.prompt.substring(0, 500) + '…'
+      : prompt.prompt;
+    const msg = `Quiero adaptar este prompt de la Prompteca para mi clase:\n\n"${prompt.titulo}"\n\n${promptText}\n\nAyúdame a personalizarlo para mi contexto.`;
 
     this.switchTab('chat');
 
@@ -2044,27 +2075,58 @@ ${promptecaCatalog || '(ninguno disponible)'}`;
   //  API
   // ═══════════════════════════════════════
 
-  async apiCall(feature, messages) {
+  async apiCall(feature, messages, _retryCount = 0) {
     const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
     const url = isLocal ? '/api/chat' : this.PROXY_URL;
 
     // Client-side rate limit (UX feedback — server enforces the real limit)
     if (!isLocal && !this.checkRateLimit()) {
-      throw new Error('Has alcanzado el límite diario de consultas. Vuelve mañana 😊');
+      throw new ApiError('Has alcanzado el límite diario de consultas. Vuelve mañana 😊', 'rate_limit');
     }
 
-    const resp = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ feature, messages }),
-    });
+    // Offline pre-check
+    if (!navigator.onLine) {
+      throw new ApiError('Sin conexión a internet. Comprueba tu WiFi.', 'network');
+    }
+
+    // Fetch with 15s timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+    let resp;
+    try {
+      resp = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ feature, messages }),
+        signal: controller.signal,
+      });
+    } catch (err) {
+      clearTimeout(timeoutId);
+      if (err.name === 'AbortError') {
+        throw new ApiError('La solicitud tardó demasiado. Inténtalo de nuevo.', 'timeout');
+      }
+      // Network error — retry with exponential backoff (max 2)
+      if (_retryCount < 2) {
+        await new Promise(r => setTimeout(r, Math.pow(2, _retryCount) * 1000));
+        return this.apiCall(feature, messages, _retryCount + 1);
+      }
+      throw new ApiError('No se pudo conectar. Comprueba tu conexión a internet.', 'network');
+    }
+    clearTimeout(timeoutId);
 
     const data = await resp.json();
     if (!resp.ok) {
+      // NEVER retry on rate limit
       if (resp.status === 429) {
-        throw new Error('Has alcanzado el límite diario de consultas. Vuelve mañana 😊');
+        throw new ApiError('Has alcanzado el límite de consultas. Vuelve mañana 😊', 'rate_limit');
       }
-      throw new Error(data.error || data.detail || `Error HTTP ${resp.status}`);
+      // Server error — retry with backoff
+      if (resp.status >= 500 && _retryCount < 2) {
+        await new Promise(r => setTimeout(r, Math.pow(2, _retryCount) * 1000));
+        return this.apiCall(feature, messages, _retryCount + 1);
+      }
+      throw new ApiError(data.error || data.detail || `Error del servidor (${resp.status})`, 'api');
     }
 
     // OpenAI-compatible format (proxy transforms Anthropic response)
@@ -2072,7 +2134,7 @@ ${promptecaCatalog || '(ninguno disponible)'}`;
       return { content: data.choices[0].message.content };
     }
     if (data.error) {
-      throw new Error(typeof data.error === 'string' ? data.error : data.error.message || 'Error desconocido');
+      throw new ApiError(typeof data.error === 'string' ? data.error : data.error.message || 'Error desconocido', 'api');
     }
     return null;
   },
@@ -2091,6 +2153,43 @@ ${promptecaCatalog || '(ninguno disponible)'}`;
     stored.count++;
     localStorage.setItem('bupia_usage', JSON.stringify(stored));
     return true;
+  },
+
+  // ── Connectivity monitor ──
+  _setupConnectivityMonitor() {
+    window.addEventListener('online', () => this._updateConnectionStatus(true));
+    window.addEventListener('offline', () => this._updateConnectionStatus(false));
+    if (!navigator.onLine) this._updateConnectionStatus(false);
+  },
+
+  _updateConnectionStatus(isOnline) {
+    let indicator = this.root.querySelector('#connection-status');
+    if (isOnline) {
+      if (indicator) {
+        indicator.classList.add('conn-fade-out');
+        setTimeout(() => indicator.remove(), 500);
+      }
+    } else {
+      if (!indicator) {
+        indicator = document.createElement('div');
+        indicator.id = 'connection-status';
+        indicator.className = 'connection-status-bar';
+        indicator.setAttribute('role', 'alert');
+        indicator.innerHTML = '📡 Sin conexión a internet';
+        const body = this.root.querySelector('.assistant-body');
+        if (body) body.insertBefore(indicator, body.firstChild);
+      }
+    }
+  },
+
+  updateCharCounter() {
+    const input = this.root.querySelector('#chat-input');
+    const counter = this.root.querySelector('#chat-char-counter');
+    if (!input || !counter) return;
+    const remaining = 500 - input.value.length;
+    counter.textContent = remaining <= 50 ? remaining : '';
+    counter.classList.toggle('chat-char-warning', remaining <= 50 && remaining > 20);
+    counter.classList.toggle('chat-char-danger', remaining <= 20);
   },
 
   updateRateCounter() {

@@ -1,0 +1,24 @@
+{
+  "name": "Taller IA - Colegio El Buen Pastor",
+  "short_name": "Taller IA",
+  "description": "Plataforma de Inteligencia Artificial para docentes del Colegio El Buen Pastor",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#fdf6f0",
+  "theme_color": "#7c5cbf",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "img/bupia.png",
+      "sizes": "120x120",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "img/logo-colegio.png",
+      "sizes": "150x130",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
