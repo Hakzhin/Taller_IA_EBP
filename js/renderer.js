@@ -113,10 +113,11 @@ const Renderer = {
 
     const tools = section.tools.map(tid => SITE_DATA.tools[tid]);
     const activeClass = section.isDefault ? ' active' : '';
+    const gridClass = tools.length === 1 ? 'tool-grid-single' : 'tool-grid';
 
     return (
       `<div class="section-panel${activeClass}" id="section-${section.id}">` +
-        `<div class="tool-grid">` +
+        `<div class="${gridClass}">` +
           tools.map(t => this.renderToolCard(t)).join('') +
         `</div>` +
         tools.map(t => this.renderTutorialPanel(t)).join('') +

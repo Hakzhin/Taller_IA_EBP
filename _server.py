@@ -213,6 +213,108 @@ Reglas:
 - Actividades CONCRETAS relacionadas con la asignatura real del profesor.
 - Cuando sea posible, referencia prompts de la Prompteca usando su "id" en prompt_recomendado_id.
 - Responde SOLO con el JSON valido. Sin texto adicional.""",
+
+    "generator_ud": BASE_PROMPT + """
+
+Contexto: Genera una UNIDAD DIDACTICA completa y lista para usar.
+Responde SOLO con JSON valido, sin texto antes ni despues:
+{
+  "titulo": "Titulo de la unidad didactica",
+  "etapa": "Infantil|Primaria|ESO",
+  "asignatura": "...",
+  "temporalizacion": "X sesiones de Y minutos",
+  "objetivos": ["Objetivo 1", "Objetivo 2", "Objetivo 3"],
+  "competencias_clave": ["Competencia 1"],
+  "contenidos": ["Contenido 1", "Contenido 2"],
+  "actividades": [
+    {"sesion": 1, "titulo": "...", "descripcion": "...", "duracion": "X min", "recursos": ["recurso1"]},
+    {"sesion": 2, "titulo": "...", "descripcion": "...", "duracion": "X min", "recursos": ["recurso1"]}
+  ],
+  "evaluacion": {"criterios": ["Criterio 1"], "instrumentos": ["Instrumento 1"]},
+  "atencion_diversidad": "Medidas de atencion a la diversidad"
+}
+Adapta el contenido a la etapa educativa y legislacion LOMLOE.""",
+
+    "generator_examen": BASE_PROMPT + """
+
+Contexto: Genera un EXAMEN o TEST completo.
+Responde SOLO con JSON valido:
+{
+  "titulo": "Examen de [tema]",
+  "asignatura": "...",
+  "etapa": "...",
+  "duracion": "X minutos",
+  "instrucciones": "Instrucciones para el alumno",
+  "preguntas": [
+    {"numero": 1, "tipo": "opcion_multiple|verdadero_falso|desarrollo|completar", "enunciado": "...", "opciones": ["A)...", "B)...", "C)...", "D)..."], "respuesta_correcta": "A", "puntuacion": 1},
+    {"numero": 2, "tipo": "desarrollo", "enunciado": "...", "respuesta_correcta": "Respuesta modelo", "puntuacion": 2}
+  ],
+  "puntuacion_total": 10,
+  "criterios_calificacion": "Descripcion de como se califica"
+}
+Incluye variedad de tipos de preguntas. Adapta la dificultad a la etapa.""",
+
+    "generator_rubrica": BASE_PROMPT + """
+
+Contexto: Genera una RUBRICA DE EVALUACION completa con criterios y niveles.
+Responde SOLO con JSON valido:
+{
+  "titulo": "Rubrica de evaluacion: [actividad]",
+  "asignatura": "...",
+  "etapa": "...",
+  "criterios": [
+    {
+      "nombre": "Nombre del criterio",
+      "peso": "25%",
+      "niveles": {
+        "excelente": "Descriptor del nivel excelente (9-10)",
+        "notable": "Descriptor del nivel notable (7-8)",
+        "bien": "Descriptor del nivel bien (5-6)",
+        "insuficiente": "Descriptor del nivel insuficiente (0-4)"
+      }
+    }
+  ],
+  "observaciones": "Notas adicionales para el profesor"
+}
+Usa descriptores claros y observables. Alinea con competencias LOMLOE.""",
+
+    "generator_actividad": BASE_PROMPT + """
+
+Contexto: Genera una ACTIVIDAD DE AULA detallada y lista para aplicar.
+Responde SOLO con JSON valido:
+{
+  "titulo": "Nombre de la actividad",
+  "asignatura": "...",
+  "etapa": "...",
+  "duracion": "X minutos",
+  "objetivos": ["Objetivo 1", "Objetivo 2"],
+  "materiales": ["Material 1", "Material 2"],
+  "descripcion": "Descripcion general de la actividad",
+  "pasos": [
+    {"paso": 1, "titulo": "...", "descripcion": "...", "duracion": "X min"},
+    {"paso": 2, "titulo": "...", "descripcion": "...", "duracion": "X min"}
+  ],
+  "adaptaciones": "Sugerencias para adaptar a diferentes niveles",
+  "evaluacion": "Como evaluar la actividad",
+  "extension": "Ideas para ampliar o continuar"
+}
+La actividad debe ser practica, motivadora y realista para el aula.""",
+
+    "generator_comunicacion": BASE_PROMPT + """
+
+Contexto: Genera una COMUNICACION PARA FAMILIAS profesional y cercana.
+Responde SOLO con JSON valido:
+{
+  "asunto": "Asunto del mensaje",
+  "saludo": "Estimadas familias,",
+  "cuerpo": "Texto principal del mensaje (varios parrafos)",
+  "cierre": "Despedida profesional",
+  "firma": "El equipo docente",
+  "tono": "formal|cercano|informativo|urgente",
+  "canal_sugerido": "email|agenda|plataforma"
+}
+El tono debe ser profesional pero cercano. Evita tecnicismos innecesarios.
+Adapta la comunicacion al contexto del Colegio El Buen Pastor.""",
 }
 
 # ── Cargar catálogo externo de herramientas verificadas ──
@@ -329,7 +431,8 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
 
         # Filtrar mensajes: solo user/assistant (Anthropic no acepta role "system" en messages)
         api_messages = [m for m in messages if m.get("role") in ("user", "assistant")]
-        max_tokens = 2000 if feature == "ruta" else 1500 if feature == "explore" else 1000
+        is_generator = feature.startswith("generator_")
+        max_tokens = 3000 if is_generator else 2000 if feature == "ruta" else 1500 if feature == "explore" else 1000
 
         # ── Búsqueda web en tiempo real para el Explorador ──
         if feature == "explore" and tavily_key and api_messages:
@@ -347,7 +450,7 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
                     web_context += "\nUsa estos resultados como fuente actualizada para complementar el catalogo. Verifica que las URLs sean reales antes de recomendarlas. Si un resultado no es relevante o no es una herramienta IA educativa, ignoralo."
                     system_prompt = system_prompt + web_context
 
-        temperature = 0.3 if feature in ("ruta", "bulletin") else 0.7
+        temperature = 0.3 if feature in ("ruta", "bulletin") or is_generator else 0.7
 
         payload = json.dumps({
             "model": MODEL,

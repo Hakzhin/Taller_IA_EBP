@@ -23,6 +23,7 @@ const Assistant = {
   promptecaData: null,
   promptecaFilters: { etapa: null, categoria: null },
   rutaWizardState: { step: 0, etapa: null, asignatura: null, nivel: null },
+  generatorState: { active: false, type: null, step: 0, etapa: null, params: {}, result: null },
 
   // ── DOM refs (set in buildDOM) ──
   root: null,
@@ -219,12 +220,331 @@ Reglas:
   //  Initialization
   // ═══════════════════════════════════════
 
+  // ── Favorites ──
+  loadFavorites() {
+    try {
+      return JSON.parse(localStorage.getItem('bupia_favorites')) || { messages: [], prompts: [] };
+    } catch { return { messages: [], prompts: [] }; }
+  },
+
+  saveFavorites(favs) {
+    localStorage.setItem('bupia_favorites', JSON.stringify(favs));
+  },
+
+  toggleFavMessage(btnEl) {
+    const msgDiv = btnEl.closest('.chat-msg');
+    if (!msgDiv) return;
+    const content = msgDiv.querySelector('.chat-msg-content');
+    if (!content) return;
+    const text = (content.innerText || content.textContent).trim();
+    if (!text) return;
+
+    const favs = this.loadFavorites();
+    const idx = favs.messages.findIndex(m => m.text === text);
+    if (idx >= 0) {
+      favs.messages.splice(idx, 1);
+      btnEl.textContent = '☆';
+      btnEl.classList.remove('favorited');
+    } else {
+      favs.messages.push({
+        text: text.substring(0, 300),
+        date: new Date().toISOString().split('T')[0],
+        source: msgDiv.closest('.assistant-explorar-mode') ? 'explore' : 'chat'
+      });
+      btnEl.textContent = '★';
+      btnEl.classList.add('favorited');
+    }
+    this.saveFavorites(favs);
+  },
+
+  toggleFavPrompt(promptId) {
+    const favs = this.loadFavorites();
+    const idx = favs.prompts.indexOf(promptId);
+    if (idx >= 0) {
+      favs.prompts.splice(idx, 1);
+    } else {
+      favs.prompts.push(promptId);
+    }
+    this.saveFavorites(favs);
+    // Re-render prompteca to update button state
+    if (this.activeTab === 'prompteca') this.renderPrompteca();
+  },
+
+  removeFavMessage(index) {
+    const favs = this.loadFavorites();
+    if (index >= 0 && index < favs.messages.length) {
+      favs.messages.splice(index, 1);
+      this.saveFavorites(favs);
+      this.renderHoy();
+    }
+  },
+
+  removeFavPrompt(promptId) {
+    const favs = this.loadFavorites();
+    const idx = favs.prompts.indexOf(promptId);
+    if (idx >= 0) {
+      favs.prompts.splice(idx, 1);
+      this.saveFavorites(favs);
+      this.renderHoy();
+    }
+  },
+
+  _renderFavoritesSection() {
+    const favs = this.loadFavorites();
+    const totalFavs = favs.messages.length + favs.prompts.length;
+    if (totalFavs === 0) return '';
+
+    let items = '';
+
+    // Favorite messages
+    favs.messages.forEach((m, i) => {
+      const preview = m.text.length > 80 ? m.text.substring(0, 80) + '...' : m.text;
+      const source = m.source === 'explore' ? '🔍' : '💬';
+      items += `
+        <div class="fav-item">
+          <span class="fav-item-icon">${source}</span>
+          <div class="fav-item-text">${this.escapeHtml(preview)}</div>
+          <button class="fav-item-remove" data-fav-remove-msg="${i}" aria-label="Eliminar favorito">✕</button>
+        </div>`;
+    });
+
+    // Favorite prompts
+    if (this.promptecaData && this.promptecaData.prompts) {
+      favs.prompts.forEach(pid => {
+        const p = this.promptecaData.prompts.find(pr => pr.id === pid);
+        if (!p) return;
+        items += `
+          <div class="fav-item fav-item-prompt" data-fav-goto-prompt="${this.escapeHtml(pid)}">
+            <span class="fav-item-icon">📖</span>
+            <div class="fav-item-text">${this.escapeHtml(p.titulo)}</div>
+            <button class="fav-item-remove" data-fav-remove-prompt="${this.escapeHtml(pid)}" aria-label="Eliminar favorito">✕</button>
+          </div>`;
+      });
+    }
+
+    return `
+      <div class="favs-section" id="favs-section">
+        <button class="favs-header" data-favs-toggle aria-expanded="false">
+          <span>⭐ Mis favoritos (${totalFavs})</span>
+          <span class="favs-toggle-icon">▼</span>
+        </button>
+        <div class="favs-list" id="favs-list" style="display:none">
+          ${items}
+        </div>
+      </div>`;
+  },
+
+  // ── Share Prompt ──
+  sharePrompt(promptId, btnEl) {
+    const url = `${location.origin}${location.pathname}#prompt=${promptId}`;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => {
+        this.showShareFeedback(btnEl);
+      }).catch(() => {
+        this.fallbackShareCopy(url, btnEl);
+      });
+    } else {
+      this.fallbackShareCopy(url, btnEl);
+    }
+  },
+
+  fallbackShareCopy(url, btnEl) {
+    const ta = document.createElement('textarea');
+    ta.value = url;
+    ta.style.cssText = 'position:fixed;left:-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); this.showShareFeedback(btnEl); }
+    catch { /* ignore */ }
+    document.body.removeChild(ta);
+  },
+
+  showShareFeedback(btnEl) {
+    if (!btnEl) return;
+    const orig = btnEl.textContent;
+    btnEl.textContent = '✅';
+    btnEl.classList.add('shared');
+    setTimeout(() => {
+      btnEl.textContent = orig;
+      btnEl.classList.remove('shared');
+    }, 1500);
+  },
+
+  handleDeepLink() {
+    const hash = location.hash;
+    if (hash.startsWith('#prompt=')) {
+      const promptId = decodeURIComponent(hash.split('=')[1]);
+      // Wait for prompteca data to load then navigate
+      const tryNav = () => {
+        if (this.promptecaData && this.promptecaData.prompts) {
+          this.open();
+          this.switchTab('prompteca');
+          setTimeout(() => {
+            const card = this.root.querySelector(`#prompteca-card-${promptId}`);
+            if (card) {
+              card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              card.classList.add('prompteca-highlight');
+              // Toggle open the card
+              const body = card.querySelector(`#prompt-body-${promptId}`);
+              if (body) body.style.display = 'block';
+              setTimeout(() => card.classList.remove('prompteca-highlight'), 3000);
+            }
+          }, 300);
+          // Clean hash
+          history.replaceState(null, '', location.pathname + location.search);
+        } else if (this.promptecaData === undefined) {
+          setTimeout(tryNav, 300);
+        }
+      };
+      tryNav();
+    }
+  },
+
+  // ── Progress Tracking ──
+  loadProgress() {
+    try {
+      return JSON.parse(localStorage.getItem('bupia_progress')) || this._defaultProgress();
+    } catch { return this._defaultProgress(); }
+  },
+
+  _defaultProgress() {
+    return {
+      toolsExplored: [],
+      promptsUsed: 0,
+      rutasGenerated: 0,
+      generatorUses: 0,
+      streak: 0,
+      lastActiveDate: '',
+      totalConsultas: 0
+    };
+  },
+
+  saveProgress(p) {
+    localStorage.setItem('bupia_progress', JSON.stringify(p));
+  },
+
+  trackAction(action, data) {
+    const p = this.loadProgress();
+    const today = new Date().toISOString().slice(0, 10);
+
+    // Update streak
+    if (p.lastActiveDate !== today) {
+      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+      p.streak = (p.lastActiveDate === yesterday) ? p.streak + 1 : 1;
+      p.lastActiveDate = today;
+    }
+
+    switch (action) {
+      case 'login':
+        // Just updates streak
+        break;
+      case 'consulta':
+        p.totalConsultas++;
+        break;
+      case 'prompt':
+        p.promptsUsed++;
+        break;
+      case 'tool':
+        if (data && !p.toolsExplored.includes(data)) {
+          p.toolsExplored.push(data);
+        }
+        break;
+      case 'ruta':
+        p.rutasGenerated++;
+        break;
+      case 'generator':
+        p.generatorUses++;
+        break;
+    }
+
+    this.saveProgress(p);
+  },
+
+  getUserLevel(p) {
+    const total = p.totalConsultas + p.promptsUsed + p.rutasGenerated + p.generatorUses + p.toolsExplored.length;
+    if (total >= 31) return { icon: '🌳', name: 'Maestro IA' };
+    if (total >= 11) return { icon: '🌿', name: 'Creador' };
+    return { icon: '🌱', name: 'Explorador' };
+  },
+
+  _renderProgressDashboard() {
+    const p = this.loadProgress();
+    const level = this.getUserLevel(p);
+
+    // Count total available tools
+    let totalTools = 0;
+    for (const pw of Object.values(SITE_DATA.pathways)) {
+      for (const sec of pw.sections) {
+        if (sec.tools) totalTools += sec.tools.length;
+      }
+    }
+
+    const toolPct = totalTools > 0 ? Math.round((p.toolsExplored.length / totalTools) * 100) : 0;
+    const barWidth = Math.min(toolPct, 100);
+
+    return `
+      <div class="progress-dashboard">
+        <div class="progress-dash-header">
+          <span class="progress-dash-title">📊 Tu progreso</span>
+          <span class="progress-level-badge">${level.icon} ${level.name}</span>
+        </div>
+        <div class="progress-dash-grid">
+          <div class="progress-dash-stat">
+            <span class="progress-stat-icon">🔥</span>
+            <span class="progress-stat-value">${p.streak}</span>
+            <span class="progress-stat-label">días seguidos</span>
+          </div>
+          <div class="progress-dash-stat">
+            <span class="progress-stat-icon">🛠️</span>
+            <span class="progress-stat-value">${p.toolsExplored.length}/${totalTools}</span>
+            <span class="progress-stat-label">herramientas</span>
+          </div>
+          <div class="progress-dash-stat">
+            <span class="progress-stat-icon">📝</span>
+            <span class="progress-stat-value">${p.promptsUsed}</span>
+            <span class="progress-stat-label">prompts</span>
+          </div>
+          <div class="progress-dash-stat">
+            <span class="progress-stat-icon">💬</span>
+            <span class="progress-stat-value">${p.totalConsultas}</span>
+            <span class="progress-stat-label">consultas</span>
+          </div>
+        </div>
+        <div class="progress-bar-mini">
+          <div class="progress-bar-mini-fill" style="width:${barWidth}%"></div>
+        </div>
+      </div>`;
+  },
+
+  // ── Dark Mode ──
+  applyTheme() {
+    const saved = localStorage.getItem('bupia_theme');
+    let theme = saved;
+    if (!theme || theme === 'auto') {
+      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.dataset.theme = theme === 'dark' ? 'dark' : '';
+    const btn = document.getElementById('dark-mode-toggle');
+    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  },
+
+  toggleDarkMode() {
+    const current = document.documentElement.dataset.theme;
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next === 'dark' ? 'dark' : '';
+    localStorage.setItem('bupia_theme', next);
+    const btn = document.getElementById('dark-mode-toggle');
+    if (btn) btn.textContent = next === 'dark' ? '☀️' : '🌙';
+  },
+
   init() {
     this.root = document.getElementById('ai-assistant-root');
     if (!this.root) return;
 
     this.loadState();
     this.buildDOM();
+    this.applyTheme();
+    this.trackAction('login');
     this.attachEvents();
     this.renderActiveTab();
     this.updateBadge();
@@ -234,6 +554,7 @@ Reglas:
     this.loadLOMLOE();
     this.loadInspeccion();
     this._setupConnectivityMonitor();
+    this.handleDeepLink();
   },
 
   async loadExternalCatalog() {
@@ -518,6 +839,7 @@ Reglas:
         </div>
         <div class="assistant-footer" role="contentinfo">
           <span>BupIA · Potenciado por Claude</span>
+          <button class="dark-mode-toggle" id="dark-mode-toggle" aria-label="Cambiar modo oscuro/claro" title="Modo oscuro/claro">🌙</button>
           <span class="rate-counter" id="rate-counter"></span>
         </div>
       </div>
@@ -550,6 +872,12 @@ Reglas:
       // Intro video: rewatch button
       if (target.closest('[data-bupia-rewatch]')) {
         this.showIntroVideo();
+        return;
+      }
+
+      // Dark mode toggle
+      if (target.closest('#dark-mode-toggle')) {
+        this.toggleDarkMode();
         return;
       }
 
@@ -729,6 +1057,70 @@ Reglas:
         return;
       }
 
+      // Favorites: toggle star on chat/explore message
+      const favBtn = target.closest('[data-chat-fav]');
+      if (favBtn) {
+        this.toggleFavMessage(favBtn);
+        return;
+      }
+
+      // Share prompt
+      const shareBtn = target.closest('[data-prompteca-share]');
+      if (shareBtn) {
+        this.sharePrompt(shareBtn.dataset.promptecaShare, shareBtn);
+        return;
+      }
+
+      // Favorites: toggle star on prompteca
+      const promptFavBtn = target.closest('[data-prompteca-fav]');
+      if (promptFavBtn) {
+        this.toggleFavPrompt(promptFavBtn.dataset.promptecaFav);
+        return;
+      }
+
+      // Favorites: toggle collapse
+      if (target.closest('[data-favs-toggle]')) {
+        const list = this.root.querySelector('#favs-list');
+        const icon = this.root.querySelector('.favs-toggle-icon');
+        if (list) {
+          const open = list.style.display !== 'none';
+          list.style.display = open ? 'none' : 'block';
+          if (icon) icon.textContent = open ? '▼' : '▲';
+        }
+        return;
+      }
+
+      // Favorites: remove message
+      const favRemoveMsg = target.closest('[data-fav-remove-msg]');
+      if (favRemoveMsg) {
+        e.stopPropagation();
+        this.removeFavMessage(parseInt(favRemoveMsg.dataset.favRemoveMsg, 10));
+        return;
+      }
+
+      // Favorites: remove prompt
+      const favRemovePrompt = target.closest('[data-fav-remove-prompt]');
+      if (favRemovePrompt) {
+        e.stopPropagation();
+        this.removeFavPrompt(favRemovePrompt.dataset.favRemovePrompt);
+        return;
+      }
+
+      // Favorites: go to prompt
+      const favGotoPrompt = target.closest('[data-fav-goto-prompt]');
+      if (favGotoPrompt && !target.closest('[data-fav-remove-prompt]')) {
+        this.switchTab('prompteca');
+        setTimeout(() => {
+          const card = this.root.querySelector(`#prompteca-card-${favGotoPrompt.dataset.favGotoPrompt}`);
+          if (card) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            card.classList.add('prompteca-highlight');
+            setTimeout(() => card.classList.remove('prompteca-highlight'), 2000);
+          }
+        }, 200);
+        return;
+      }
+
       // Prompteca: personalize
       const persBtn = target.closest('[data-prompteca-personalize]');
       if (persBtn) {
@@ -785,6 +1177,59 @@ Reglas:
       const rutaPrompt = target.closest('[data-ruta-prompt]');
       if (rutaPrompt) {
         this.navigateToPromptecaPrompt(rutaPrompt.dataset.rutaPrompt);
+        return;
+      }
+
+      // Generators: start a generator
+      const genStart = target.closest('[data-gen-start]');
+      if (genStart) {
+        this.startGenerator(genStart.dataset.genStart);
+        return;
+      }
+
+      // Generators: select etapa
+      const genEtapa = target.closest('[data-gen-etapa]');
+      if (genEtapa) {
+        this.generatorState.etapa = genEtapa.dataset.genEtapa;
+        this.generatorState.step = 2;
+        this.renderHoy();
+        return;
+      }
+
+      // Generators: submit form
+      const genSubmit = target.closest('[data-gen-submit]');
+      if (genSubmit) {
+        this.submitGenerator();
+        return;
+      }
+
+      // Generators: back navigation
+      const genBack = target.closest('[data-gen-back]');
+      if (genBack) {
+        const dest = genBack.dataset.genBack;
+        if (dest === 'menu') {
+          this.generatorState = { active: false, type: null, step: 0, etapa: null, params: {}, result: null };
+        } else if (dest === 'etapa') {
+          this.generatorState.step = 1;
+          this.generatorState.etapa = null;
+        }
+        this.renderHoy();
+        return;
+      }
+
+      // Generators: copy result
+      const genCopy = target.closest('[data-gen-copy]');
+      if (genCopy) {
+        this.copyGeneratorResult();
+        return;
+      }
+
+      // Generators: regenerate
+      const genRegen = target.closest('[data-gen-regenerate]');
+      if (genRegen) {
+        this.generatorState.result = null;
+        this.generatorState.step = 2;
+        this.renderHoy();
         return;
       }
     });
@@ -1115,6 +1560,12 @@ Reglas:
     const container = this.root.querySelector('#assistant-hoy');
     if (!container) return;
 
+    // Generator wizard active?
+    if (this.generatorState.active) {
+      this.renderGeneratorWizard(container);
+      return;
+    }
+
     // Mi Ruta wizard active?
     if (this.rutaWizardState.step > 0) {
       this.renderRutaWizard(container);
@@ -1166,6 +1617,8 @@ Reglas:
         <button class="bupia-rewatch-btn" data-bupia-rewatch title="Ver vídeo de presentación">🎬</button>
       </div>
       ${savedRutaHtml}
+      ${this._renderProgressDashboard()}
+      ${this._renderFavoritesSection()}
       <div class="wizard-title">¿Qué quieres hacer hoy?</div>
       <div class="wizard-intents">
         ${available.map(i => `
@@ -1178,6 +1631,17 @@ Reglas:
             <span class="wizard-intent-arrow">›</span>
           </button>
         `).join('')}
+      </div>
+      <div class="wizard-apps-section">
+        <div class="ruta-cta-divider"><span>Crear contenido con IA</span></div>
+        <div class="gen-picker-grid">
+          ${this.GENERATOR_TYPES.map(g => `
+            <button class="gen-picker-card" data-gen-start="${g.id}">
+              <span class="gen-picker-icon">${g.icon}</span>
+              <div class="gen-picker-label">${g.label}</div>
+            </button>
+          `).join('')}
+        </div>
       </div>
       <div class="wizard-apps-section">
         <div class="ruta-cta-divider"><span>Apps del colegio</span></div>
@@ -1403,6 +1867,7 @@ Reglas:
 
   async sendMessage(text) {
     this.isSending = true;
+    this.trackAction('consulta');
     const sendBtn = this.root.querySelector('#chat-send');
     if (sendBtn) sendBtn.disabled = true;
 
@@ -1562,7 +2027,10 @@ Reglas:
     } else if (role === 'assistant') {
       div.innerHTML = `
         <div class="chat-msg-content">${this.formatMarkdown(text)}</div>
-        <button class="chat-copy-btn" data-chat-copy aria-label="Copiar respuesta">📋</button>
+        <div class="chat-msg-actions">
+          <button class="chat-copy-btn" data-chat-copy aria-label="Copiar respuesta">📋</button>
+          <button class="chat-fav-btn" data-chat-fav aria-label="Guardar en favoritos">☆</button>
+        </div>
       `;
     } else {
       div.innerHTML = this.formatMarkdown(text);
@@ -1722,7 +2190,10 @@ Reglas:
     } else if (role === 'assistant') {
       div.innerHTML = `
         <div class="chat-msg-content">${this.formatMarkdown(text)}</div>
-        <button class="chat-copy-btn" data-explore-copy aria-label="Copiar respuesta">📋</button>
+        <div class="chat-msg-actions">
+          <button class="chat-copy-btn" data-explore-copy aria-label="Copiar respuesta">📋</button>
+          <button class="chat-fav-btn" data-chat-fav aria-label="Guardar en favoritos">☆</button>
+        </div>
       `;
     } else {
       div.innerHTML = this.formatMarkdown(text);
@@ -1749,6 +2220,292 @@ Reglas:
   // ═══════════════════════════════════════
   //  PROMPTECA (Prompt Library)
   // ═══════════════════════════════════════
+
+  // ═══════════════════════════════════════
+  //  GENERATORS (Structured content)
+  // ═══════════════════════════════════════
+
+  GENERATOR_TYPES: [
+    { id: 'generator_ud', icon: '📘', label: 'Unidad Didáctica', desc: 'Objetivos, contenidos, actividades y evaluación' },
+    { id: 'generator_examen', icon: '📝', label: 'Examen / Test', desc: 'Preguntas, respuestas y criterios' },
+    { id: 'generator_rubrica', icon: '📊', label: 'Rúbrica', desc: 'Criterios, niveles y descriptores' },
+    { id: 'generator_actividad', icon: '🎯', label: 'Actividad de Aula', desc: 'Pasos, materiales y temporización' },
+    { id: 'generator_comunicacion', icon: '✉️', label: 'Comunicación', desc: 'Mensajes profesionales a familias' },
+  ],
+
+  startGenerator(typeId) {
+    this.generatorState = { active: true, type: typeId, step: 1, etapa: null, params: {}, result: null };
+    this.renderHoy();
+  },
+
+  renderGeneratorWizard(container) {
+    const gs = this.generatorState;
+    const gen = this.GENERATOR_TYPES.find(g => g.id === gs.type);
+    if (!gen) return;
+
+    if (gs.step === 1) {
+      // Step 1: Choose etapa
+      container.innerHTML = `
+        <button class="wizard-back-btn" data-gen-back="menu">← Volver</button>
+        <div class="wizard-title">${gen.icon} ${gen.label}</div>
+        <div class="wizard-subtitle">¿Para qué etapa educativa?</div>
+        <div class="wizard-levels">
+          <button class="wizard-level-btn" data-gen-etapa="Infantil">
+            <span class="wizard-level-icon">🎒</span>
+            <div class="wizard-level-name">Infantil</div>
+            <div class="wizard-level-ages">3-6 años</div>
+          </button>
+          <button class="wizard-level-btn" data-gen-etapa="Primaria">
+            <span class="wizard-level-icon">📚</span>
+            <div class="wizard-level-name">Primaria</div>
+            <div class="wizard-level-ages">6-12 años</div>
+          </button>
+          <button class="wizard-level-btn" data-gen-etapa="ESO">
+            <span class="wizard-level-icon">🎓</span>
+            <div class="wizard-level-name">ESO</div>
+            <div class="wizard-level-ages">12-16 años</div>
+          </button>
+        </div>`;
+    } else if (gs.step === 2) {
+      // Step 2: Form with specific fields
+      const fields = this._getGeneratorFields(gs.type);
+      container.innerHTML = `
+        <button class="wizard-back-btn" data-gen-back="etapa">← Cambiar etapa</button>
+        <div class="wizard-title">${gen.icon} ${gen.label} · ${gs.etapa}</div>
+        <div class="gen-form">
+          ${fields.map(f => `
+            <div class="gen-field">
+              <label class="gen-label" for="gen-${f.id}">${f.label}</label>
+              ${f.type === 'textarea'
+                ? `<textarea class="gen-input gen-textarea" id="gen-${f.id}" placeholder="${this.escapeHtml(f.placeholder)}" rows="2"></textarea>`
+                : `<input class="gen-input" id="gen-${f.id}" type="text" placeholder="${this.escapeHtml(f.placeholder)}">`
+              }
+            </div>
+          `).join('')}
+          <button class="gen-submit-btn" data-gen-submit>✨ Generar</button>
+        </div>`;
+    } else if (gs.step === 3) {
+      // Step 3: Loading
+      container.innerHTML = `
+        <div class="wizard-title">${gen.icon} Generando ${gen.label.toLowerCase()}...</div>
+        <div class="ruta-loading">
+          <div class="chat-typing visible" style="display:flex;justify-content:center">
+            <div class="chat-typing-dots">
+              <div class="chat-typing-dot"></div>
+              <div class="chat-typing-dot"></div>
+              <div class="chat-typing-dot"></div>
+            </div>
+          </div>
+          <p style="margin-top:0.75rem;font-size:0.8125rem;color:var(--text-medium)">BupIA está preparando tu contenido...</p>
+        </div>`;
+    } else if (gs.step === 4 && gs.result) {
+      // Step 4: Result
+      container.innerHTML = `
+        <button class="wizard-back-btn" data-gen-back="menu">← Nuevo generador</button>
+        <div class="wizard-title">${gen.icon} ${gen.label}</div>
+        <div class="gen-result">
+          ${this._renderGeneratorResult(gs.type, gs.result)}
+        </div>
+        <div class="gen-result-actions">
+          <button class="prompteca-copy-btn" data-gen-copy style="flex:1">📋 Copiar todo</button>
+          <button class="ruta-regenerate-btn" data-gen-regenerate style="flex:1;margin-top:0">🔄 Regenerar</button>
+        </div>`;
+    }
+  },
+
+  _getGeneratorFields(type) {
+    const common = [
+      { id: 'asignatura', label: 'Asignatura', placeholder: 'Ej: Matemáticas, Lengua, Ciencias...', type: 'text' },
+      { id: 'tema', label: 'Tema', placeholder: 'Ej: Fracciones, Los seres vivos...', type: 'text' },
+    ];
+    switch (type) {
+      case 'generator_ud':
+        return [...common, { id: 'sesiones', label: 'Nº de sesiones', placeholder: 'Ej: 6', type: 'text' }];
+      case 'generator_examen':
+        return [...common, { id: 'preguntas', label: 'Nº de preguntas', placeholder: 'Ej: 10', type: 'text' }];
+      case 'generator_rubrica':
+        return [...common, { id: 'actividad', label: 'Actividad a evaluar', placeholder: 'Ej: Presentación oral, proyecto...', type: 'text' }];
+      case 'generator_actividad':
+        return [...common, { id: 'duracion', label: 'Duración', placeholder: 'Ej: 50 minutos', type: 'text' }];
+      case 'generator_comunicacion':
+        return [
+          { id: 'motivo', label: 'Motivo', placeholder: 'Ej: Excursión, reunión, información...', type: 'text' },
+          { id: 'detalles', label: 'Detalles', placeholder: 'Fecha, lugar, instrucciones...', type: 'textarea' },
+          { id: 'tono', label: 'Tono', placeholder: 'formal, cercano, informativo', type: 'text' },
+        ];
+      default: return common;
+    }
+  },
+
+  async submitGenerator() {
+    const gs = this.generatorState;
+    const fields = this._getGeneratorFields(gs.type);
+    const params = {};
+    for (const f of fields) {
+      const el = this.root.querySelector(`#gen-${f.id}`);
+      params[f.id] = el ? el.value.trim() : '';
+    }
+    gs.params = params;
+    gs.step = 3;
+    this.renderHoy();
+
+    // Build prompt message
+    let msg = `Genera contenido para ${gs.etapa}.\n`;
+    for (const [k, v] of Object.entries(params)) {
+      if (v) msg += `${k}: ${v}\n`;
+    }
+
+    try {
+      if (!this.checkRateLimit()) {
+        gs.step = 2;
+        this.renderHoy();
+        return;
+      }
+
+      const resp = await this.apiCall(gs.type, [{ role: 'user', content: msg }]);
+      this.trackAction('generator');
+
+      // Try parsing JSON from response
+      let parsed = null;
+      try {
+        const jsonMatch = resp.content.match(/\{[\s\S]*\}/);
+        if (jsonMatch) parsed = JSON.parse(jsonMatch[0]);
+      } catch { /* not JSON — use raw */ }
+
+      gs.result = parsed || resp.content;
+      gs.step = 4;
+      this.renderHoy();
+    } catch (err) {
+      gs.step = 2;
+      this.renderHoy();
+    }
+  },
+
+  _renderGeneratorResult(type, data) {
+    if (typeof data === 'string') {
+      return `<div class="gen-raw-result">${this.formatMarkdown(data)}</div>`;
+    }
+
+    switch (type) {
+      case 'generator_ud': return this._renderUD(data);
+      case 'generator_examen': return this._renderExamen(data);
+      case 'generator_rubrica': return this._renderRubrica(data);
+      case 'generator_actividad': return this._renderActividad(data);
+      case 'generator_comunicacion': return this._renderComunicacion(data);
+      default: return `<pre class="gen-raw-result">${this.escapeHtml(JSON.stringify(data, null, 2))}</pre>`;
+    }
+  },
+
+  _renderUD(d) {
+    const acts = (d.actividades || []).map(a => `
+      <div class="gen-card-section">
+        <div class="gen-card-section-title">Sesión ${a.sesion}: ${this.escapeHtml(a.titulo)}</div>
+        <p>${this.escapeHtml(a.descripcion)}</p>
+        <small>⏱️ ${this.escapeHtml(a.duracion || '')} · 📦 ${(a.recursos || []).map(r => this.escapeHtml(r)).join(', ')}</small>
+      </div>`).join('');
+
+    return `
+      <div class="gen-card">
+        <h3 class="gen-card-title">${this.escapeHtml(d.titulo || '')}</h3>
+        <div class="gen-card-meta">${this.escapeHtml(d.etapa || '')} · ${this.escapeHtml(d.asignatura || '')} · ${this.escapeHtml(d.temporalizacion || '')}</div>
+        <details class="gen-details" open><summary>🎯 Objetivos</summary><ul>${(d.objetivos || []).map(o => `<li>${this.escapeHtml(o)}</li>`).join('')}</ul></details>
+        <details class="gen-details"><summary>📚 Contenidos</summary><ul>${(d.contenidos || []).map(c => `<li>${this.escapeHtml(c)}</li>`).join('')}</ul></details>
+        <details class="gen-details" open><summary>📋 Actividades</summary>${acts}</details>
+        <details class="gen-details"><summary>✅ Evaluación</summary><ul>${(d.evaluacion?.criterios || []).map(c => `<li>${this.escapeHtml(c)}</li>`).join('')}</ul><p><strong>Instrumentos:</strong> ${(d.evaluacion?.instrumentos || []).join(', ')}</p></details>
+        ${d.atencion_diversidad ? `<details class="gen-details"><summary>🌈 Atención a la diversidad</summary><p>${this.escapeHtml(d.atencion_diversidad)}</p></details>` : ''}
+      </div>`;
+  },
+
+  _renderExamen(d) {
+    const pregs = (d.preguntas || []).map(q => {
+      let body = `<div class="gen-card-section"><strong>${q.numero}. ${this.escapeHtml(q.enunciado)}</strong> <span class="gen-badge">${this.escapeHtml(q.tipo || '')} · ${q.puntuacion || 1} pt</span>`;
+      if (q.opciones && q.opciones.length) {
+        body += '<ul>' + q.opciones.map(o => `<li>${this.escapeHtml(o)}</li>`).join('') + '</ul>';
+      }
+      body += `<details class="gen-answer"><summary>Ver respuesta</summary><p>${this.escapeHtml(typeof q.respuesta_correcta === 'string' ? q.respuesta_correcta : JSON.stringify(q.respuesta_correcta))}</p></details></div>`;
+      return body;
+    }).join('');
+
+    return `
+      <div class="gen-card">
+        <h3 class="gen-card-title">${this.escapeHtml(d.titulo || '')}</h3>
+        <div class="gen-card-meta">${this.escapeHtml(d.etapa || '')} · ${this.escapeHtml(d.asignatura || '')} · ⏱️ ${this.escapeHtml(d.duracion || '')} · Total: ${d.puntuacion_total || '?'} puntos</div>
+        ${d.instrucciones ? `<p class="gen-instructions">${this.escapeHtml(d.instrucciones)}</p>` : ''}
+        ${pregs}
+      </div>`;
+  },
+
+  _renderRubrica(d) {
+    const levels = ['excelente', 'notable', 'bien', 'insuficiente'];
+    const headers = ['Criterio', 'Peso', ...levels.map(l => l.charAt(0).toUpperCase() + l.slice(1))];
+    const rows = (d.criterios || []).map(c => `
+      <tr>
+        <td><strong>${this.escapeHtml(c.nombre)}</strong></td>
+        <td>${this.escapeHtml(c.peso || '')}</td>
+        ${levels.map(l => `<td>${this.escapeHtml(c.niveles?.[l] || '')}</td>`).join('')}
+      </tr>`).join('');
+
+    return `
+      <div class="gen-card">
+        <h3 class="gen-card-title">${this.escapeHtml(d.titulo || '')}</h3>
+        <div class="gen-card-meta">${this.escapeHtml(d.etapa || '')} · ${this.escapeHtml(d.asignatura || '')}</div>
+        <div class="gen-table-wrap">
+          <table class="gen-rubrica-table">
+            <thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+        ${d.observaciones ? `<p class="gen-observations">${this.escapeHtml(d.observaciones)}</p>` : ''}
+      </div>`;
+  },
+
+  _renderActividad(d) {
+    const pasos = (d.pasos || []).map(p => `
+      <div class="gen-card-section">
+        <div class="gen-card-section-title">Paso ${p.paso}: ${this.escapeHtml(p.titulo)}</div>
+        <p>${this.escapeHtml(p.descripcion)}</p>
+        <small>⏱️ ${this.escapeHtml(p.duracion || '')}</small>
+      </div>`).join('');
+
+    return `
+      <div class="gen-card">
+        <h3 class="gen-card-title">${this.escapeHtml(d.titulo || '')}</h3>
+        <div class="gen-card-meta">${this.escapeHtml(d.etapa || '')} · ${this.escapeHtml(d.asignatura || '')} · ⏱️ ${this.escapeHtml(d.duracion || '')}</div>
+        <details class="gen-details" open><summary>🎯 Objetivos</summary><ul>${(d.objetivos || []).map(o => `<li>${this.escapeHtml(o)}</li>`).join('')}</ul></details>
+        <details class="gen-details"><summary>📦 Materiales</summary><ul>${(d.materiales || []).map(m => `<li>${this.escapeHtml(m)}</li>`).join('')}</ul></details>
+        <details class="gen-details" open><summary>📋 Pasos</summary>${pasos}</details>
+        ${d.adaptaciones ? `<details class="gen-details"><summary>🌈 Adaptaciones</summary><p>${this.escapeHtml(d.adaptaciones)}</p></details>` : ''}
+        ${d.evaluacion ? `<details class="gen-details"><summary>✅ Evaluación</summary><p>${this.escapeHtml(d.evaluacion)}</p></details>` : ''}
+      </div>`;
+  },
+
+  _renderComunicacion(d) {
+    return `
+      <div class="gen-card gen-letter">
+        <div class="gen-letter-header">
+          <strong>${this.escapeHtml(d.asunto || '')}</strong>
+          <span class="gen-badge">${this.escapeHtml(d.tono || '')} · ${this.escapeHtml(d.canal_sugerido || '')}</span>
+        </div>
+        <div class="gen-letter-body">
+          <p><em>${this.escapeHtml(d.saludo || '')}</em></p>
+          <p>${this.escapeHtml(d.cuerpo || '').replace(/\n/g, '<br>')}</p>
+          <p><em>${this.escapeHtml(d.cierre || '')}</em></p>
+          <p><strong>${this.escapeHtml(d.firma || '')}</strong></p>
+        </div>
+      </div>`;
+  },
+
+  copyGeneratorResult() {
+    const gs = this.generatorState;
+    if (!gs.result) return;
+    const text = typeof gs.result === 'string' ? gs.result : JSON.stringify(gs.result, null, 2);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = this.root.querySelector('[data-gen-copy]');
+        if (btn) this.showCopyFeedback(btn);
+      });
+    }
+  },
 
   renderPrompteca() {
     const container = this.root.querySelector('#assistant-prompteca');
@@ -1825,6 +2582,8 @@ Reglas:
             <div class="prompteca-card-actions">
               <button class="prompteca-copy-btn" data-prompteca-copy="${p.id}">📋 Copiar</button>
               <button class="prompteca-personalize-btn" data-prompteca-personalize="${p.id}">✨ Personalizar</button>
+              <button class="prompteca-share-btn" data-prompteca-share="${p.id}">🔗</button>
+              <button class="prompteca-fav-btn${this.loadFavorites().prompts.includes(p.id) ? ' favorited' : ''}" data-prompteca-fav="${p.id}" aria-label="Favorito">${this.loadFavorites().prompts.includes(p.id) ? '★' : '☆'}</button>
             </div>
           </div>
         </div>
@@ -1846,6 +2605,7 @@ Reglas:
     if (!this.promptecaData) return;
     const prompt = this.promptecaData.prompts.find(p => p.id === promptId);
     if (!prompt) return;
+    this.trackAction('prompt');
 
     const text = prompt.prompt;
 
@@ -1901,6 +2661,7 @@ Reglas:
     if (!this.promptecaData) return;
     const prompt = this.promptecaData.prompts.find(p => p.id === promptId);
     if (!prompt) return;
+    this.trackAction('prompt');
 
     // Switch to chat tab with prompt pre-loaded
     const promptText = prompt.prompt.length > 500
