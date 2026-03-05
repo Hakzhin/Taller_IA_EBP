@@ -3358,9 +3358,10 @@ ${promptecaCatalog || '(ninguno disponible)'}`;
       throw new ApiError('Sin conexión a internet. Comprueba tu WiFi.', 'network');
     }
 
-    // Fetch with 15s timeout
+    // Fetch with timeout: 45s for generators (long JSON output), 15s for chat
+    const isGenerator = feature.startsWith('generator_') || feature === 'ruta';
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    const timeoutId = setTimeout(() => controller.abort(), isGenerator ? 45000 : 15000);
 
     let resp;
     try {
