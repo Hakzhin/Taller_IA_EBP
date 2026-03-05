@@ -465,11 +465,11 @@ Reglas:
       <div class="assistant-panel" id="bupia-panel" role="complementary" aria-label="Asistente BupIA">
         <div class="assistant-header">
           <div class="assistant-tabs" role="tablist" aria-label="Secciones del asistente">
-            <button class="assistant-tab-btn" data-assistant-tab="hoy" role="tab" id="tab-hoy" aria-selected="true" aria-controls="assistant-hoy"><span class="tab-icon" aria-hidden="true">🚀</span><span class="tab-label"> Hoy</span></button>
-            <button class="assistant-tab-btn" data-assistant-tab="tablon" role="tab" id="tab-tablon" aria-selected="false" aria-controls="assistant-tablon" tabindex="-1"><span class="tab-icon" aria-hidden="true">📋</span><span class="tab-label"> Tablón</span></button>
-            <button class="assistant-tab-btn" data-assistant-tab="prompteca" role="tab" id="tab-prompteca" aria-selected="false" aria-controls="assistant-prompteca" tabindex="-1"><span class="tab-icon" aria-hidden="true">📖</span><span class="tab-label"> Recetas</span></button>
-            <button class="assistant-tab-btn" data-assistant-tab="explorar" role="tab" id="tab-explorar" aria-selected="false" aria-controls="assistant-explorar" tabindex="-1"><span class="tab-icon" aria-hidden="true">🔍</span><span class="tab-label"> Explorar</span></button>
-            <button class="assistant-tab-btn" data-assistant-tab="chat" role="tab" id="tab-chat" aria-selected="false" aria-controls="assistant-chat" tabindex="-1"><span class="tab-icon" aria-hidden="true">💬</span><span class="tab-label"> Chat</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="hoy" role="tab" id="tab-hoy" aria-selected="true" aria-controls="assistant-hoy" title="¿Qué quieres hacer hoy?"><span class="tab-icon" aria-hidden="true">🚀</span><span class="tab-label"> Hoy</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="tablon" role="tab" id="tab-tablon" aria-selected="false" aria-controls="assistant-tablon" tabindex="-1" title="Top 10 herramientas IA"><span class="tab-icon" aria-hidden="true">📋</span><span class="tab-label"> Tablón</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="prompteca" role="tab" id="tab-prompteca" aria-selected="false" aria-controls="assistant-prompteca" tabindex="-1" title="Prompts listos para usar"><span class="tab-icon" aria-hidden="true">📖</span><span class="tab-label"> Recetas</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="explorar" role="tab" id="tab-explorar" aria-selected="false" aria-controls="assistant-explorar" tabindex="-1" title="Descubre herramientas IA externas"><span class="tab-icon" aria-hidden="true">🔍</span><span class="tab-label"> Explorar</span></button>
+            <button class="assistant-tab-btn" data-assistant-tab="chat" role="tab" id="tab-chat" aria-selected="false" aria-controls="assistant-chat" tabindex="-1" title="Chat con BupIA"><span class="tab-icon" aria-hidden="true">💬</span><span class="tab-label"> Chat</span></button>
           </div>
           <button class="assistant-close-btn" data-assistant-action="close" aria-label="Cerrar asistente">✕</button>
         </div>
@@ -712,6 +712,20 @@ Reglas:
       if (copyBtn) {
         const id = copyBtn.dataset.promptecaCopy;
         this.copyPromptToClipboard(id, copyBtn);
+        return;
+      }
+
+      // Chat: copy assistant message
+      const chatCopyBtn = target.closest('[data-chat-copy]');
+      if (chatCopyBtn) {
+        this.copyChatMessage(chatCopyBtn);
+        return;
+      }
+
+      // Explore: copy assistant message
+      const exploreCopyBtn = target.closest('[data-explore-copy]');
+      if (exploreCopyBtn) {
+        this.copyChatMessage(exploreCopyBtn);
         return;
       }
 
@@ -1037,7 +1051,7 @@ Reglas:
         <div class="tablon-empty-state">
           <div class="tablon-empty-icon" aria-hidden="true">📋</div>
           <div class="tablon-empty-title">Ranking no disponible</div>
-          <div class="tablon-empty-text">El ranking de herramientas se actualizara proximamente.</div>
+          <div class="tablon-empty-text">El ranking de herramientas se actualizará próximamente.</div>
         </div>
       `;
     }
@@ -1335,6 +1349,12 @@ Reglas:
         this.appendMessage(msg.role, msg.content);
       });
     } else {
+      // Empty state hero
+      const heroDiv = document.createElement('div');
+      heroDiv.className = 'chat-empty-hero';
+      heroDiv.innerHTML = '<div class="empty-state-icon">💬</div><div class="empty-state-title">Chat con BupIA</div>';
+      container.appendChild(heroDiv);
+
       // Welcome message for first-time users
       this.appendMessage('assistant',
         '¡Hola! 👋 Soy **BupIA**, tu asistente del Taller IA. Puedo ayudarte a:\n\n' +
@@ -1539,6 +1559,11 @@ Reglas:
         <span class="chat-error-text">${this.formatMarkdown(text)}</span>
         ${showRetry ? '<button class="chat-retry-btn" data-chat-retry aria-label="Reintentar mensaje">🔄 Reintentar</button>' : ''}
       `;
+    } else if (role === 'assistant') {
+      div.innerHTML = `
+        <div class="chat-msg-content">${this.formatMarkdown(text)}</div>
+        <button class="chat-copy-btn" data-chat-copy aria-label="Copiar respuesta">📋</button>
+      `;
     } else {
       div.innerHTML = this.formatMarkdown(text);
     }
@@ -1586,6 +1611,12 @@ Reglas:
   renderExplorarWelcome(container) {
     if (!container) container = this.root.querySelector('#explore-messages');
     if (!container) return;
+
+    // Empty state hero
+    const heroDiv = document.createElement('div');
+    heroDiv.className = 'explore-empty-hero';
+    heroDiv.innerHTML = '<div class="empty-state-icon">🔍</div><div class="empty-state-title">Explorador IA</div>';
+    container.appendChild(heroDiv);
 
     this.appendExploreMessage('assistant',
       '**Modo Explorador** 🔍\n\n' +
@@ -1687,6 +1718,11 @@ Reglas:
         <span class="chat-error-icon">${icon}</span>
         <span class="chat-error-text">${this.formatMarkdown(text)}</span>
         ${showRetry ? '<button class="chat-retry-btn" data-explore-retry aria-label="Reintentar mensaje">🔄 Reintentar</button>' : ''}
+      `;
+    } else if (role === 'assistant') {
+      div.innerHTML = `
+        <div class="chat-msg-content">${this.formatMarkdown(text)}</div>
+        <button class="chat-copy-btn" data-explore-copy aria-label="Copiar respuesta">📋</button>
       `;
     } else {
       div.innerHTML = this.formatMarkdown(text);
@@ -1844,6 +1880,21 @@ Reglas:
       btnEl.textContent = orig;
       btnEl.classList.remove('copied');
     }, 2000);
+  },
+
+  copyChatMessage(btnEl) {
+    const msgDiv = btnEl.closest('.chat-msg');
+    if (!msgDiv) return;
+    const content = msgDiv.querySelector('.chat-msg-content');
+    if (!content) return;
+    const text = content.innerText || content.textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        this.showCopyFeedback(btnEl);
+      }).catch(() => this.fallbackCopy(text, btnEl));
+    } else {
+      this.fallbackCopy(text, btnEl);
+    }
   },
 
   personalizePrompt(promptId) {
