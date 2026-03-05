@@ -9,10 +9,15 @@ import http.server
 import json
 import os
 import sys
+import time
 import urllib.request
 import urllib.error
 
 PORT = 8085
+MAX_PAYLOAD_BYTES = 51200          # 50 KB max request body
+MAX_MESSAGE_CHARS = 2000           # per-message character limit
+MAX_MESSAGES = 50                  # max messages in conversation history
+DAILY_LIMIT = 100                  # requests per IP per day
 API_KEY_FILE = "api_key.txt"
 TAVILY_KEY_FILE = "tavily_key.txt"
 ANTHROPIC_URL = "https://api.anthropic.com/v1/messages"
@@ -230,6 +235,22 @@ else:
     print(f"[!] No se encontro {_catalog_path}. El explorador usara solo conocimiento del modelo.")
 
 
+# ── Rate limiter per-IP (in-memory, resets daily) ──
+_rate_store = {}   # { ip: { "date": "YYYY-MM-DD", "count": int } }
+
+def _check_rate(ip):
+    """Return True if request is allowed, False if over daily limit."""
+    today = time.strftime("%Y-%m-%d")
+    entry = _rate_store.get(ip, {"date": "", "count": 0})
+    if entry["date"] != today:
+        entry = {"date": today, "count": 0}
+    if entry["count"] >= DAILY_LIMIT:
+        return False
+    entry["count"] += 1
+    _rate_store[ip] = entry
+    return True
+
+
 class TallerHandler(http.server.SimpleHTTPRequestHandler):
     """Sirve archivos estaticos + proxea /api/chat a Anthropic (Claude)."""
 
@@ -257,6 +278,15 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
             self.send_error(404, "Not Found")
             return
 
+        # ── Rate limit per-IP ──
+        client_ip = self.client_address[0]
+        if not _check_rate(client_ip):
+            self.send_json(429, {
+                "error": "Limite diario alcanzado",
+                "detail": f"Maximo {DAILY_LIMIT} consultas por dia. Intentalo manana."
+            })
+            return
+
         # Verificar API key
         if not api_key:
             self.send_json(503, {
@@ -265,9 +295,12 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
             })
             return
 
-        # Leer body
+        # Leer body (con limite de tamano)
         try:
             length = int(self.headers.get("Content-Length", 0))
+            if length > MAX_PAYLOAD_BYTES:
+                self.send_json(413, {"error": f"Payload demasiado grande (max {MAX_PAYLOAD_BYTES // 1024}KB)"})
+                return
             body = json.loads(self.rfile.read(length))
         except (json.JSONDecodeError, ValueError):
             self.send_json(400, {"error": "JSON invalido en el body"})
@@ -279,6 +312,16 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
         if not messages:
             self.send_json(400, {"error": "El campo 'messages' es obligatorio"})
             return
+
+        # ── Validar mensajes ──
+        if len(messages) > MAX_MESSAGES:
+            self.send_json(400, {"error": f"Demasiados mensajes (max {MAX_MESSAGES})"})
+            return
+        for msg in messages:
+            content = msg.get("content", "")
+            if isinstance(content, str) and len(content) > MAX_MESSAGE_CHARS:
+                self.send_json(400, {"error": f"Mensaje demasiado largo (max {MAX_MESSAGE_CHARS} caracteres)"})
+                return
 
         # Construir peticion a Anthropic
         # Anthropic usa 'system' como parametro top-level, no como mensaje
