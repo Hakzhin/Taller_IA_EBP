@@ -2073,6 +2073,126 @@
   margin: 8px 0;
 }
 
+/* ── Select & Checkbox in generators ── */
+.gen-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a5775' stroke-width='2'%3e%3cpath d='M6 9l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  padding-right: 32px !important;
+  cursor: pointer;
+}
+.gen-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8125rem;
+  color: var(--text-dark);
+  cursor: pointer;
+  padding: 8px 0;
+}
+.gen-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-purple);
+  cursor: pointer;
+}
+
+/* ── Adaptation generator card ── */
+.gen-adaptation-profile {
+  font-size: 0.8125rem;
+  padding: 8px 12px;
+  background: rgba(124, 92, 191, 0.06);
+  border-radius: 8px;
+  margin: 8px 0;
+  color: var(--text-dark);
+}
+.gen-badge-green {
+  background: #e6f9f0 !important;
+  color: #059669 !important;
+}
+.gen-badge-orange {
+  background: #fff3e6 !important;
+  color: #d97706 !important;
+}
+.gen-badge-blue {
+  background: #e6f0ff !important;
+  color: #2563eb !important;
+}
+
+/* DUA grid (3 cards) */
+.gen-dua-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+.gen-dua-card {
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+.gen-dua-card p {
+  margin: 4px 0 0;
+  color: var(--text-medium);
+}
+.gen-dua-title {
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: var(--text-dark);
+}
+.gen-dua-representacion {
+  background: rgba(59, 130, 246, 0.08);
+  border-left: 3px solid #3b82f6;
+}
+.gen-dua-expresion {
+  background: rgba(16, 185, 129, 0.08);
+  border-left: 3px solid #10b981;
+}
+.gen-dua-implicacion {
+  background: rgba(245, 158, 11, 0.08);
+  border-left: 3px solid #f59e0b;
+}
+
+/* ── Level tabs (multinivel) ── */
+.gen-level-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  padding: 3px;
+  background: rgba(0,0,0,0.04);
+  border-radius: 10px;
+}
+.gen-level-tab {
+  flex: 1;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-medium);
+}
+.gen-level-tab:hover {
+  background: rgba(124, 92, 191, 0.08);
+}
+.gen-level-tab.active {
+  background: white;
+  color: var(--text-dark);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.gen-level-panel {
+  display: none;
+}
+.gen-level-panel.active {
+  display: block;
+}
+
 /* Result actions row */
 .gen-result-actions {
   display: flex;
@@ -2167,6 +2287,19 @@
 [data-theme="dark"] .gen-letter-header strong { color: #e8e6f0; }
 [data-theme="dark"] .gen-letter-body { color: #b0adc0; }
 [data-theme="dark"] .gen-raw-result { color: #b0adc0; }
+[data-theme="dark"] .gen-adaptation-profile { background: rgba(124, 92, 191, 0.15); color: #e8e6f0; }
+[data-theme="dark"] .gen-badge-green { background: rgba(5, 150, 105, 0.2) !important; color: #6ee7b7 !important; }
+[data-theme="dark"] .gen-badge-orange { background: rgba(217, 119, 6, 0.2) !important; color: #fcd34d !important; }
+[data-theme="dark"] .gen-badge-blue { background: rgba(37, 99, 235, 0.2) !important; color: #93c5fd !important; }
+[data-theme="dark"] .gen-dua-representacion { background: rgba(59, 130, 246, 0.15); }
+[data-theme="dark"] .gen-dua-expresion { background: rgba(16, 185, 129, 0.15); }
+[data-theme="dark"] .gen-dua-implicacion { background: rgba(245, 158, 11, 0.15); }
+[data-theme="dark"] .gen-dua-title { color: #e8e6f0; }
+[data-theme="dark"] .gen-dua-card p { color: #b0adc0; }
+[data-theme="dark"] .gen-select { background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b0adc0' stroke-width='2'%3e%3cpath d='M6 9l6 6 6-6'/%3e%3c/svg%3e"); }
+[data-theme="dark"] .gen-checkbox-label { color: #e8e6f0; }
+[data-theme="dark"] .gen-level-tabs { background: rgba(255,255,255,0.06); }
+[data-theme="dark"] .gen-level-tab.active { background: rgba(255,255,255,0.1); color: #e8e6f0; }
 
 /* ══════════════════════════════════════════
    Dark Mode Overrides — Assistant Panel

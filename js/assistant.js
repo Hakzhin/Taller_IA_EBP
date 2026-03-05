@@ -82,6 +82,28 @@ SOBRE TI (autoconocimiento — responde con naturalidad si te preguntan):
 
 ${CATALOG}
 
+ATENCION A LA DIVERSIDAD — Eres experta en inclusion educativa y atencion a la diversidad. Conoces:
+
+PERFILES Y ESTRATEGIAS:
+- TDAH: Fragmentar tareas en pasos cortos, instrucciones claras y directas, timers visuales, descansos programados, refuerzo positivo frecuente, ubicacion preferente en el aula, reducir distractores.
+- Dislexia y dificultades lectoescritoras: Tipografia accesible (sans-serif, interlineado amplio), apoyos visuales y auditivos, mas tiempo en tareas escritas, evaluacion oral como alternativa, textos simplificados, evitar copiar de la pizarra.
+- TEA (Trastorno del Espectro Autista): Anticipacion de cambios con antelacion, rutinas visuales con pictogramas, instrucciones explicitas y literales (evitar ironias y dobles sentidos), reducir estimulos sensoriales, historias sociales, companero-guia.
+- Altas capacidades: Enriquecimiento curricular (NO mas de lo mismo, sino diferente y mas profundo), proyectos de investigacion autonomos, mentoria entre iguales, compactacion curricular, retos creativos y pensamiento divergente.
+- Desfase curricular: Actividades multinivel, material manipulativo y concreto, agrupamientos flexibles, planes de refuerzo individualizados, evaluacion por progreso personal.
+- Incorporacion tardia / Barrera idiomatica: Apoyo linguistico, companero-tutor bilingue, pictogramas y apoyos visuales, adaptacion cultural del contenido, valorar conocimientos previos del pais de origen.
+- Discapacidad sensorial: Materiales en formatos alternativos (braille, audiodescripcion, subtitulos, lengua de signos), ubicacion preferente, adaptacion de materiales visuales/auditivos.
+- Discapacidad intelectual: Simplificar contenidos sin infantilizar, material manipulativo, repeticion y sobreaprendizaje, objetivos funcionales, evaluacion adaptada.
+
+MARCO LEGAL Y PEDAGOGICO:
+- LOMLOE: Principio de inclusion como eje transversal. Atencion a la diversidad como derecho de todo el alumnado, no solo de quienes tienen diagnostico.
+- DUA (Diseno Universal para el Aprendizaje): Multiples formas de representacion (como se presenta la info), expresion (como demuestra el alumno lo aprendido) e implicacion (como se motiva).
+- PTI: Plan de Trabajo Individualizado para alumnos con necesidades especificas de apoyo educativo.
+- Adaptaciones NO significativas: Mismos objetivos, diferente metodologia, materiales o temporalizacion.
+- Adaptaciones significativas: Se modifican los objetivos y criterios de evaluacion.
+- Enriquecimiento curricular: Para altas capacidades — ampliar, profundizar, conectar.
+
+Si un profesor pregunta sobre diversidad, adaptar actividades, o perfiles especificos, responde con estrategias PRACTICAS y CONCRETAS para su aula. Recuerda que tienen el generador de Adaptaciones Curriculares (icono 🧩) en la pestana Hoy para generar adaptaciones completas automaticamente.
+
 Reglas:
 - Responde SIEMPRE en espanol.
 - Se conciso y practico (los profesores tienen poco tiempo).
@@ -1256,6 +1278,16 @@ Reglas:
         this.renderHoy();
         return;
       }
+
+      // Generators: multinivel tab switching
+      const levelTab = target.closest('[data-gen-level]');
+      if (levelTab) {
+        const level = levelTab.dataset.genLevel;
+        const container = levelTab.closest('.gen-result') || levelTab.parentElement.parentElement;
+        container.querySelectorAll('.gen-level-tab').forEach(t => t.classList.toggle('active', t.dataset.genLevel === level));
+        container.querySelectorAll('.gen-level-panel').forEach(p => p.classList.toggle('active', p.dataset.genLevelPanel === level));
+        return;
+      }
     });
 
     // Chat input: Enter key
@@ -2336,6 +2368,8 @@ Reglas:
       <button class="explore-chip" data-explore-query="Herramientas para gamificar el aula con IA">🎮 Gamificación</button>
       <button class="explore-chip" data-explore-query="Herramientas de IA para crear vídeos educativos cortos gratis">🎬 Vídeos educativos</button>
       <button class="explore-chip" data-explore-query="Herramientas para evaluar y dar feedback con IA">✅ Evaluación con IA</button>
+      <button class="explore-chip" data-explore-query="Herramientas de IA para atención a la diversidad, adaptaciones curriculares, inclusión educativa y necesidades educativas especiales">🧩 Diversidad e inclusión</button>
+      <button class="explore-chip" data-explore-query="Herramientas de IA de accesibilidad educativa: texto a voz, pictogramas, lectura fácil, apoyo visual y auditivo para alumnos con NEE">♿ Accesibilidad</button>
     `;
     container.appendChild(chipsDiv);
   },
@@ -2498,6 +2532,7 @@ Reglas:
     { id: 'generator_rubrica', icon: '📊', label: 'Rúbrica', desc: 'Criterios, niveles y descriptores' },
     { id: 'generator_actividad', icon: '🎯', label: 'Actividad de Aula', desc: 'Pasos, materiales y temporización' },
     { id: 'generator_comunicacion', icon: '✉️', label: 'Comunicación', desc: 'Mensajes profesionales a familias' },
+    { id: 'generator_adaptacion', icon: '🧩', label: 'Adaptación Curricular', desc: 'Adapta actividades a perfiles de diversidad' },
   ],
 
   startGenerator(typeId) {
@@ -2544,8 +2579,12 @@ Reglas:
             <div class="gen-field">
               <label class="gen-label" for="gen-${f.id}">${f.label}</label>
               ${f.type === 'textarea'
-                ? `<textarea class="gen-input gen-textarea" id="gen-${f.id}" placeholder="${this.escapeHtml(f.placeholder)}" rows="2"></textarea>`
-                : `<input class="gen-input" id="gen-${f.id}" type="text" placeholder="${this.escapeHtml(f.placeholder)}">`
+                ? `<textarea class="gen-input gen-textarea" id="gen-${f.id}" placeholder="${this.escapeHtml(f.placeholder || '')}" rows="2"></textarea>`
+                : f.type === 'select'
+                  ? `<select class="gen-input gen-select" id="gen-${f.id}">${f.options.map(o => `<option value="${o.value}">${o.label}</option>`).join('')}</select>`
+                  : f.type === 'checkbox'
+                    ? `<label class="gen-checkbox-label"><input type="checkbox" class="gen-checkbox" id="gen-${f.id}"> ${f.checkLabel || f.label}</label>`
+                    : `<input class="gen-input" id="gen-${f.id}" type="text" placeholder="${this.escapeHtml(f.placeholder || '')}">`
               }
             </div>
           `).join('')}
@@ -2589,16 +2628,39 @@ Reglas:
       case 'generator_ud':
         return [...common, { id: 'sesiones', label: 'Nº de sesiones', placeholder: 'Ej: 6', type: 'text' }];
       case 'generator_examen':
-        return [...common, { id: 'preguntas', label: 'Nº de preguntas', placeholder: 'Ej: 10', type: 'text' }];
+        return [...common, { id: 'preguntas', label: 'Nº de preguntas', placeholder: 'Ej: 10', type: 'text' },
+          { id: 'multinivel', label: '', type: 'checkbox', checkLabel: '🌈 Generar 3 niveles (refuerzo / estándar / ampliación)' }];
       case 'generator_rubrica':
         return [...common, { id: 'actividad', label: 'Actividad a evaluar', placeholder: 'Ej: Presentación oral, proyecto...', type: 'text' }];
       case 'generator_actividad':
-        return [...common, { id: 'duracion', label: 'Duración', placeholder: 'Ej: 50 minutos', type: 'text' }];
+        return [...common, { id: 'duracion', label: 'Duración', placeholder: 'Ej: 50 minutos', type: 'text' },
+          { id: 'multinivel', label: '', type: 'checkbox', checkLabel: '🌈 Generar 3 niveles (refuerzo / estándar / ampliación)' }];
       case 'generator_comunicacion':
         return [
           { id: 'motivo', label: 'Motivo', placeholder: 'Ej: Excursión, reunión, información...', type: 'text' },
           { id: 'detalles', label: 'Detalles', placeholder: 'Fecha, lugar, instrucciones...', type: 'textarea' },
           { id: 'tono', label: 'Tono', placeholder: 'formal, cercano, informativo', type: 'text' },
+        ];
+      case 'generator_adaptacion':
+        return [
+          ...common,
+          { id: 'actividad_original', label: 'Actividad a adaptar', placeholder: 'Describe la actividad, contenido o tarea original que quieres adaptar...', type: 'textarea' },
+          { id: 'perfil', label: 'Perfil del alumno', type: 'select', options: [
+            { value: 'tdah', label: '🔵 TDAH' },
+            { value: 'dislexia', label: '📖 Dislexia / Dificultades lectoescritoras' },
+            { value: 'tea', label: '🧩 TEA (Trastorno del Espectro Autista)' },
+            { value: 'altas_capacidades', label: '🌟 Altas Capacidades' },
+            { value: 'desfase_curricular', label: '📉 Desfase curricular' },
+            { value: 'incorporacion_tardia', label: '🌍 Incorporación tardía / Barrera idiomática' },
+            { value: 'discapacidad_sensorial', label: '👁️ Discapacidad visual o auditiva' },
+            { value: 'discapacidad_intelectual', label: '🧠 Discapacidad intelectual' },
+            { value: 'otro', label: '📋 Otro perfil' },
+          ]},
+          { id: 'tipo_adaptacion', label: 'Tipo de adaptación', type: 'select', options: [
+            { value: 'no_significativa', label: '🟢 No significativa (mismos objetivos, diferente metodología)' },
+            { value: 'significativa', label: '🟠 Significativa (objetivos modificados)' },
+            { value: 'enriquecimiento', label: '🔵 Enriquecimiento curricular (ampliación)' },
+          ]},
         ];
       default: return common;
     }
@@ -2610,7 +2672,16 @@ Reglas:
     const params = {};
     for (const f of fields) {
       const el = this.root.querySelector(`#gen-${f.id}`);
-      params[f.id] = el ? el.value.trim() : '';
+      if (!el) { params[f.id] = ''; continue; }
+      if (f.type === 'checkbox') {
+        params[f.id] = el.checked;
+      } else if (f.type === 'select') {
+        // Send the readable label text, not the internal value
+        const selectedOpt = el.options[el.selectedIndex];
+        params[f.id] = selectedOpt ? selectedOpt.textContent.trim() : el.value;
+      } else {
+        params[f.id] = el.value.trim();
+      }
     }
     gs.params = params;
     gs.step = 3;
@@ -2619,7 +2690,12 @@ Reglas:
     // Build prompt message
     let msg = `Genera contenido para ${gs.etapa}.\n`;
     for (const [k, v] of Object.entries(params)) {
-      if (v) msg += `${k}: ${v}\n`;
+      if (v && k !== 'multinivel') msg += `${k}: ${v}\n`;
+    }
+
+    // Multinivel: add instructions for 3-level generation
+    if (params.multinivel === true) {
+      msg += `\nIMPORTANTE: Genera 3 VERSIONES del mismo contenido con diferente nivel de dificultad. Envuelve todo en un objeto JSON con "multinivel": true y "niveles": {"refuerzo": {...}, "estandar": {...}, "ampliacion": {...}}. Cada nivel tiene la misma estructura JSON que generarias normalmente, pero adaptado asi:\n- REFUERZO: Simplificado, con mas apoyos, menos complejidad, instrucciones mas detalladas\n- ESTANDAR: Nivel medio del grupo\n- AMPLIACION: Mayor profundidad, pensamiento critico, retos extra, conexiones interdisciplinares\n`;
     }
 
     try {
@@ -2659,6 +2735,7 @@ Reglas:
       case 'generator_rubrica': return this._renderRubrica(data);
       case 'generator_actividad': return this._renderActividad(data);
       case 'generator_comunicacion': return this._renderComunicacion(data);
+      case 'generator_adaptacion': return this._renderAdaptacion(data);
       default: return `<pre class="gen-raw-result">${this.escapeHtml(JSON.stringify(data, null, 2))}</pre>`;
     }
   },
@@ -2679,11 +2756,44 @@ Reglas:
         <details class="gen-details"><summary>📚 Contenidos</summary><ul>${(d.contenidos || []).map(c => `<li>${this.escapeHtml(c)}</li>`).join('')}</ul></details>
         <details class="gen-details" open><summary>📋 Actividades</summary>${acts}</details>
         <details class="gen-details"><summary>✅ Evaluación</summary><ul>${(d.evaluacion?.criterios || []).map(c => `<li>${this.escapeHtml(c)}</li>`).join('')}</ul><p><strong>Instrumentos:</strong> ${(d.evaluacion?.instrumentos || []).join(', ')}</p></details>
-        ${d.atencion_diversidad ? `<details class="gen-details"><summary>🌈 Atención a la diversidad</summary><p>${this.escapeHtml(d.atencion_diversidad)}</p></details>` : ''}
+        ${d.atencion_diversidad ? `<details class="gen-details"><summary>🌈 Atención a la diversidad (DUA)</summary>${
+          typeof d.atencion_diversidad === 'object'
+            ? `<div class="gen-dua-grid">
+                <div class="gen-dua-card gen-dua-representacion">
+                  <div class="gen-dua-title">👁️ Representación</div>
+                  <p>${this.escapeHtml(d.atencion_diversidad.representacion || '')}</p>
+                </div>
+                <div class="gen-dua-card gen-dua-expresion">
+                  <div class="gen-dua-title">✍️ Expresión</div>
+                  <p>${this.escapeHtml(d.atencion_diversidad.expresion || '')}</p>
+                </div>
+                <div class="gen-dua-card gen-dua-implicacion">
+                  <div class="gen-dua-title">💪 Implicación</div>
+                  <p>${this.escapeHtml(d.atencion_diversidad.implicacion || '')}</p>
+                </div>
+              </div>
+              ${d.atencion_diversidad.adaptaciones_sugeridas ? `<p style="margin-top:8px;font-size:0.8rem"><strong>Adaptaciones sugeridas:</strong> ${this.escapeHtml(d.atencion_diversidad.adaptaciones_sugeridas)}</p>` : ''}`
+            : `<p>${this.escapeHtml(d.atencion_diversidad)}</p>`
+        }</details>` : ''}
       </div>`;
   },
 
   _renderExamen(d) {
+    // Multinivel: render 3 tabs
+    if (d.multinivel && d.niveles) {
+      const levels = [
+        { key: 'refuerzo', label: '🟢 Refuerzo', active: true },
+        { key: 'estandar', label: '🟡 Estándar', active: false },
+        { key: 'ampliacion', label: '🔴 Ampliación', active: false },
+      ];
+      const tabs = levels.map(l => `<button class="gen-level-tab${l.active ? ' active' : ''}" data-gen-level="${l.key}">${l.label}</button>`).join('');
+      const panels = levels.map(l => `<div class="gen-level-panel${l.active ? ' active' : ''}" data-gen-level-panel="${l.key}">${this._renderExamenSingle(d.niveles[l.key] || {})}</div>`).join('');
+      return `<div class="gen-level-tabs">${tabs}</div>${panels}`;
+    }
+    return this._renderExamenSingle(d);
+  },
+
+  _renderExamenSingle(d) {
     const pregs = (d.preguntas || []).map(q => {
       let body = `<div class="gen-card-section"><strong>${q.numero}. ${this.escapeHtml(q.enunciado)}</strong> <span class="gen-badge">${this.escapeHtml(q.tipo || '')} · ${q.puntuacion || 1} pt</span>`;
       if (q.opciones && q.opciones.length) {
@@ -2727,6 +2837,21 @@ Reglas:
   },
 
   _renderActividad(d) {
+    // Multinivel: render 3 tabs
+    if (d.multinivel && d.niveles) {
+      const levels = [
+        { key: 'refuerzo', label: '🟢 Refuerzo', active: true },
+        { key: 'estandar', label: '🟡 Estándar', active: false },
+        { key: 'ampliacion', label: '🔴 Ampliación', active: false },
+      ];
+      const tabs = levels.map(l => `<button class="gen-level-tab${l.active ? ' active' : ''}" data-gen-level="${l.key}">${l.label}</button>`).join('');
+      const panels = levels.map(l => `<div class="gen-level-panel${l.active ? ' active' : ''}" data-gen-level-panel="${l.key}">${this._renderActividadSingle(d.niveles[l.key] || {})}</div>`).join('');
+      return `<div class="gen-level-tabs">${tabs}</div>${panels}`;
+    }
+    return this._renderActividadSingle(d);
+  },
+
+  _renderActividadSingle(d) {
     const pasos = (d.pasos || []).map(p => `
       <div class="gen-card-section">
         <div class="gen-card-section-title">Paso ${p.paso}: ${this.escapeHtml(p.titulo)}</div>
@@ -2741,7 +2866,22 @@ Reglas:
         <details class="gen-details" open><summary>🎯 Objetivos</summary><ul>${(d.objetivos || []).map(o => `<li>${this.escapeHtml(o)}</li>`).join('')}</ul></details>
         <details class="gen-details"><summary>📦 Materiales</summary><ul>${(d.materiales || []).map(m => `<li>${this.escapeHtml(m)}</li>`).join('')}</ul></details>
         <details class="gen-details" open><summary>📋 Pasos</summary>${pasos}</details>
-        ${d.adaptaciones ? `<details class="gen-details"><summary>🌈 Adaptaciones</summary><p>${this.escapeHtml(d.adaptaciones)}</p></details>` : ''}
+        ${d.adaptaciones ? `<details class="gen-details"><summary>🌈 Adaptaciones (DUA)</summary>${
+          typeof d.adaptaciones === 'object'
+            ? `<div class="gen-dua-grid">
+                <div class="gen-dua-card gen-dua-representacion">
+                  <div class="gen-dua-title">📉 Refuerzo</div>
+                  <p>${this.escapeHtml(d.adaptaciones.refuerzo || '')}</p>
+                </div>
+                <div class="gen-dua-card gen-dua-expresion">
+                  <div class="gen-dua-title">📈 Ampliación</div>
+                  <p>${this.escapeHtml(d.adaptaciones.ampliacion || '')}</p>
+                </div>
+              </div>
+              ${d.adaptaciones.dua_representacion ? `<p style="margin-top:8px;font-size:0.8rem"><strong>👁️ Representación:</strong> ${this.escapeHtml(d.adaptaciones.dua_representacion)}</p>` : ''}
+              ${d.adaptaciones.dua_expresion ? `<p style="font-size:0.8rem"><strong>✍️ Expresión:</strong> ${this.escapeHtml(d.adaptaciones.dua_expresion)}</p>` : ''}`
+            : `<p>${this.escapeHtml(d.adaptaciones)}</p>`
+        }</details>` : ''}
         ${d.evaluacion ? `<details class="gen-details"><summary>✅ Evaluación</summary><p>${this.escapeHtml(d.evaluacion)}</p></details>` : ''}
       </div>`;
   },
@@ -2759,6 +2899,56 @@ Reglas:
           <p><em>${this.escapeHtml(d.cierre || '')}</em></p>
           <p><strong>${this.escapeHtml(d.firma || '')}</strong></p>
         </div>
+      </div>`;
+  },
+
+  _renderAdaptacion(d) {
+    const a = d.adaptacion || {};
+    const dua = d.principios_dua || {};
+    const tipoBadge = (d.tipo_adaptacion || '').toLowerCase().includes('significativa') && !(d.tipo_adaptacion || '').toLowerCase().includes('no ')
+      ? 'gen-badge-orange'
+      : (d.tipo_adaptacion || '').toLowerCase().includes('enriquecimiento')
+        ? 'gen-badge-blue'
+        : 'gen-badge-green';
+
+    return `
+      <div class="gen-card gen-adaptation">
+        <h3 class="gen-card-title">${this.escapeHtml(d.titulo || 'Adaptación Curricular')}</h3>
+        <div class="gen-card-meta">
+          ${this.escapeHtml(d.etapa || '')} · ${this.escapeHtml(d.asignatura || '')}
+          <span class="gen-badge ${tipoBadge}">${this.escapeHtml(d.tipo_adaptacion || '')}</span>
+        </div>
+        <div class="gen-adaptation-profile">
+          <strong>Perfil:</strong> ${this.escapeHtml(d.perfil || '')}
+        </div>
+        ${d.actividad_original ? `<details class="gen-details"><summary>📄 Actividad original</summary><p>${this.escapeHtml(d.actividad_original)}</p></details>` : ''}
+        <details class="gen-details" open><summary>💡 Justificación pedagógica</summary><p>${this.escapeHtml(d.justificacion || '')}</p></details>
+        <details class="gen-details" open><summary>🧩 Actividad adaptada</summary>
+          <p>${this.escapeHtml(a.actividad_adaptada || '')}</p>
+          ${a.metodologia ? `<p><strong>Metodología:</strong> ${this.escapeHtml(a.metodologia)}</p>` : ''}
+          ${a.temporalizacion ? `<p><strong>Temporalización:</strong> ${this.escapeHtml(a.temporalizacion)}</p>` : ''}
+        </details>
+        ${a.objetivos && a.objetivos.length ? `<details class="gen-details"><summary>🎯 Objetivos adaptados</summary><ul>${a.objetivos.map(o => `<li>${this.escapeHtml(o)}</li>`).join('')}</ul></details>` : ''}
+        ${a.materiales && a.materiales.length ? `<details class="gen-details"><summary>📦 Materiales adaptados</summary><ul>${a.materiales.map(m => `<li>${this.escapeHtml(m)}</li>`).join('')}</ul></details>` : ''}
+        ${a.apoyos && a.apoyos.length ? `<details class="gen-details"><summary>🤝 Apoyos</summary><ul>${a.apoyos.map(ap => `<li>${this.escapeHtml(ap)}</li>`).join('')}</ul></details>` : ''}
+        ${a.evaluacion ? `<details class="gen-details"><summary>✅ Evaluación adaptada</summary><p>${this.escapeHtml(a.evaluacion)}</p></details>` : ''}
+        <details class="gen-details" open><summary>🌈 Principios DUA</summary>
+          <div class="gen-dua-grid">
+            <div class="gen-dua-card gen-dua-representacion">
+              <div class="gen-dua-title">👁️ Representación</div>
+              <p>${this.escapeHtml(dua.representacion || 'No especificado')}</p>
+            </div>
+            <div class="gen-dua-card gen-dua-expresion">
+              <div class="gen-dua-title">✍️ Expresión</div>
+              <p>${this.escapeHtml(dua.expresion || 'No especificado')}</p>
+            </div>
+            <div class="gen-dua-card gen-dua-implicacion">
+              <div class="gen-dua-title">💪 Implicación</div>
+              <p>${this.escapeHtml(dua.implicacion || 'No especificado')}</p>
+            </div>
+          </div>
+        </details>
+        ${d.recomendaciones_docente ? `<details class="gen-details" open><summary>👩‍🏫 Recomendaciones para el docente</summary><p>${this.escapeHtml(d.recomendaciones_docente)}</p></details>` : ''}
       </div>`;
   },
 

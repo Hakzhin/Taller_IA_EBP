@@ -5,7 +5,7 @@
 //  Network-first for API & fonts
 // ══════════════════════════════════════════
 
-const CACHE_NAME = 'taller-ia-v3';
+const CACHE_NAME = 'taller-ia-v4';
 
 const STATIC_ASSETS = [
   '/',
