@@ -543,9 +543,9 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
         if is_stream:
             self._handle_stream(system_prompt, api_messages, max_tokens, temperature)
         else:
-            self._handle_standard(system_prompt, api_messages, max_tokens, temperature)
+            self._handle_standard(system_prompt, api_messages, max_tokens, temperature, feature)
 
-    def _handle_standard(self, system_prompt, api_messages, max_tokens, temperature):
+    def _handle_standard(self, system_prompt, api_messages, max_tokens, temperature, feature="chat"):
         """Non-streaming API call — returns full response as JSON."""
         payload = json.dumps({
             "model": MODEL,
@@ -565,8 +565,11 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
             },
         )
 
+        # Generators produce 3000 tokens of JSON — need longer timeout
+        api_timeout = 55 if feature.startswith("generator_") or feature == "ruta" else 30
+
         try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
+            with urllib.request.urlopen(req, timeout=api_timeout) as resp:
                 result = json.loads(resp.read().decode("utf-8"))
 
             # Transformar respuesta Anthropic → formato OpenAI (para que el JS no cambie)

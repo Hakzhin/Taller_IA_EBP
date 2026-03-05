@@ -2571,9 +2571,13 @@ Reglas:
     } else if (gs.step === 2) {
       // Step 2: Form with specific fields
       const fields = this._getGeneratorFields(gs.type);
+      const errorBanner = gs.error
+        ? `<div class="gen-error-banner">⚠️ ${this.escapeHtml(gs.error)}</div>`
+        : '';
       container.innerHTML = `
         <button class="wizard-back-btn" data-gen-back="etapa">← Cambiar etapa</button>
         <div class="wizard-title">${gen.icon} ${gen.label} · ${gs.etapa}</div>
+        ${errorBanner}
         <div class="gen-form">
           ${fields.map(f => `
             <div class="gen-field">
@@ -2705,8 +2709,14 @@ Reglas:
         return;
       }
 
+      gs.error = null;  // Clear previous error
       const resp = await this.apiCall(gs.type, [{ role: 'user', content: msg }]);
       this.trackAction('generator');
+
+      // Guard against null response
+      if (!resp || !resp.content) {
+        throw new Error('No se recibió respuesta del servidor.');
+      }
 
       // Try parsing JSON from response
       let parsed = null;
@@ -2719,6 +2729,8 @@ Reglas:
       gs.step = 4;
       this.renderHoy();
     } catch (err) {
+      console.error('[BupIA] Generator error:', err);
+      gs.error = err?.message || 'Error al generar. Inténtalo de nuevo.';
       gs.step = 2;
       this.renderHoy();
     }

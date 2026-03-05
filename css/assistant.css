@@ -2100,6 +2100,23 @@
   cursor: pointer;
 }
 
+/* ── Generator error banner ── */
+.gen-error-banner {
+  background: #fff3f3;
+  border: 1px solid #e8a0a0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.8125rem;
+  color: #b33a3a;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+[data-theme="dark"] .gen-error-banner {
+  background: rgba(180,60,60,0.15);
+  border-color: rgba(180,60,60,0.3);
+  color: #f0a0a0;
+}
+
 /* ── Adaptation generator card ── */
 .gen-adaptation-profile {
   font-size: 0.8125rem;

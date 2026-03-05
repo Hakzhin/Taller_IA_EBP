@@ -522,6 +522,9 @@ def chat():
 
     system_prompt, max_tokens, temperature = build_prompt_and_settings(feature, messages)
 
+    # Generators produce 3000 tokens of JSON — need longer timeout
+    api_timeout = 55 if feature.startswith("generator_") or feature == "ruta" else 30
+
     try:
         resp = http_client.post(
             ANTHROPIC_URL,
@@ -537,7 +540,7 @@ def chat():
                 "anthropic-version": ANTHROPIC_VERSION,
                 "Content-Type": "application/json",
             },
-            timeout=30,
+            timeout=api_timeout,
         )
     except http_client.exceptions.RequestException as e:
         return jsonify(error=f"No se pudo conectar a Anthropic: {e}"), 502
