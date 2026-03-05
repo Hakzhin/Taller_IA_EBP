@@ -99,7 +99,7 @@ Reglas:
 - Si te hacen preguntas no relacionadas con educacion, IA o el colegio, redirige amablemente: "¡Buena pregunta! Pero mi especialidad es ayudarte con herramientas de IA para el aula. ¿En que puedo ayudarte con eso?". No respondas a temas politicos, medicos, legales no educativos ni personales.`;
 
     return {
-      chat: BASE,
+      chat: BASE + `\n\nOBLIGATORIO — SIEMPRE al final de cada respuesta, DEBES incluir exactamente 3 sugerencias de seguimiento usando EXACTAMENTE este formato (con las etiquetas [SUGERENCIAS] y [/SUGERENCIAS]). NUNCA omitas este bloque:\n\n[SUGERENCIAS]\n1. Pregunta sugerida contextual\n2. Pregunta sugerida contextual\n3. Pregunta sugerida contextual\n[/SUGERENCIAS]\n\nLas sugerencias deben ser preguntas breves (max 12 palabras) relacionadas con tu respuesta. Este bloque es OBLIGATORIO en TODAS tus respuestas sin excepcion.`,
       recommend: BASE + `\n\nContexto adicional: El usuario esta en el recomendador de herramientas.\nResponde con 2-3 frases practicas explicando por que esas herramientas son utiles para su caso.\nNo repitas la lista de herramientas (ya se muestra en la interfaz).\nSugiere un prompt de ejemplo que podrian probar.`,
       bulletin: BASE + `\n\nContexto adicional: Genera un consejo breve y practico del dia para profesores que usan IA en el aula.\nMenciona una herramienta concreta del catalogo.\nFormato: un titulo llamativo (max 8 palabras) y 2-3 frases de contenido.\nResponde SOLO con JSON valido: {"title": "...", "body": "...", "toolId": "..."}\nEl toolId debe ser un ID del catalogo como "pri-gemini", "eso-chatgpt", "inf-suno", etc.`,
       explore: `Eres "BupIA" en modo Explorador. Ayudas a profesores del Colegio El Buen Pastor (Murcia) a descubrir herramientas de IA EXTERNAS que NO estan en su plataforma.
@@ -801,7 +801,13 @@ Reglas:
           <div class="assistant-tab-content" id="assistant-chat" role="tabpanel" aria-labelledby="tab-chat">
             <div class="chat-header-bar">
               <span class="chat-header-title">💬 Chat con BupIA</span>
-              <button class="chat-clear-btn" id="chat-clear" title="Nueva conversación" aria-label="Borrar conversacion">🗑️</button>
+              <div class="chat-header-actions">
+                <button class="chat-header-icon-btn" id="chat-search-toggle" title="Buscar en chat" aria-label="Buscar en chat">🔍</button>
+                <button class="chat-clear-btn" id="chat-clear" title="Nueva conversación" aria-label="Borrar conversacion">🗑️</button>
+              </div>
+            </div>
+            <div class="chat-search-bar" id="chat-search-bar" style="display:none">
+              <input type="text" class="chat-search-input" id="chat-search-input" placeholder="Buscar en chat..." autocomplete="off" aria-label="Buscar en chat">
             </div>
             <div class="chat-messages" id="chat-messages" aria-live="polite" aria-relevant="additions"></div>
             <div class="chat-typing" id="chat-typing" aria-hidden="true">
@@ -810,6 +816,7 @@ Reglas:
                 <div class="chat-typing-dot"></div>
                 <div class="chat-typing-dot"></div>
               </div>
+              <span class="chat-typing-label">BupIA está pensando...</span>
             </div>
           </div>
           <div class="assistant-tab-content assistant-explorar-mode" id="assistant-explorar" role="tabpanel" aria-labelledby="tab-explorar">
@@ -824,6 +831,7 @@ Reglas:
                 <div class="chat-typing-dot"></div>
                 <div class="chat-typing-dot"></div>
               </div>
+              <span class="chat-typing-label">BupIA está buscando...</span>
             </div>
           </div>
         </div>
@@ -961,6 +969,22 @@ Reglas:
         const chipsContainer = this.root.querySelector('.explore-chips');
         if (chipsContainer) chipsContainer.remove();
         this.sendExploreMessage(query);
+        return;
+      }
+
+      // Chat: followup suggestion chip
+      const followupChip = target.closest('[data-followup-query]');
+      if (followupChip) {
+        const query = followupChip.dataset.followupQuery;
+        this.root.querySelectorAll('.chat-followup-chips').forEach(el => el.remove());
+        this.handleSend(query);
+        return;
+      }
+
+      // Chat: search toggle
+      const searchToggle = target.closest('#chat-search-toggle');
+      if (searchToggle) {
+        this.toggleChatSearch();
         return;
       }
 
@@ -1245,6 +1269,14 @@ Reglas:
       });
       chatInput.addEventListener('input', () => {
         this.updateCharCounter();
+      });
+    }
+
+    // Search input: filter chat messages in real time
+    const searchInput = this.root.querySelector('#chat-search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        this.filterChatMessages(searchInput.value);
       });
     }
 
@@ -1810,7 +1842,7 @@ Reglas:
     if (this.chatHistory.length > 0) {
       // Restore saved conversation from persistent memory
       this.chatHistory.forEach(msg => {
-        this.appendMessage(msg.role, msg.content);
+        this.appendMessage(msg.role, msg.content, null, msg.timestamp);
       });
     } else {
       // Empty state hero
@@ -1872,34 +1904,69 @@ Reglas:
     if (sendBtn) sendBtn.disabled = true;
 
     // Show user message
-    this.appendMessage('user', text);
+    const userTs = Date.now();
+    this.appendMessage('user', text, null, userTs);
 
     // Add to history
-    this.chatHistory.push({ role: 'user', content: text });
+    this.chatHistory.push({ role: 'user', content: text, timestamp: userTs });
 
     // Trim history to last 50 messages (persistent memory)
     if (this.chatHistory.length > 50) {
       this.chatHistory = this.chatHistory.slice(-50);
     }
 
-    // Show typing
-    this.showTyping();
-
+    // Try streaming first, fallback to standard
+    let success = false;
+    const chatContext = this.buildSmartContext(this.chatHistory);
     try {
-      const result = await this.apiCall('chat', this.chatHistory);
+      this.showTyping();
+      const streamDiv = this.appendStreamingMessage('#chat-messages');
+      let fullText = '';
+      let streamOk = false;
 
+      await this.apiCallStream('chat', chatContext,
+        (token) => {
+          if (!streamOk) { this.hideTyping(); streamOk = true; }
+          fullText += token;
+          this.updateStreamingMessage(streamDiv, fullText);
+        },
+        () => {
+          this.hideTyping();
+          const savedText = this.finalizeStreamingMessage(streamDiv, fullText, 'chat');
+          this.chatHistory.push({ role: 'assistant', content: savedText || fullText, timestamp: Date.now() });
+          this.saveState();
+        },
+        (errMsg) => {
+          this.hideTyping();
+          if (streamDiv) streamDiv.remove();
+          this.appendMessage('error', errMsg || 'Error en el streaming.', 'api');
+        }
+      );
+      success = true;
+    } catch (streamErr) {
+      // Fallback to non-streaming
       this.hideTyping();
+      // Remove empty stream div if it exists
+      const emptyStream = this.root.querySelector('.chat-msg.streaming');
+      if (emptyStream) emptyStream.remove();
 
-      if (result && result.content) {
-        this.appendMessage('assistant', result.content);
-        this.chatHistory.push({ role: 'assistant', content: result.content });
-        this.saveState();
-      } else {
-        this.appendMessage('error', 'No se recibió respuesta. Comprueba la conexión.');
+      this.showTyping();
+      try {
+        const result = await this.apiCall('chat', chatContext);
+        this.hideTyping();
+        if (result && result.content) {
+          this.appendMessage('assistant', result.content);
+          const { cleanText: ct } = this._parseSuggestions(result.content);
+          this.chatHistory.push({ role: 'assistant', content: ct, timestamp: Date.now() });
+          this.saveState();
+          success = true;
+        } else {
+          this.appendMessage('error', 'No se recibió respuesta. Comprueba la conexión.');
+        }
+      } catch (err) {
+        this.hideTyping();
+        this.appendMessage('error', err.message || 'Error al conectar con el asistente.', err.type || 'unknown');
       }
-    } catch (err) {
-      this.hideTyping();
-      this.appendMessage('error', err.message || 'Error al conectar con el asistente.', err.type || 'unknown');
     }
 
     this.isSending = false;
@@ -2008,12 +2075,41 @@ Reglas:
     return html;
   },
 
-  appendMessage(role, text, errorType) {
+  _parseSuggestions(text) {
+    const match = text.match(/\[SUGERENCIAS\]([\s\S]*?)\[\/SUGERENCIAS\]/);
+    if (!match) return { cleanText: text, suggestions: [] };
+    const cleanText = text.replace(match[0], '').trim();
+    const suggestions = match[1].trim().split('\n')
+      .map(s => s.replace(/^\d+\.\s*/, '').trim())
+      .filter(s => s.length > 0)
+      .slice(0, 3);
+    return { cleanText, suggestions };
+  },
+
+  _renderFollowupChips(container, suggestions) {
+    if (!suggestions.length || !container) return;
+    // Remove previous chips
+    this.root.querySelectorAll('.chat-followup-chips').forEach(el => el.remove());
+    const chipsDiv = document.createElement('div');
+    chipsDiv.className = 'chat-followup-chips';
+    chipsDiv.innerHTML = suggestions.map(s =>
+      `<button class="chat-followup-chip" data-followup-query="${this.escapeHtml(s)}">${this.escapeHtml(s)}</button>`
+    ).join('');
+    container.appendChild(chipsDiv);
+    const body = this.root.querySelector('.assistant-body');
+    if (body) body.scrollTop = body.scrollHeight;
+  },
+
+  appendMessage(role, text, errorType, savedTimestamp) {
     const container = this.root.querySelector('#chat-messages');
     if (!container) return;
 
     const div = document.createElement('div');
     div.className = `chat-msg chat-msg-${role}`;
+
+    // Timestamp helper
+    const ts = savedTimestamp ? new Date(savedTimestamp) : new Date();
+    const timeStr = ts.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 
     if (role === 'error') {
       const icons = { network: '📡', timeout: '⏱️', rate_limit: '🚫', api: '⚠️', unknown: '❌' };
@@ -2025,15 +2121,22 @@ Reglas:
         ${showRetry ? '<button class="chat-retry-btn" data-chat-retry aria-label="Reintentar mensaje">🔄 Reintentar</button>' : ''}
       `;
     } else if (role === 'assistant') {
+      const { cleanText, suggestions } = this._parseSuggestions(text);
       div.innerHTML = `
-        <div class="chat-msg-content">${this.formatMarkdown(text)}</div>
+        <div class="chat-msg-content">${this.formatMarkdown(cleanText)}</div>
+        <span class="chat-msg-time">${timeStr}</span>
         <div class="chat-msg-actions">
           <button class="chat-copy-btn" data-chat-copy aria-label="Copiar respuesta">📋</button>
           <button class="chat-fav-btn" data-chat-fav aria-label="Guardar en favoritos">☆</button>
         </div>
       `;
+      container.appendChild(div);
+      this._renderFollowupChips(container, suggestions);
+      const body = this.root.querySelector('.assistant-body');
+      if (body) body.scrollTop = body.scrollHeight;
+      return;
     } else {
-      div.innerHTML = this.formatMarkdown(text);
+      div.innerHTML = `${this.formatMarkdown(text)}<span class="chat-msg-time">${timeStr}</span>`;
     }
 
     container.appendChild(div);
@@ -2056,6 +2159,134 @@ Reglas:
     if (el) el.classList.remove('visible');
   },
 
+  // ── Streaming helpers ──
+
+  _streamRafId: null,
+  _streamPendingText: '',
+
+  async apiCallStream(feature, messages, onToken, onDone, onError) {
+    const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    const baseUrl = isLocal ? '' : this.PROXY_URL.replace('/api/chat', '');
+    const url = baseUrl + '/api/chat/stream';
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
+
+    let resp;
+    try {
+      resp = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ feature, messages }),
+        signal: controller.signal,
+      });
+    } catch (err) {
+      clearTimeout(timeoutId);
+      throw new ApiError(err.name === 'AbortError'
+        ? 'La solicitud tardó demasiado. Inténtalo de nuevo.'
+        : 'No se pudo conectar. Comprueba tu conexión.',
+        err.name === 'AbortError' ? 'timeout' : 'network');
+    }
+
+    clearTimeout(timeoutId);
+
+    if (!resp.ok || !resp.body) {
+      const data = await resp.json().catch(() => ({}));
+      throw new ApiError(data.error || data.detail || `Error del servidor (${resp.status})`,
+        resp.status === 429 ? 'rate_limit' : 'api');
+    }
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+
+      const parts = buffer.split('\n\n');
+      buffer = parts.pop();
+
+      for (const chunk of parts) {
+        const line = chunk.trim();
+        if (!line.startsWith('data: ')) continue;
+        try {
+          const data = JSON.parse(line.slice(6));
+          if (data.token) onToken(data.token);
+          if (data.done) { onDone(); return; }
+          if (data.error) { onError(data.error); return; }
+        } catch { /* skip malformed */ }
+      }
+    }
+    onDone();
+  },
+
+  appendStreamingMessage(containerId) {
+    const container = this.root.querySelector(containerId || '#chat-messages');
+    if (!container) return null;
+    const div = document.createElement('div');
+    div.className = 'chat-msg chat-msg-assistant streaming';
+    div.innerHTML = '<div class="chat-msg-content"></div>';
+    container.appendChild(div);
+    return div;
+  },
+
+  updateStreamingMessage(div, text) {
+    this._streamPendingText = text;
+    if (!this._streamRafId) {
+      this._streamRafId = requestAnimationFrame(() => {
+        const content = div?.querySelector('.chat-msg-content');
+        if (content) content.innerHTML = this.formatMarkdown(this._streamPendingText);
+        this._streamRafId = null;
+        const body = this.root.querySelector('.assistant-body');
+        if (body) body.scrollTop = body.scrollHeight;
+      });
+    }
+  },
+
+  finalizeStreamingMessage(div, text, mode) {
+    if (this._streamRafId) {
+      cancelAnimationFrame(this._streamRafId);
+      this._streamRafId = null;
+    }
+    if (!div) return;
+    div.classList.remove('streaming');
+
+    // Parse suggestions from response
+    const { cleanText, suggestions } = this._parseSuggestions(text);
+
+    const content = div.querySelector('.chat-msg-content');
+    if (content) content.innerHTML = this.formatMarkdown(cleanText);
+
+    // Timestamp
+    const timeStr = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    const timeSpan = document.createElement('span');
+    timeSpan.className = 'chat-msg-time';
+    timeSpan.textContent = timeStr;
+    div.appendChild(timeSpan);
+
+    const copyAttr = mode === 'explore' ? 'data-explore-copy' : 'data-chat-copy';
+    const actions = document.createElement('div');
+    actions.className = 'chat-msg-actions';
+    actions.innerHTML = `
+      <button class="chat-copy-btn" ${copyAttr} aria-label="Copiar respuesta">📋</button>
+      <button class="chat-fav-btn" data-chat-fav aria-label="Guardar en favoritos">☆</button>
+    `;
+    div.appendChild(actions);
+
+    // Render followup chips (chat mode only)
+    if (mode === 'chat' && suggestions.length) {
+      const container = div.parentElement;
+      this._renderFollowupChips(container, suggestions);
+    }
+
+    const body = this.root.querySelector('.assistant-body');
+    if (body) body.scrollTop = body.scrollHeight;
+
+    return cleanText;
+  },
+
   // ═══════════════════════════════════════
   //  EXPLORAR (AI Tool Discovery)
   // ═══════════════════════════════════════
@@ -2069,7 +2300,7 @@ Reglas:
     if (this.exploreHistory.length > 0) {
       // Restore saved exploration from persistent memory
       this.exploreHistory.forEach(msg => {
-        this.appendExploreMessage(msg.role, msg.content);
+        this.appendExploreMessage(msg.role, msg.content, null, msg.timestamp);
       });
     } else {
       this.renderExplorarWelcome(container);
@@ -2137,30 +2368,62 @@ Reglas:
     const sendBtn = this.root.querySelector('#chat-send');
     if (sendBtn) sendBtn.disabled = true;
 
-    this.appendExploreMessage('user', text);
-    this.exploreHistory.push({ role: 'user', content: text });
+    const exploreUserTs = Date.now();
+    this.appendExploreMessage('user', text, null, exploreUserTs);
+    this.exploreHistory.push({ role: 'user', content: text, timestamp: exploreUserTs });
 
     if (this.exploreHistory.length > 50) {
       this.exploreHistory = this.exploreHistory.slice(-50);
     }
 
-    this.showExploreTyping();
-
+    // Try streaming first, fallback to standard
+    const exploreContext = this.buildSmartContext(this.exploreHistory);
     try {
-      const result = await this.apiCall('explore', this.exploreHistory);
-      this.hideExploreTyping();
+      this.showExploreTyping();
+      const streamDiv = this.appendStreamingMessage('#explore-messages');
+      let fullText = '';
+      let streamOk = false;
 
-      if (result && result.content) {
-        this.appendExploreMessage('assistant', result.content);
-        this.exploreHistory.push({ role: 'assistant', content: result.content });
-        this.saveState();
-        this.showExploreResetBtn();
-      } else {
-        this.appendExploreMessage('error', 'No se recibió respuesta. Comprueba la conexión.');
-      }
-    } catch (err) {
+      await this.apiCallStream('explore', exploreContext,
+        (token) => {
+          if (!streamOk) { this.hideExploreTyping(); streamOk = true; }
+          fullText += token;
+          this.updateStreamingMessage(streamDiv, fullText);
+        },
+        () => {
+          this.hideExploreTyping();
+          const savedExpText = this.finalizeStreamingMessage(streamDiv, fullText, 'explore');
+          this.exploreHistory.push({ role: 'assistant', content: savedExpText || fullText, timestamp: Date.now() });
+          this.saveState();
+          this.showExploreResetBtn();
+        },
+        (errMsg) => {
+          this.hideExploreTyping();
+          if (streamDiv) streamDiv.remove();
+          this.appendExploreMessage('error', errMsg || 'Error en el streaming.', 'api');
+        }
+      );
+    } catch (streamErr) {
       this.hideExploreTyping();
-      this.appendExploreMessage('error', err.message || 'Error al conectar con el asistente.', err.type || 'unknown');
+      const emptyStream = this.root.querySelector('#explore-messages .streaming');
+      if (emptyStream) emptyStream.remove();
+
+      this.showExploreTyping();
+      try {
+        const result = await this.apiCall('explore', exploreContext);
+        this.hideExploreTyping();
+        if (result && result.content) {
+          this.appendExploreMessage('assistant', result.content, null, Date.now());
+          this.exploreHistory.push({ role: 'assistant', content: result.content, timestamp: Date.now() });
+          this.saveState();
+          this.showExploreResetBtn();
+        } else {
+          this.appendExploreMessage('error', 'No se recibió respuesta. Comprueba la conexión.');
+        }
+      } catch (err) {
+        this.hideExploreTyping();
+        this.appendExploreMessage('error', err.message || 'Error al conectar con el asistente.', err.type || 'unknown');
+      }
     }
 
     this.isSending = false;
@@ -2171,12 +2434,15 @@ Reglas:
     if (input) input.focus();
   },
 
-  appendExploreMessage(role, text, errorType) {
+  appendExploreMessage(role, text, errorType, savedTimestamp) {
     const container = this.root.querySelector('#explore-messages');
     if (!container) return;
 
     const div = document.createElement('div');
     div.className = `chat-msg chat-msg-${role}`;
+
+    const ts = savedTimestamp ? new Date(savedTimestamp) : new Date();
+    const timeStr = ts.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 
     if (role === 'error') {
       const icons = { network: '📡', timeout: '⏱️', rate_limit: '🚫', api: '⚠️', unknown: '❌' };
@@ -2190,13 +2456,14 @@ Reglas:
     } else if (role === 'assistant') {
       div.innerHTML = `
         <div class="chat-msg-content">${this.formatMarkdown(text)}</div>
+        <span class="chat-msg-time">${timeStr}</span>
         <div class="chat-msg-actions">
           <button class="chat-copy-btn" data-explore-copy aria-label="Copiar respuesta">📋</button>
           <button class="chat-fav-btn" data-chat-fav aria-label="Guardar en favoritos">☆</button>
         </div>
       `;
     } else {
-      div.innerHTML = this.formatMarkdown(text);
+      div.innerHTML = `${this.formatMarkdown(text)}<span class="chat-msg-time">${timeStr}</span>`;
     }
 
     container.appendChild(div);
@@ -2952,7 +3219,7 @@ ${promptecaCatalog || '(ninguno disponible)'}`;
   },
 
   // ── Rate limit (client-side UX only — server enforces the real limit) ──
-  _DAILY_LIMIT: 50,
+  _DAILY_LIMIT: 100,
 
   checkRateLimit() {
     const today = new Date().toISOString().slice(0, 10);
@@ -3079,6 +3346,92 @@ ${promptecaCatalog || '(ninguno disponible)'}`;
       sessionStorage.setItem('bulletin_last_seen', String(total));
       this.badge.classList.remove('visible');
     }
+  },
+
+  // ═══════════════════════════════════════
+  //  Smart Context Window (B5)
+  // ═══════════════════════════════════════
+
+  buildSmartContext(history) {
+    // Send full history if small enough
+    const msgs = history.map(m => ({ role: m.role, content: m.content }));
+    if (msgs.length <= 8) return msgs;
+
+    // Summarize older messages, keep last 6 complete
+    const older = msgs.slice(0, -6);
+    const recent = msgs.slice(-6);
+    const summary = older.map(m =>
+      `[${m.role}]: ${m.content.substring(0, 100)}${m.content.length > 100 ? '...' : ''}`
+    ).join('\n');
+    return [
+      { role: 'user', content: `[Contexto resumido de la conversación anterior]\n${summary}` },
+      { role: 'assistant', content: 'Entendido, tengo el contexto de nuestra conversación.' },
+      ...recent,
+    ];
+  },
+
+  // ═══════════════════════════════════════
+  //  Chat Search (B6)
+  // ═══════════════════════════════════════
+
+  toggleChatSearch() {
+    const searchBar = this.root.querySelector('#chat-search-bar');
+    if (!searchBar) return;
+    const isVisible = searchBar.style.display !== 'none';
+    searchBar.style.display = isVisible ? 'none' : 'flex';
+    if (!isVisible) {
+      const input = searchBar.querySelector('#chat-search-input');
+      if (input) { input.value = ''; input.focus(); }
+      this.filterChatMessages('');
+    } else {
+      this.filterChatMessages('');
+    }
+  },
+
+  filterChatMessages(query) {
+    const containerId = this.activeTab === 'explorar' ? '#explore-messages' : '#chat-messages';
+    const msgs = this.root.querySelectorAll(`${containerId} .chat-msg`);
+    const q = query.toLowerCase().trim();
+
+    msgs.forEach(msg => {
+      // Remove previous highlights
+      msg.querySelectorAll('mark').forEach(m => {
+        const parent = m.parentNode;
+        parent.replaceChild(document.createTextNode(m.textContent), m);
+        parent.normalize();
+      });
+
+      if (!q) {
+        msg.style.display = '';
+        return;
+      }
+
+      const textContent = msg.textContent.toLowerCase();
+      if (textContent.includes(q)) {
+        msg.style.display = '';
+        // Highlight matches in content div
+        const contentEl = msg.querySelector('.chat-msg-content') || msg;
+        this._highlightText(contentEl, q);
+      } else {
+        msg.style.display = 'none';
+      }
+    });
+  },
+
+  _highlightText(el, query) {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null, false);
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+    textNodes.forEach(node => {
+      const idx = node.textContent.toLowerCase().indexOf(query);
+      if (idx === -1) return;
+      const span = document.createElement('mark');
+      const after = node.splitText(idx);
+      after.splitText(query.length);
+      span.textContent = after.textContent;
+      after.parentNode.replaceChild(span, after);
+    });
   },
 
   // ═══════════════════════════════════════

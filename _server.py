@@ -16,7 +16,7 @@ import urllib.error
 PORT = 8085
 MAX_PAYLOAD_BYTES = 51200          # 50 KB max request body
 MAX_MESSAGE_CHARS = 2000           # per-message character limit
-MAX_MESSAGES = 50                  # max messages in conversation history
+MAX_MESSAGES = 20                  # max messages (client sends smart context)
 DAILY_LIMIT = 100                  # requests per IP per day
 API_KEY_FILE = "api_key.txt"
 TAVILY_KEY_FILE = "tavily_key.txt"
@@ -117,7 +117,17 @@ Reglas:
 - Usa un tono cercano y motivador."""
 
 FEATURE_PROMPTS = {
-    "chat": BASE_PROMPT,
+    "chat": BASE_PROMPT + """
+
+OBLIGATORIO — SIEMPRE al final de cada respuesta, DEBES incluir exactamente 3 sugerencias de seguimiento usando EXACTAMENTE este formato (con las etiquetas [SUGERENCIAS] y [/SUGERENCIAS]). NUNCA omitas este bloque:
+
+[SUGERENCIAS]
+1. Pregunta sugerida contextual
+2. Pregunta sugerida contextual
+3. Pregunta sugerida contextual
+[/SUGERENCIAS]
+
+Las sugerencias deben ser preguntas breves (max 12 palabras) relacionadas con tu respuesta. Este bloque es OBLIGATORIO en TODAS tus respuestas sin excepcion.""",
     "recommend": BASE_PROMPT + """
 
 Contexto adicional: El usuario esta en el recomendador de herramientas.
@@ -376,7 +386,8 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
         super().do_GET()
 
     def do_POST(self):
-        if self.path != "/api/chat":
+        is_stream = self.path == "/api/chat/stream"
+        if self.path != "/api/chat" and not is_stream:
             self.send_error(404, "Not Found")
             return
 
@@ -452,6 +463,14 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
 
         temperature = 0.3 if feature in ("ruta", "bulletin") or is_generator else 0.7
 
+        # ── Route to streaming or standard handler ──
+        if is_stream:
+            self._handle_stream(system_prompt, api_messages, max_tokens, temperature)
+        else:
+            self._handle_standard(system_prompt, api_messages, max_tokens, temperature)
+
+    def _handle_standard(self, system_prompt, api_messages, max_tokens, temperature):
+        """Non-streaming API call — returns full response as JSON."""
         payload = json.dumps({
             "model": MODEL,
             "system": system_prompt,
@@ -475,8 +494,6 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
                 result = json.loads(resp.read().decode("utf-8"))
 
             # Transformar respuesta Anthropic → formato OpenAI (para que el JS no cambie)
-            # Anthropic: { "content": [{"type":"text","text":"..."}] }
-            # OpenAI:    { "choices": [{"message":{"content":"..."}}] }
             text = ""
             if result.get("content"):
                 for block in result["content"]:
@@ -504,6 +521,71 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json(502, {"error": f"No se pudo conectar a Anthropic: {e.reason}"})
         except Exception as e:
             self.send_json(500, {"error": str(e)})
+
+    def _handle_stream(self, system_prompt, api_messages, max_tokens, temperature):
+        """SSE streaming — relays Anthropic stream tokens to the client."""
+        payload = json.dumps({
+            "model": MODEL,
+            "system": system_prompt,
+            "messages": api_messages,
+            "max_tokens": max_tokens,
+            "temperature": temperature,
+            "stream": True,
+        }).encode("utf-8")
+
+        req = urllib.request.Request(
+            ANTHROPIC_URL,
+            data=payload,
+            headers={
+                "Content-Type": "application/json",
+                "x-api-key": api_key,
+                "anthropic-version": ANTHROPIC_VERSION,
+            },
+        )
+
+        # Send SSE headers
+        self.send_response(200)
+        self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+        self.send_header("Cache-Control", "no-cache")
+        self.send_header("Connection", "keep-alive")
+        self.send_header("X-Accel-Buffering", "no")
+        origin = self._cors_origin()
+        if origin:
+            self.send_header("Access-Control-Allow-Origin", origin)
+        self.end_headers()
+
+        try:
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                for raw_line in resp:
+                    line = raw_line.decode("utf-8").strip()
+                    if not line.startswith("data: "):
+                        continue
+                    json_str = line[6:]
+                    if json_str == "[DONE]":
+                        break
+                    try:
+                        event = json.loads(json_str)
+                    except json.JSONDecodeError:
+                        continue
+                    etype = event.get("type", "")
+                    if etype == "content_block_delta":
+                        token = event.get("delta", {}).get("text", "")
+                        if token:
+                            self.wfile.write(f"data: {json.dumps({'token': token}, ensure_ascii=False)}\n\n".encode("utf-8"))
+                            self.wfile.flush()
+                    elif etype == "message_stop":
+                        break
+
+            self.wfile.write(b"data: {\"done\": true}\n\n")
+            self.wfile.flush()
+
+        except urllib.error.HTTPError as e:
+            error_body = e.read().decode("utf-8", errors="replace")
+            self.wfile.write(f"data: {json.dumps({'error': error_body}, ensure_ascii=False)}\n\n".encode("utf-8"))
+            self.wfile.flush()
+        except Exception as e:
+            self.wfile.write(f"data: {json.dumps({'error': str(e)}, ensure_ascii=False)}\n\n".encode("utf-8"))
+            self.wfile.flush()
 
     _LOCAL_ORIGINS = ["http://localhost:8085", "http://127.0.0.1:8085"]
 
@@ -537,13 +619,13 @@ class TallerHandler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, format, *args):
         """Log simplificado (solo POST /api/chat y errores)."""
         msg = format % args
-        if "/api/chat" in msg or "404" in msg or "500" in msg:
+        if "/api/" in msg or "404" in msg or "500" in msg:
             sys.stderr.write(f"[{self.log_date_time_string()}] {msg}\n")
 
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    server = http.server.HTTPServer(("0.0.0.0", PORT), TallerHandler)
+    server = http.server.ThreadingHTTPServer(("0.0.0.0", PORT), TallerHandler)
     print(f"\n  BupIA servidor activo en http://localhost:{PORT}")
     print(f"  Proxy API: POST /api/chat -> Anthropic ({MODEL})")
     print(f"  Pulsa Ctrl+C para detener\n")
