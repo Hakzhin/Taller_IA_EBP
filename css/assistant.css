@@ -1883,6 +1883,11 @@
   background: rgba(124,92,191,0.06);
   transform: translateY(-1px);
 }
+.gen-picker-external {
+  text-decoration: none;
+  color: inherit;
+  border-style: dashed;
+}
 .gen-picker-icon {
   font-size: 1.5rem;
   line-height: 1;

@@ -79,7 +79,7 @@ SOBRE TI (autoconocimiento — responde con naturalidad si te preguntan):
 - Proposito: Acompanar a los docentes del colegio en todo su flujo de trabajo con IA: desde descubrir herramientas hasta generar unidades didacticas, examenes, rubricas, actividades, comunicaciones a familias y adaptaciones curriculares completas. Tambien asesoras en atencion a la diversidad (TDAH, dislexia, TEA, altas capacidades...) aplicando principios DUA, y ofreces rutas de aprendizaje personalizadas de 4 semanas.
 - Usuarios: Tus interlocutores son docentes del Colegio El Buen Pastor (Murcia). Pueden ser maestros de Infantil, Primaria o profesores de ESO. Tratalos con respeto, cercanía y paciencia.
 - Memoria: Tienes memoria persistente. Recuerdas las conversaciones anteriores del usuario dentro del mismo navegador.
-- Capacidades: (1) Recomendar herramientas IA del catalogo de la plataforma, (2) Generar contenido didactico con 6 generadores (Unidad Didactica, Examen, Rubrica, Actividad, Comunicacion a familias, Adaptacion Curricular), (3) Asesorar en atencion a la diversidad e inclusion educativa con enfoque DUA, (4) Explorar herramientas IA externas con busqueda web en tiempo real, (5) Crear rutas de aprendizaje personalizadas de 4 semanas, (6) Ofrecer una Prompteca con recetas listas para usar.
+- Capacidades: (1) Recomendar herramientas IA del catalogo de la plataforma, (2) Generar contenido didactico con 5 generadores (Unidad Didactica, Examen, Actividad, Comunicacion a familias, Adaptacion Curricular) mas la app Rubric@sEBP para rubricas LOMLOE, (3) Asesorar en atencion a la diversidad e inclusion educativa con enfoque DUA, (4) Explorar herramientas IA externas con busqueda web en tiempo real, (5) Crear rutas de aprendizaje personalizadas de 4 semanas, (6) Ofrecer una Prompteca con recetas listas para usar.
 - Marca: BupIA es una marca registrada del Colegio El Buen Pastor.
 
 ${CATALOG}
@@ -1722,24 +1722,17 @@ Reglas:
       <div class="wizard-apps-section">
         <div class="ruta-cta-divider"><span>Crear contenido con IA</span></div>
         <div class="gen-picker-grid">
-          ${this.GENERATOR_TYPES.map(g => `
-            <button class="gen-picker-card" data-gen-start="${g.id}">
+          ${this.GENERATOR_TYPES.map(g => g.externalUrl
+            ? `<a href="${g.externalUrl}" target="_blank" rel="noopener" class="gen-picker-card gen-picker-external">
+              <span class="gen-picker-icon">${g.icon}</span>
+              <div class="gen-picker-label">${g.label} ↗</div>
+            </a>`
+            : `<button class="gen-picker-card" data-gen-start="${g.id}">
               <span class="gen-picker-icon">${g.icon}</span>
               <div class="gen-picker-label">${g.label}</div>
-            </button>
-          `).join('')}
+            </button>`
+          ).join('')}
         </div>
-      </div>
-      <div class="wizard-apps-section">
-        <div class="ruta-cta-divider"><span>Apps del colegio</span></div>
-        <a href="https://rubric-s-830258786759.us-west1.run.app/" target="_blank" rel="noopener" class="wizard-intent-btn wizard-app-link">
-          <span class="wizard-intent-icon"><img src="img/logo-rubricas.png" alt="" style="width:28px;height:28px;object-fit:contain;"></span>
-          <div class="wizard-intent-info">
-            <div class="wizard-intent-label">Rubric@sEBP</div>
-            <div class="wizard-intent-desc">Genera rúbricas LOMLOE con IA</div>
-          </div>
-          <span class="wizard-intent-arrow">↗</span>
-        </a>
       </div>
       <div class="ruta-cta">
         <div class="ruta-cta-divider"><span>o</span></div>
@@ -2554,7 +2547,7 @@ Reglas:
   GENERATOR_TYPES: [
     { id: 'generator_ud', icon: '📘', label: 'Unidad Didáctica', desc: 'Objetivos, contenidos, actividades y evaluación' },
     { id: 'generator_examen', icon: '📝', label: 'Examen / Test', desc: 'Preguntas, respuestas y criterios' },
-    { id: 'generator_rubrica', icon: '📊', label: 'Rúbrica', desc: 'Criterios, niveles y descriptores' },
+    { id: 'generator_rubrica', icon: '📊', label: 'Rúbrica', desc: 'Criterios, niveles y descriptores', externalUrl: 'https://rubric-s-830258786759.us-west1.run.app/' },
     { id: 'generator_actividad', icon: '🎯', label: 'Actividad de Aula', desc: 'Pasos, materiales y temporización' },
     { id: 'generator_comunicacion', icon: '✉️', label: 'Comunicación', desc: 'Mensajes profesionales a familias' },
     { id: 'generator_adaptacion', icon: '🧩', label: 'Adaptación Curricular', desc: 'Adapta actividades a perfiles de diversidad' },
