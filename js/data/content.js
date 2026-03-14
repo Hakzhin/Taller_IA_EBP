@@ -30,8 +30,8 @@ const SITE_DATA = {
       ],
       mission: 'Crea una ilustración que puedas usar mañana mismo en tu aula de Infantil. Puede ser un personaje para un cuento motor, una lámina de las estaciones para la asamblea, un dibujo para una ficha de grafomotricidad o una imagen para el rincón de las emociones.',
       example: '<strong>💡 Ejemplo:</strong> «Genera una imagen en estilo acuarela infantil de un oso pequeño abrazando un corazón rojo, rodeado de estrellas brillantes y nubes esponjosas, colores pastel suaves, fondo blanco limpio. Para el rincón de las emociones de un aula de Infantil»',
-      link: 'https://gemini.google.com',
-      linkLabel: 'Abrir Gemini ↗',
+      link: 'google-pro.html',
+      linkLabel: 'Acceder con Google Pro →',
     },
 
     'inf-grok': {
@@ -130,8 +130,8 @@ const SITE_DATA = {
       ],
       mission: 'Crea una pieza musical instrumental para un momento concreto de tu aula de Infantil: un fondo para la relajación después del recreo, música para la asamblea, sonidos ambientales para el rincón de la naturaleza o una melodía para acompañar un cuento.',
       example: '<strong>💡 Ejemplo:</strong> «Melodía instrumental suave con campanitas y piano, 2 minutos, para acompañar el momento de relajación después del recreo en infantil. Ritmo muy lento, tono tranquilo y acogedor, como una nana sin letra»',
-      link: 'https://gemini.google.com',
-      linkLabel: 'Abrir Gemini ↗',
+      link: 'google-pro.html',
+      linkLabel: 'Acceder con Google Pro →',
     },
 
     'inf-storybook': {
@@ -154,8 +154,8 @@ const SITE_DATA = {
       ],
       mission: 'Crea un cuento ilustrado personalizado para tu grupo de alumnos. Piensa en un valor, un tema o una situación que quieras trabajar con ellos y deja que la IA te ayude a contarlo.',
       example: '<strong>💡 Ejemplo:</strong> «Crea un cuento ilustrado de 6 páginas para niños de 5 años sobre un caracol llamado Paco que tiene miedo de ir lento, pero descubre que ir despacio le permite ver cosas hermosas que los demás se pierden. Estilo ilustración acuarela tierna. Moraleja: cada uno tiene su ritmo y eso está bien»',
-      link: 'https://gemini.google.com',
-      linkLabel: 'Abrir Gemini ↗',
+      link: 'google-pro.html',
+      linkLabel: 'Acceder con Google Pro →',
     },
 
     'inf-flow': {
@@ -255,8 +255,8 @@ const SITE_DATA = {
       ],
       mission: 'Genera una imagen para una de tus asignaturas: una ilustración del sistema solar para Conocimiento del Medio, una escena histórica para Sociales, un esquema del cuerpo humano para Naturales o una portada visual para un tema de Lengua.',
       example: '<strong>💡 Ejemplo:</strong> «Genera una infografía educativa del ciclo del agua con flechas que muestren evaporación, condensación y precipitación, etiquetas claras en español, estilo colorido y limpio, fondo blanco. Para una clase de Conocimiento del Medio de 4º de Primaria»',
-      link: 'https://gemini.google.com',
-      linkLabel: 'Abrir Gemini ↗',
+      link: 'google-pro.html',
+      linkLabel: 'Acceder con Google Pro →',
     },
 
     'pri-grok': {
@@ -430,8 +430,8 @@ const SITE_DATA = {
       ],
       mission: 'Crea una pieza musical para una actividad concreta de tu aula de Primaria: un jingle para un proyecto, un fondo para una presentación de Slides, música para el trabajo individual o una sintonía para el podcast de clase.',
       example: '<strong>💡 Ejemplo:</strong> «Música instrumental alegre con ukelele y percusión suave, 1 minuto, para usar de fondo en una presentación de Google Slides sobre los ecosistemas en 5.o de Primaria. Ritmo medio, tono positivo y enérgico, que transmita curiosidad»',
-      link: 'https://gemini.google.com',
-      linkLabel: 'Abrir Gemini ↗',
+      link: 'google-pro.html',
+      linkLabel: 'Acceder con Google Pro →',
     },
 
     'pri-notebooklm': {
@@ -455,8 +455,8 @@ const SITE_DATA = {
       ],
       mission: 'Crea un cuaderno de NotebookLM sobre un tema de tu asignatura de Primaria. Sube el PDF del libro de texto (o un vídeo de YouTube educativo) y genera una guía de estudio o un podcast para que tus alumnos repasen en casa.',
       example: '<strong>💡 Ideas:</strong> Sube el PDF del tema «Los ecosistemas» de Ciencias Naturales de 4.o. Pide a NotebookLM: «Crea un cuestionario de 10 preguntas tipo test con 4 opciones cada una, adaptado a alumnos de 9-10 años, con la respuesta correcta al final». Luego genera un «Audio Overview» y tendrás un podcast del tema que pueden escuchar en casa.',
-      link: 'https://notebooklm.google.com',
-      linkLabel: 'Abrir NotebookLM ↗',
+      link: 'google-pro.html',
+      linkLabel: 'Acceder con Google Pro →',
     },
 
     'pri-gemini-mat': {
@@ -480,8 +480,8 @@ const SITE_DATA = {
       ],
       mission: 'Genera una ficha de actividades o un examen para una de tus asignaturas de Primaria y crea una adaptación para un perfil NEE. Revisa que el contenido sea correcto y adecuado al nivel de tus alumnos.',
       example: '<strong>💡 Ejemplo paso a paso:</strong> 1) Pide a Gemini una ficha de actividades sobre «La multiplicación» para 3.o de Primaria con 10 ejercicios progresivos. 2) Luego pide: «Adapta esta ficha para un alumno con discalculia: reduce a 6 ejercicios, incluye apoyo visual con dibujos, usa números más pequeños y añade un ejemplo resuelto al principio». 3) Copia ambas versiones a Google Docs.',
-      link: 'https://gemini.google.com',
-      linkLabel: 'Abrir Gemini ↗',
+      link: 'google-pro.html',
+      linkLabel: 'Acceder con Google Pro →',
     },
 
     'pri-chatgpt-mat': {
@@ -556,8 +556,8 @@ const SITE_DATA = {
       ],
       mission: 'Genera una imagen vinculada a un saber básico concreto de tu programación: una recreación histórica para Geografía e Historia, un diagrama para Biología, una infografía para Física y Química o una ilustración literaria para Lengua.',
       example: '<strong>💡 Ejemplo:</strong> «Genera una imagen realista de un ágora griega durante una asamblea democrática en Atenas, siglo V a.C., con ciudadanos debatiendo en un hemiciclo de piedra, columnas dóricas al fondo y cielo mediterráneo azul. Para Geografía e Historia de 1º ESO, bloque de saberes: civilizaciones clásicas»',
-      link: 'https://gemini.google.com',
-      linkLabel: 'Abrir Gemini ↗',
+      link: 'google-pro.html',
+      linkLabel: 'Acceder con Google Pro →',
     },
     'eso-grok': {
       id: 'eso-grok',
@@ -704,8 +704,8 @@ const SITE_DATA = {
       ],
       mission: 'Crea un cuaderno sobre un tema de tu asignatura de ESO. Sube al menos 2 fuentes (el PDF del libro de texto + un fragmento del currículo LOMLOE o un examen anterior) y genera una guía de estudio o un podcast para que tus alumnos repasen.',
       example: '<strong>💡 Ideas:</strong> Sube el PDF del tema «La Revolución Francesa» de 2.o ESO + el enlace a un documental de YouTube. Pide: «Crea un cuestionario de 15 preguntas tipo test con 4 opciones, vinculadas a los saberes básicos de Geografía e Historia, con respuestas al final». Luego genera un «Audio Overview» y tendrás un podcast de repaso previo al examen.',
-      link: 'https://notebooklm.google.com',
-      linkLabel: 'Abrir NotebookLM ↗',
+      link: 'google-pro.html',
+      linkLabel: 'Acceder con Google Pro →',
     },
 
     'eso-gemini-mat': {
@@ -729,8 +729,8 @@ const SITE_DATA = {
       ],
       mission: 'Genera un examen o una situación de aprendizaje para una de tus asignaturas de ESO, vinculado a saberes básicos y criterios de evaluación LOMLOE. Crea también una adaptación curricular para un perfil NEE.',
       example: '<strong>💡 Ejemplo paso a paso:</strong> 1) Pide a Gemini un examen de 15 preguntas tipo test sobre «La narrativa del siglo XVI: el Lazarillo» para 3.o ESO, vinculado a los criterios de evaluación de Lengua del Decreto 228/2022. 2) Luego pide: «Adapta este examen para un alumno con dislexia: tipografía clara, interlineado amplio, reduce las opciones a 3 por pregunta». 3) Copia ambas versiones a Google Docs y compáralas.',
-      link: 'https://gemini.google.com',
-      linkLabel: 'Abrir Gemini ↗',
+      link: 'google-pro.html',
+      linkLabel: 'Acceder con Google Pro →',
     },
 
     'eso-chatgpt-mat': {
