@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>var t=localStorage.getItem('bupia_theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.dataset.theme='dark';</script>
+<title>Acceso Google Pro · Taller IA</title>
+<link rel="icon" type="image/x-icon" href="img/favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-start: #fdf6f0;
+    --bg-end: #f0e6f6;
+    --glass-bg: rgba(255,255,255,0.55);
+    --glass-border: rgba(255,255,255,0.7);
+    --glass-shadow: rgba(0,0,0,0.08);
+    --text-dark: #2d2b3d;
+    --text-medium: #5a5775;
+    --text-light: #6b6580;
+    --accent-purple: #7c5cbf;
+    --accent-green: #2ec4a0;
+    --accent-warm: #ff7b54;
+  }
+  [data-theme="dark"] {
+    --bg-start: #1a1625;
+    --bg-end: #2d2640;
+    --glass-bg: rgba(30,25,50,0.7);
+    --glass-border: rgba(255,255,255,0.1);
+    --glass-shadow: rgba(0,0,0,0.3);
+    --text-dark: #e8e6f0;
+    --text-medium: #b0adc0;
+    --text-light: #8b87a0;
+    --accent-purple: #9b7fd4;
+    --accent-green: #3dd6b0;
+    --accent-warm: #ff9570;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+    min-height: 100vh;
+    color: var(--text-dark);
+    padding: 24px 16px;
+  }
+
+  .gp-container {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  /* ── Back link ── */
+  .gp-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-medium);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+  }
+  .gp-back:hover { color: var(--accent-purple); }
+
+  /* ── Header ── */
+  .gp-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .gp-header-icon {
+    font-size: 3rem;
+    margin-bottom: 8px;
+  }
+  .gp-header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+  .gp-header h1 span {
+    background: linear-gradient(135deg, #4285f4, #ea4335, #fbbc04, #34a853);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .gp-header p {
+    color: var(--text-medium);
+    font-size: 0.9rem;
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  /* ── Cards ── */
+  .gp-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1.5px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 24px 28px;
+    margin-bottom: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .gp-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 20px 20px 0 0;
+  }
+
+  /* ── Credentials card ── */
+  .gp-cred-card::before {
+    background: linear-gradient(90deg, #4285f4, #ea4335, #fbbc04, #34a853);
+  }
+  .gp-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .gp-field {
+    margin-bottom: 14px;
+  }
+  .gp-field-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .gp-field-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0,0,0,0.04);
+    border-radius: 12px;
+    padding: 12px 16px;
+    border: 1px solid rgba(148,163,184,0.15);
+  }
+  [data-theme="dark"] .gp-field-row {
+    background: rgba(255,255,255,0.06);
+  }
+  .gp-field-value {
+    flex: 1;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    font-family: 'Poppins', monospace;
+    letter-spacing: 0.02em;
+  }
+  .gp-field-value.gp-masked {
+    letter-spacing: 0.15em;
+  }
+  .gp-copy-btn {
+    background: linear-gradient(135deg, #4285f4, #5a95f5);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .gp-copy-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(66,133,244,0.3); }
+  .gp-copy-btn:active { transform: scale(0.97); }
+  .gp-copy-btn.gp-copied {
+    background: linear-gradient(135deg, var(--accent-green), #27b08b);
+  }
+  .gp-toggle-pw {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 4px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  .gp-toggle-pw:hover { opacity: 1; }
+
+  /* ── Steps card ── */
+  .gp-steps-card::before {
+    background: linear-gradient(90deg, var(--accent-purple), var(--accent-green));
+  }
+  .gp-steps {
+    counter-reset: step;
+    list-style: none;
+  }
+  .gp-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(148,163,184,0.1);
+  }
+  .gp-step:last-child { border-bottom: none; }
+  .gp-step-num {
+    counter-increment: step;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-purple), #9b7fd4);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .gp-step-num::before { content: counter(step); }
+  .gp-step-text {
+    font-size: 0.88rem;
+    color: var(--text-medium);
+    line-height: 1.5;
+    padding-top: 4px;
+  }
+  .gp-step-text strong { color: var(--text-dark); }
+
+  /* ── Tools grid ── */
+  .gp-tools-card::before {
+    background: linear-gradient(90deg, #fbbc04, #34a853);
+  }
+  .gp-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .gp-tool-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    text-decoration: none;
+    background: rgba(0,0,0,0.03);
+    border: 1.5px solid rgba(148,163,184,0.15);
+    transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+  [data-theme="dark"] .gp-tool-link {
+    background: rgba(255,255,255,0.04);
+  }
+  .gp-tool-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    border-color: rgba(66,133,244,0.4);
+  }
+  .gp-tool-logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+  }
+  .gp-tool-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .gp-tool-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+  .gp-tool-desc {
+    font-size: 0.72rem;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+  .gp-tool-arrow {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    transition: transform 0.2s;
+  }
+  .gp-tool-link:hover .gp-tool-arrow { transform: translateX(3px); }
+
+  /* ── Warning ── */
+  .gp-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: rgba(251,188,4,0.1);
+    border: 1px solid rgba(251,188,4,0.25);
+    margin-top: 18px;
+    font-size: 0.8rem;
+    color: var(--text-medium);
+    line-height: 1.5;
+  }
+  .gp-warning-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── Footer ── */
+  .gp-footer {
+    text-align: center;
+    margin-top: 28px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(148,163,184,0.15);
+  }
+  .gp-footer img {
+    height: 32px;
+    opacity: 0.5;
+    margin-bottom: 6px;
+  }
+  .gp-footer p {
+    font-size: 0.75rem;
+    color: var(--text-light);
+  }
+
+  @media (max-width: 480px) {
+    .gp-tools-grid { grid-template-columns: 1fr; }
+    .gp-card { padding: 20px 18px; }
+    .gp-field-row { flex-wrap: wrap; }
+    .gp-copy-btn { width: 100%; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="gp-container">
+
+  <a href="index.html" class="gp-back">&larr; Volver a la plataforma</a>
+
+  <!-- Header -->
+  <header class="gp-header">
+    <div class="gp-header-icon">🔑</div>
+    <h1>Acceso <span>Google Pro</span></h1>
+    <p>Inicia sesión con la cuenta Pro del colegio para acceder a las funciones avanzadas de Gemini, NotebookLM y más.</p>
+  </header>
+
+  <!-- Credentials -->
+  <div class="gp-card gp-cred-card">
+    <div class="gp-card-title">🪪 Datos de acceso</div>
+
+    <div class="gp-field">
+      <div class="gp-field-label">Cuenta</div>
+      <div class="gp-field-row">
+        <span class="gp-field-value">iapro@elbuenpastor.es</span>
+        <button class="gp-copy-btn" onclick="gpCopy('iapro@elbuenpastor.es', this)">Copiar</button>
+      </div>
+    </div>
+
+    <div class="gp-field">
+      <div class="gp-field-label">Contrase&ntilde;a</div>
+      <div class="gp-field-row">
+        <span class="gp-field-value gp-masked" id="gp-pw">••••••••••</span>
+        <button class="gp-toggle-pw" onclick="gpTogglePw()" title="Mostrar/ocultar contrase&ntilde;a" aria-label="Mostrar u ocultar contrase&ntilde;a">👁️</button>
+        <button class="gp-copy-btn" onclick="gpCopy(GP_PW, this)">Copiar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Steps -->
+  <div class="gp-card gp-steps-card">
+    <div class="gp-card-title">📋 Pasos r&aacute;pidos</div>
+    <ol class="gp-steps">
+      <li class="gp-step">
+        <div class="gp-step-num"></div>
+        <div class="gp-step-text"><strong>Copia la contrase&ntilde;a</strong> pulsando el bot&oacute;n &laquo;Copiar&raquo; de arriba.</div>
+      </li>
+      <li class="gp-step">
+        <div class="gp-step-num"></div>
+        <div class="gp-step-text"><strong>Elige la herramienta</strong> que quieras usar en la secci&oacute;n de abajo.</div>
+      </li>
+      <li class="gp-step">
+        <div class="gp-step-num"></div>
+        <div class="gp-step-text">Google te pedir&aacute; iniciar sesi&oacute;n. Escribe <strong>iapro@elbuenpastor.es</strong> como correo.</div>
+      </li>
+      <li class="gp-step">
+        <div class="gp-step-num"></div>
+        <div class="gp-step-text"><strong>Pega la contrase&ntilde;a</strong> (Ctrl+V) en el campo de contrase&ntilde;a y pulsa Entrar.</div>
+      </li>
+      <li class="gp-step">
+        <div class="gp-step-num"></div>
+        <div class="gp-step-text">&iexcl;Listo! Ya tienes acceso a las <strong>funciones Pro</strong>: Deep Research, generaci&oacute;n de im&aacute;genes avanzada, Gems y m&aacute;s.</div>
+      </li>
+    </ol>
+  </div>
+
+  <!-- Tools grid -->
+  <div class="gp-card gp-tools-card">
+    <div class="gp-card-title">🚀 Herramientas Google Pro</div>
+    <div class="gp-tools-grid">
+      <a href="https://gemini.google.com" target="_blank" class="gp-tool-link">
+        <img src="img/gemini.png" alt="Gemini" class="gp-tool-logo">
+        <div class="gp-tool-info">
+          <div class="gp-tool-name">Gemini</div>
+          <div class="gp-tool-desc">Chat IA, im&aacute;genes, Deep Research</div>
+        </div>
+        <span class="gp-tool-arrow">&rarr;</span>
+      </a>
+      <a href="https://notebooklm.google.com" target="_blank" class="gp-tool-link">
+        <img src="img/notebooklm.png" alt="NotebookLM" class="gp-tool-logo">
+        <div class="gp-tool-info">
+          <div class="gp-tool-name">NotebookLM</div>
+          <div class="gp-tool-desc">An&aacute;lisis de documentos con IA</div>
+        </div>
+        <span class="gp-tool-arrow">&rarr;</span>
+      </a>
+      <a href="https://aistudio.google.com" target="_blank" class="gp-tool-link">
+        <img src="img/gemini.png" alt="AI Studio" class="gp-tool-logo">
+        <div class="gp-tool-info">
+          <div class="gp-tool-name">AI Studio</div>
+          <div class="gp-tool-desc">Prototipa con los modelos de Google</div>
+        </div>
+        <span class="gp-tool-arrow">&rarr;</span>
+      </a>
+      <a href="https://docs.google.com" target="_blank" class="gp-tool-link">
+        <img src="img/gemini.png" alt="Google Docs" class="gp-tool-logo">
+        <div class="gp-tool-info">
+          <div class="gp-tool-name">Google Docs</div>
+          <div class="gp-tool-desc">Documentos con Gemini integrado</div>
+        </div>
+        <span class="gp-tool-arrow">&rarr;</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Warning -->
+  <div class="gp-warning">
+    <span class="gp-warning-icon">&#x26A0;&#xFE0F;</span>
+    <span>Esta cuenta es compartida por todos los profesores del colegio. No cambies la contrase&ntilde;a, ni almacenes informaci&oacute;n personal sensible. Si la cuenta pide verificaci&oacute;n de seguridad, contacta con el administrador.</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="gp-footer">
+    <img src="img/logo-colegio.png" alt="Colegio El Buen Pastor">
+    <p>Colegio El Buen Pastor &middot; Taller IA</p>
+  </footer>
+
+</div>
+
+<script>
+  // ── Password (cambiar aquí) ──
+  var GP_PW = 'profe2026';
+
+  var pwVisible = false;
+
+  function gpTogglePw() {
+    pwVisible = !pwVisible;
+    document.getElementById('gp-pw').textContent = pwVisible ? GP_PW : '••••••••••';
+    document.getElementById('gp-pw').classList.toggle('gp-masked', !pwVisible);
+  }
+
+  function gpCopy(text, btn) {
+    navigator.clipboard.writeText(text).then(function() {
+      var orig = btn.textContent;
+      btn.textContent = 'Copiado!';
+      btn.classList.add('gp-copied');
+      setTimeout(function() {
+        btn.textContent = orig;
+        btn.classList.remove('gp-copied');
+      }, 1500);
+    });
+  }
+</script>
+
+</body>
+</html>

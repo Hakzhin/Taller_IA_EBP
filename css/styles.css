@@ -1683,6 +1683,41 @@
     .mothership-connector-dots { gap: 30px; }
   }
 
+  /* ── Google Pro Landing Card ── */
+  .gp-gradient-text {
+    background: linear-gradient(135deg, #4285f4, #ea4335, #fbbc04, #34a853);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .gp-landing-card::after {
+    background: linear-gradient(90deg, #4285f4, #ea4335, #fbbc04, #34a853) !important;
+  }
+  .gp-active-btn {
+    background: linear-gradient(135deg, #e8f0fe, #e6f4ea) !important;
+    color: #1a73e8 !important;
+    border-color: rgba(66,133,244,0.3) !important;
+    box-shadow: 0 4px 15px rgba(66,133,244,0.15) !important;
+    cursor: pointer !important;
+  }
+  .gp-active-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(66,133,244,0.25) !important;
+  }
+  .gp-active-btn .app-status {
+    background: rgba(26,115,232,0.15) !important;
+    color: #1a73e8 !important;
+  }
+  [data-theme="dark"] .gp-active-btn {
+    background: linear-gradient(135deg, rgba(66,133,244,0.2), rgba(52,168,83,0.15)) !important;
+    color: #8ab4f8 !important;
+    border-color: rgba(66,133,244,0.3) !important;
+  }
+  [data-theme="dark"] .gp-active-btn .app-status {
+    background: rgba(138,180,248,0.15) !important;
+    color: #8ab4f8 !important;
+  }
+
   /* Pathway content containers */
   .pathway-content { display: none; }
   .pathway-content.active { display: block; }
