@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>var t=localStorage.getItem('bupia_theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.dataset.theme='dark';</script>
+<title>Guia Gemini · Taller IA</title>
+<link rel="icon" type="image/x-icon" href="img/favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-start: #fdf6f0;
+    --bg-end: #f0e6f6;
+    --glass-bg: rgba(255,255,255,0.55);
+    --glass-border: rgba(255,255,255,0.7);
+    --glass-shadow: rgba(0,0,0,0.08);
+    --text-dark: #2d2b3d;
+    --text-medium: #5a5775;
+    --text-light: #6b6580;
+    --accent-purple: #7c5cbf;
+    --accent-green: #2ec4a0;
+    --accent-warm: #ff7b54;
+    --google-blue: #4285f4;
+    --google-red: #ea4335;
+    --google-yellow: #fbbc04;
+    --google-green: #34a853;
+  }
+  [data-theme="dark"] {
+    --bg-start: #1a1625;
+    --bg-end: #2d2640;
+    --glass-bg: rgba(30,25,50,0.7);
+    --glass-border: rgba(255,255,255,0.1);
+    --glass-shadow: rgba(0,0,0,0.3);
+    --text-dark: #e8e6f0;
+    --text-medium: #b0adc0;
+    --text-light: #8b87a0;
+    --accent-purple: #9b7fd4;
+    --accent-green: #3dd6b0;
+    --accent-warm: #ff9570;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+    min-height: 100vh;
+    color: var(--text-dark);
+    padding: 24px 16px;
+  }
+
+  .gg-container {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  /* -- Back link -- */
+  .gg-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-medium);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+  }
+  .gg-back:hover { color: var(--accent-purple); }
+
+  /* -- Header -- */
+  .gg-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .gg-header-icon {
+    font-size: 3rem;
+    margin-bottom: 8px;
+  }
+  .gg-header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+  .gg-header h1 span {
+    background: linear-gradient(135deg, #4285f4, #ea4335, #fbbc04, #34a853);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .gg-header p {
+    color: var(--text-medium);
+    font-size: 0.9rem;
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  /* -- Cards -- */
+  .gg-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1.5px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 24px 28px;
+    margin-bottom: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .gg-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 20px 20px 0 0;
+  }
+  .gg-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* -- Models card -- */
+  .gg-models-card::before {
+    background: linear-gradient(90deg, var(--google-blue), var(--google-red), var(--google-yellow), var(--google-green));
+  }
+  .gg-model-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .gg-model {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    background: rgba(0,0,0,0.03);
+    border: 1.5px solid rgba(148,163,184,0.15);
+    transition: all 0.25s ease;
+  }
+  [data-theme="dark"] .gg-model {
+    background: rgba(255,255,255,0.04);
+  }
+  .gg-model:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  }
+  .gg-model-icon {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+  }
+  .gg-model-icon.flash { background: linear-gradient(135deg, #4285f4, #5a9cf5); }
+  .gg-model-icon.thinking { background: linear-gradient(135deg, #ea4335, #ff6b6b); }
+  .gg-model-icon.pro { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+  .gg-model-info { flex: 1; }
+  .gg-model-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+  .gg-model-name small {
+    font-weight: 400;
+    color: var(--text-light);
+    font-size: 0.78rem;
+  }
+  .gg-model-desc {
+    font-size: 0.82rem;
+    color: var(--text-medium);
+    line-height: 1.5;
+    margin-top: 4px;
+  }
+  .gg-model-badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-top: 6px;
+  }
+  .gg-model-badge.free { background: rgba(46,196,160,0.15); color: var(--accent-green); }
+  .gg-model-badge.premium { background: rgba(139,92,246,0.15); color: var(--accent-purple); }
+
+  .gg-model-tip {
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: rgba(66,133,244,0.08);
+    border: 1px solid rgba(66,133,244,0.15);
+    font-size: 0.8rem;
+    color: var(--text-medium);
+    line-height: 1.5;
+  }
+  .gg-model-tip strong { color: var(--text-dark); }
+
+  /* -- Tools card -- */
+  .gg-tools-card::before {
+    background: linear-gradient(90deg, var(--google-yellow), var(--google-green));
+  }
+  .gg-tool-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .gg-tool {
+    border-radius: 14px;
+    background: rgba(0,0,0,0.03);
+    border: 1.5px solid rgba(148,163,184,0.15);
+    overflow: hidden;
+    transition: all 0.25s ease;
+  }
+  [data-theme="dark"] .gg-tool {
+    background: rgba(255,255,255,0.04);
+  }
+  .gg-tool-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+  }
+  .gg-tool-header:hover {
+    background: rgba(66,133,244,0.06);
+  }
+  .gg-tool-logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+  .gg-tool-emoji {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    background: linear-gradient(135deg, rgba(66,133,244,0.15), rgba(52,168,83,0.15));
+  }
+  .gg-tool-title-area { flex: 1; min-width: 0; }
+  .gg-tool-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+  .gg-tool-tagline {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+  .gg-tool-arrow {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+  .gg-tool.open .gg-tool-arrow {
+    transform: rotate(90deg);
+  }
+
+  .gg-tool-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+  .gg-tool.open .gg-tool-body {
+    max-height: 800px;
+  }
+  .gg-tool-content {
+    padding: 0 18px 18px;
+    font-size: 0.84rem;
+    color: var(--text-medium);
+    line-height: 1.6;
+  }
+  .gg-tool-content h4 {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 12px 0 6px;
+  }
+  .gg-tool-content h4:first-child { margin-top: 0; }
+  .gg-tool-content ul {
+    padding-left: 18px;
+    margin: 4px 0;
+  }
+  .gg-tool-content li {
+    margin-bottom: 4px;
+  }
+  .gg-tool-content .gg-example {
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(66,133,244,0.06);
+    border: 1px solid rgba(66,133,244,0.12);
+    font-style: italic;
+  }
+
+  /* -- CTA card -- */
+  .gg-cta-card::before {
+    background: linear-gradient(90deg, var(--accent-purple), var(--accent-green));
+  }
+  .gg-cta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .gg-cta-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    text-decoration: none;
+    background: rgba(0,0,0,0.03);
+    border: 1.5px solid rgba(148,163,184,0.15);
+    transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+  [data-theme="dark"] .gg-cta-link {
+    background: rgba(255,255,255,0.04);
+  }
+  .gg-cta-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    border-color: rgba(66,133,244,0.4);
+  }
+  .gg-cta-link img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+  }
+  .gg-cta-info { flex: 1; min-width: 0; }
+  .gg-cta-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+  .gg-cta-desc {
+    font-size: 0.72rem;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+  .gg-cta-arrow {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    transition: transform 0.2s;
+  }
+  .gg-cta-link:hover .gg-cta-arrow { transform: translateX(3px); }
+
+  /* -- Footer -- */
+  .gg-footer {
+    text-align: center;
+    margin-top: 28px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(148,163,184,0.15);
+  }
+  .gg-footer img {
+    height: 32px;
+    opacity: 0.5;
+    margin-bottom: 6px;
+  }
+  .gg-footer p {
+    font-size: 0.75rem;
+    color: var(--text-light);
+  }
+
+  @media (max-width: 480px) {
+    .gg-card { padding: 20px 16px; }
+    .gg-cta-grid { grid-template-columns: 1fr; }
+    .gg-model { flex-direction: column; gap: 10px; }
+    .gg-model-icon { width: 36px; height: 36px; font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="gg-container">
+
+  <a href="index.html" class="gg-back">&larr; Volver a la plataforma</a>
+
+  <!-- Header -->
+  <header class="gg-header">
+    <div class="gg-header-icon"><img src="img/gemini.png" alt="Gemini" style="height:3rem"></div>
+    <h1>Gu&iacute;a <span>Gemini</span></h1>
+    <p>Todo lo que necesitas saber sobre las herramientas y modelos de Gemini para sacarle el m&aacute;ximo partido en tu aula.</p>
+  </header>
+
+  <!-- ═══ Modelos ═══ -->
+  <div class="gg-card gg-models-card">
+    <div class="gg-card-title">&#x1F9E0; Modelos disponibles</div>
+
+    <div class="gg-model-grid">
+
+      <div class="gg-model">
+        <div class="gg-model-icon flash">&#x26A1;</div>
+        <div class="gg-model-info">
+          <div class="gg-model-name">Flash <small>&#183; R&aacute;pido</small></div>
+          <div class="gg-model-desc">El modelo r&aacute;pido y ligero. Responde en segundos y es ideal para tareas del d&iacute;a a d&iacute;a: generar ideas, resumir textos, responder dudas, crear im&aacute;genes sencillas. Es el que se usa por defecto.</div>
+          <span class="gg-model-badge free">Disponible para todos</span>
+        </div>
+      </div>
+
+      <div class="gg-model">
+        <div class="gg-model-icon thinking">&#x1F50D;</div>
+        <div class="gg-model-info">
+          <div class="gg-model-name">Razonamiento <small>&#183; Deep Think</small></div>
+          <div class="gg-model-desc">Piensa paso a paso antes de responder. Perfecto para problemas de matem&aacute;ticas, l&oacute;gica, an&aacute;lisis de datos o cualquier tarea que necesite reflexi&oacute;n profunda. Tarda un poco m&aacute;s, pero los resultados son mucho m&aacute;s precisos.</div>
+          <span class="gg-model-badge free">Disponible para todos</span>
+        </div>
+      </div>
+
+      <div class="gg-model">
+        <div class="gg-model-icon pro">&#x1F48E;</div>
+        <div class="gg-model-info">
+          <div class="gg-model-name">Pro <small>&#183; El m&aacute;s capaz</small></div>
+          <div class="gg-model-desc">El modelo m&aacute;s potente de Google. Necesario para Deep Research, tareas complejas con muchos documentos y generaci&oacute;n avanzada. Produce los mejores resultados pero requiere la cuenta Pro del colegio.</div>
+          <span class="gg-model-badge premium">Requiere Google Pro</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="gg-model-tip">
+      <strong>&#x1F4A1; Consejo:</strong> Para la mayor&iacute;a de tareas docentes (generar ideas, crear im&aacute;genes, escribir textos), <strong>Flash</strong> es m&aacute;s que suficiente. Cambia a <strong>Razonamiento</strong> cuando necesites que analice algo complejo, y usa <strong>Pro</strong> para Deep Research o tareas que manejen muchos documentos.
+    </div>
+  </div>
+
+  <!-- ═══ Herramientas ═══ -->
+  <div class="gg-card gg-tools-card">
+    <div class="gg-card-title">&#x1F6E0;&#xFE0F; Herramientas de Gemini</div>
+
+    <div class="gg-tool-list">
+
+      <!-- Canvas -->
+      <div class="gg-tool" onclick="ggToggle(this)">
+        <div class="gg-tool-header">
+          <div class="gg-tool-emoji">&#x1F3A8;</div>
+          <div class="gg-tool-title-area">
+            <div class="gg-tool-name">Canvas</div>
+            <div class="gg-tool-tagline">Editor visual para escribir, programar y crear con IA</div>
+          </div>
+          <span class="gg-tool-arrow">&rarr;</span>
+        </div>
+        <div class="gg-tool-body">
+          <div class="gg-tool-content">
+            <h4>&#x00BF;Qu&eacute; es?</h4>
+            <p>Canvas es un espacio de trabajo colaborativo dentro de Gemini donde puedes crear documentos, c&oacute;digo, aplicaciones, infograf&iacute;as y hasta juegos interactivos. Gemini escribe y t&uacute; editas en tiempo real, o al rev&eacute;s.</p>
+            <h4>&#x00BF;C&oacute;mo se usa?</h4>
+            <ul>
+              <li>Escribe en Gemini: <em>&laquo;Crea un cuestionario interactivo sobre el sistema solar&raquo;</em></li>
+              <li>Gemini abrir&aacute; Canvas autom&aacute;ticamente con el resultado</li>
+              <li>Puedes editar el contenido directamente, pedir cambios o a&ntilde;adir elementos</li>
+              <li>Descarga el resultado o comp&aacute;rtelo con un enlace</li>
+            </ul>
+            <h4>&#x1F3EB; Ejemplo docente</h4>
+            <div class="gg-example">&laquo;Crea en Canvas una infograf&iacute;a interactiva sobre el ciclo del agua para alumnos de 4&ordm; de Primaria, con colores llamativos y un mini-quiz al final&raquo;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Crear Musica -->
+      <div class="gg-tool" onclick="ggToggle(this)">
+        <div class="gg-tool-header">
+          <div class="gg-tool-emoji">&#x1F3B5;</div>
+          <div class="gg-tool-title-area">
+            <div class="gg-tool-name">Crear M&uacute;sica</div>
+            <div class="gg-tool-tagline">Genera canciones y pistas musicales con Lyria</div>
+          </div>
+          <span class="gg-tool-arrow">&rarr;</span>
+        </div>
+        <div class="gg-tool-body">
+          <div class="gg-tool-content">
+            <h4>&#x00BF;Qu&eacute; es?</h4>
+            <p>Gemini puede generar canciones completas (con letra y m&uacute;sica) gracias al modelo Lyria de DeepMind. Describes el estilo, el tema y el tono, y en segundos tienes una pista musical original.</p>
+            <h4>&#x00BF;C&oacute;mo se usa?</h4>
+            <ul>
+              <li>Escribe: <em>&laquo;Crea una canci&oacute;n infantil sobre los d&iacute;as de la semana, alegre y pegadiza&raquo;</em></li>
+              <li>Gemini generar&aacute; la m&uacute;sica y la letra autom&aacute;ticamente</li>
+              <li>Puedes pedir cambios: <em>&laquo;Hazla m&aacute;s lenta&raquo;</em>, <em>&laquo;Cambia a estilo pop&raquo;</em></li>
+              <li>Descarga el audio para usarlo en clase</li>
+            </ul>
+            <h4>&#x1F3EB; Ejemplo docente</h4>
+            <div class="gg-example">&laquo;Crea una canci&oacute;n en espa&ntilde;ol para aprender las tablas de multiplicar del 7, estilo pop alegre con ritmo pegadizo, que puedan cantar ni&ntilde;os de 8 a&ntilde;os&raquo;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deep Research -->
+      <div class="gg-tool" onclick="ggToggle(this)">
+        <div class="gg-tool-header">
+          <div class="gg-tool-emoji">&#x1F50C;</div>
+          <div class="gg-tool-title-area">
+            <div class="gg-tool-name">Deep Research</div>
+            <div class="gg-tool-tagline">Investigaci&oacute;n profunda automatizada con informe detallado</div>
+          </div>
+          <span class="gg-tool-arrow">&rarr;</span>
+        </div>
+        <div class="gg-tool-body">
+          <div class="gg-tool-content">
+            <h4>&#x00BF;Qu&eacute; es?</h4>
+            <p>Deep Research es un asistente de investigaci&oacute;n aut&oacute;nomo. Le das un tema y navega por cientos de p&aacute;ginas web, analiza la informaci&oacute;n, y genera un informe detallado de varias p&aacute;ginas con fuentes. Es como tener un investigador personal.</p>
+            <h4>&#x00BF;C&oacute;mo se usa?</h4>
+            <ul>
+              <li>En Gemini, selecciona <strong>Deep Research</strong> en el selector de herramientas</li>
+              <li>Escribe tu pregunta de investigaci&oacute;n</li>
+              <li>Gemini te mostrar&aacute; un plan de investigaci&oacute;n &mdash; apru&eacute;balo o aj&uacute;stalo</li>
+              <li>Espera unos minutos mientras investiga (puede tardar 3-10 min)</li>
+              <li>Recibir&aacute;s un informe completo con fuentes citadas</li>
+            </ul>
+            <h4>&#x1F3EB; Ejemplo docente</h4>
+            <div class="gg-example">&laquo;Investiga las mejores pr&aacute;cticas basadas en evidencia para ense&ntilde;ar comprensi&oacute;n lectora en Educaci&oacute;n Primaria. Incluye estudios recientes, metodolog&iacute;as efectivas y ejemplos de actividades&raquo;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gems -->
+      <div class="gg-tool" onclick="ggToggle(this)">
+        <div class="gg-tool-header">
+          <div class="gg-tool-emoji">&#x2728;</div>
+          <div class="gg-tool-title-area">
+            <div class="gg-tool-name">Gems</div>
+            <div class="gg-tool-tagline">Crea versiones personalizadas de Gemini con instrucciones propias</div>
+          </div>
+          <span class="gg-tool-arrow">&rarr;</span>
+        </div>
+        <div class="gg-tool-body">
+          <div class="gg-tool-content">
+            <h4>&#x00BF;Qu&eacute; es?</h4>
+            <p>Una Gem es una versi&oacute;n personalizada de Gemini con instrucciones espec&iacute;ficas que t&uacute; defines. Puedes crear un asistente especializado en tu asignatura, que use tu r&uacute;brica de evaluaci&oacute;n, que hable con el tono que quieras o que siempre use Deep Research.</p>
+            <h4>&#x00BF;C&oacute;mo se usa?</h4>
+            <ul>
+              <li>Ve a <strong>Gem manager</strong> en el men&uacute; lateral de Gemini</li>
+              <li>Haz clic en <strong>New Gem</strong></li>
+              <li>Escribe las instrucciones: qu&eacute; rol tiene, c&oacute;mo debe responder, qu&eacute; herramientas debe usar</li>
+              <li>Opcionalmente, sube documentos de referencia (tu programaci&oacute;n, r&uacute;bricas, etc.)</li>
+              <li>Guarda y comparte con tus compa&ntilde;eros</li>
+            </ul>
+            <h4>&#x1F3EB; Ejemplo docente</h4>
+            <div class="gg-example">&laquo;Crea una Gem llamada "Tutor de Lengua 3&ordm; ESO" con estas instrucciones: "Eres un tutor de Lengua Castellana para alumnos de 3&ordm; ESO. Explica los conceptos con ejemplos cercanos a adolescentes. Si te preguntan algo de gram&aacute;tica, siempre da un ejemplo antes de la regla."&raquo;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NotebookLM -->
+      <div class="gg-tool" onclick="ggToggle(this)">
+        <div class="gg-tool-header">
+          <img src="img/notebooklm.png" alt="NotebookLM" class="gg-tool-logo">
+          <div class="gg-tool-title-area">
+            <div class="gg-tool-name">NotebookLM</div>
+            <div class="gg-tool-tagline">Analiza documentos, genera res&uacute;menes y podcasts con IA</div>
+          </div>
+          <span class="gg-tool-arrow">&rarr;</span>
+        </div>
+        <div class="gg-tool-body">
+          <div class="gg-tool-content">
+            <h4>&#x00BF;Qu&eacute; es?</h4>
+            <p>NotebookLM es un asistente de investigaci&oacute;n que trabaja con tus propios documentos. Subes PDFs, enlaces o textos, y la IA los analiza para responder preguntas, generar res&uacute;menes, crear gu&iacute;as de estudio e incluso producir un podcast en audio explicando el contenido.</p>
+            <h4>&#x00BF;C&oacute;mo se usa?</h4>
+            <ul>
+              <li>Ve a <strong>notebooklm.google.com</strong> y crea un nuevo notebook</li>
+              <li>Sube tus fuentes: PDFs, enlaces web, textos, documentos de Google Drive</li>
+              <li>Haz preguntas sobre el contenido: <em>&laquo;Resume los puntos clave&raquo;</em></li>
+              <li>Genera un <strong>Audio Overview</strong> (podcast) para escuchar el resumen</li>
+              <li>Crea gu&iacute;as de estudio, FAQs o esquemas autom&aacute;ticamente</li>
+            </ul>
+            <h4>&#x1F3EB; Ejemplo docente</h4>
+            <div class="gg-example">&laquo;Sube la programaci&oacute;n did&aacute;ctica de tu asignatura y el curr&iacute;culo LOMLOE. Pregunta: "&#x00BF;Qu&eacute; saberes b&aacute;sicos de mi programaci&oacute;n se corresponden con cada competencia espec&iacute;fica del curr&iacute;culo?" o genera un podcast resumen para compartir con tu departamento&raquo;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Studio -->
+      <div class="gg-tool" onclick="ggToggle(this)">
+        <div class="gg-tool-header">
+          <img src="img/aistudio.png" alt="AI Studio" class="gg-tool-logo" onerror="this.outerHTML='<div class=gg-tool-emoji>&#x1F9EA;</div>'">
+          <div class="gg-tool-title-area">
+            <div class="gg-tool-name">AI Studio</div>
+            <div class="gg-tool-tagline">Prototipa aplicaciones de IA y experimenta con modelos</div>
+          </div>
+          <span class="gg-tool-arrow">&rarr;</span>
+        </div>
+        <div class="gg-tool-body">
+          <div class="gg-tool-content">
+            <h4>&#x00BF;Qu&eacute; es?</h4>
+            <p>Google AI Studio es un entorno gratuito donde puedes experimentar con los modelos de Gemini de forma visual. Puedes crear chatbots personalizados, ajustar par&aacute;metros del modelo (temperatura, longitud de respuesta) y exportar tu creaci&oacute;n como c&oacute;digo.</p>
+            <h4>&#x00BF;C&oacute;mo se usa?</h4>
+            <ul>
+              <li>Ve a <strong>aistudio.google.com</strong> e inicia sesi&oacute;n</li>
+              <li>Elige <strong>Chat prompt</strong> para crear un chatbot</li>
+              <li>Escribe las instrucciones del sistema (system prompt)</li>
+              <li>Ajusta temperatura y modelo en el panel derecho</li>
+              <li>Prueba en tiempo real y exporta como c&oacute;digo cuando est&eacute;s satisfecho</li>
+            </ul>
+            <h4>&#x1F3EB; Ejemplo docente</h4>
+            <div class="gg-example">&laquo;Crea un chatbot en AI Studio que act&uacute;e como tutor de ingl&eacute;s: que hable siempre en ingl&eacute;s, corrija errores del alumno, y adapte el nivel seg&uacute;n las respuestas. Usa temperatura baja (0.3) para respuestas consistentes&raquo;</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ Acceso rapido ═══ -->
+  <div class="gg-card gg-cta-card">
+    <div class="gg-card-title">&#x1F680; Acceso r&aacute;pido</div>
+    <div class="gg-cta-grid">
+      <a href="google-pro.html" class="gg-cta-link">
+        <img src="img/gemini.png" alt="Google Pro">
+        <div class="gg-cta-info">
+          <div class="gg-cta-name">Cuenta Google Pro</div>
+          <div class="gg-cta-desc">Credenciales de la cuenta del colegio</div>
+        </div>
+        <span class="gg-cta-arrow">&rarr;</span>
+      </a>
+      <a href="https://gemini.google.com" target="_blank" class="gg-cta-link">
+        <img src="img/gemini.png" alt="Gemini">
+        <div class="gg-cta-info">
+          <div class="gg-cta-name">Abrir Gemini</div>
+          <div class="gg-cta-desc">Ir directamente a gemini.google.com</div>
+        </div>
+        <span class="gg-cta-arrow">&rarr;</span>
+      </a>
+      <a href="https://notebooklm.google.com" target="_blank" class="gg-cta-link">
+        <img src="img/notebooklm.png" alt="NotebookLM">
+        <div class="gg-cta-info">
+          <div class="gg-cta-name">Abrir NotebookLM</div>
+          <div class="gg-cta-desc">An&aacute;lisis de documentos con IA</div>
+        </div>
+        <span class="gg-cta-arrow">&rarr;</span>
+      </a>
+      <a href="https://aistudio.google.com" target="_blank" class="gg-cta-link">
+        <img src="img/gemini.png" alt="AI Studio">
+        <div class="gg-cta-info">
+          <div class="gg-cta-name">Abrir AI Studio</div>
+          <div class="gg-cta-desc">Prototipa con modelos de Gemini</div>
+        </div>
+        <span class="gg-cta-arrow">&rarr;</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="gg-footer">
+    <img src="img/logo-colegio.png" alt="Colegio El Buen Pastor">
+    <p>Colegio El Buen Pastor &middot; Taller IA</p>
+  </footer>
+
+</div>
+
+<script>
+  function ggToggle(el) {
+    el.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
